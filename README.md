@@ -12,6 +12,8 @@ loader.exe <path>
 ```
 4. Genshin impact will now be opened and the program will be injected, a console will pop up with every setting explained.
 
+Here is a [video showing the program](https://www.youtube.com/watch?v=cvZf11vtuaw).
+
 ## Credits
 
 * [lanylow](https://github.com/lanylow) - for coding the whole thing.
