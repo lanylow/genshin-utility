@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include "../lib/minhook/MinHook.h"
-#include "utils.h"
 
 #define HANDLE_KEY(key_code, var, step, min, max) \
   if ((GetAsyncKeyState(key_code) & 1) && (var + step >= min) && (var + step <= max)) { \
@@ -51,7 +50,8 @@ void redraw_console() {
 }
 
 unsigned long __stdcall main_thread(void* arg) {
-  create_console();
+  AllocConsole();
+  freopen_s((FILE**)stdout, "conout$", "w", stdout);
 
   HANDLE unity_player = NULL;
   while (!(unity_player = GetModuleHandleA("UnityPlayer.dll"))) Sleep(100);
