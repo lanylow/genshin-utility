@@ -18,12 +18,21 @@ il2cpp_resolve_icall_t il2cpp_resolve_icall = NULL;
 typedef void(__cdecl* camera_set_field_of_view_t)(void* camera, float value, void* info);
 camera_set_field_of_view_t camera_set_field_of_view = NULL;
 
+typedef void(__cdecl* application_set_target_frame_rate_t)(int value, void* info);
+application_set_target_frame_rate_t application_set_target_frame_rate = NULL;
+
+typedef void(__cdecl* quality_settings_set_vsync_count_t)(int value, void* info);
+quality_settings_set_vsync_count_t quality_settings_set_vsync_count = NULL;
+
 int target_fov = 45;
 int target_fps = 120;
 
 void camera_set_field_of_view_h(void* camera, float value, void* info) {
   if (floor((double)value) == 45.0)
     value = (float)target_fov;
+
+  application_set_target_frame_rate(target_fps, NULL);
+  quality_settings_set_vsync_count(0, NULL);
 
   camera_set_field_of_view(camera, value, info);
 }
@@ -41,7 +50,7 @@ void redraw_console() {
   WriteConsoleA(console, buff, strlen(buff), NULL, NULL);
 }
 
-__declspec(noreturn) unsigned long __stdcall main_thread(void* arg) {
+unsigned long __stdcall main_thread(void* arg) {
   create_console();
 
   HANDLE unity_player = NULL;
@@ -52,33 +61,26 @@ __declspec(noreturn) unsigned long __stdcall main_thread(void* arg) {
 
   il2cpp_resolve_icall = (il2cpp_resolve_icall_t)GetProcAddress(user_assembly, "il2cpp_resolve_icall");
   camera_set_field_of_view = (camera_set_field_of_view_t)il2cpp_resolve_icall("UnityEngine.Camera::set_fieldOfView()");
+  application_set_target_frame_rate = (application_set_target_frame_rate_t)il2cpp_resolve_icall("UnityEngine.Application::set_targetFrameRate(int)");
+  quality_settings_set_vsync_count = (quality_settings_set_vsync_count_t)il2cpp_resolve_icall("UnityEngine.QualitySettings::set_vSyncCount(int)");
 
   MH_Initialize();
   MH_CreateHook(camera_set_field_of_view, (void*)(&camera_set_field_of_view_h), (void**)(&camera_set_field_of_view));
   MH_EnableHook(MH_ALL_HOOKS);
 
-  int* fps_value = find_pointer(unity_player, "\x33\xDB\x8B\x05", 4);
-  void* vsync_class_pointer = find_pointer(unity_player, "\x48\x8B\x1D\x00\x00\x00\x00\x45\x8B", 9);
-  uintptr_t vsync_class;
-  while (!(vsync_class = *(uintptr_t*)(vsync_class_pointer))) Sleep(100);
-  int* vsync_value = (int*)(vsync_class + 0x3E8);
-
   redraw_console();
 
   while (1) {
-    HANDLE_KEY(VK_INSERT, target_fov, 5, 5, 175)
-    HANDLE_KEY(VK_DELETE, target_fov, -5, 5, 175)
+    HANDLE_KEY(VK_INSERT, target_fov, 5, 5, 175);
+    HANDLE_KEY(VK_DELETE, target_fov, -5, 5, 175);
 
-    HANDLE_KEY(VK_HOME, target_fps, 10, 10, 360)
-    HANDLE_KEY(VK_END, target_fps, -10, 10, 360)
-
-    if (*fps_value != -1) {
-      if (*fps_value != target_fps) *fps_value = target_fps;
-      if (*vsync_value != 0) *vsync_value = 0;
-    }
+    HANDLE_KEY(VK_HOME, target_fps, 10, 10, 360);
+    HANDLE_KEY(VK_END, target_fps, -10, 10, 360);
 
     Sleep(10);
   }
+
+  return 0;
 }
 
 int __stdcall DllMain(void* instance, unsigned long reason, void* reserved) {
