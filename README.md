@@ -1,6 +1,6 @@
 # Genshin Utility [![License](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://github.com/lanylow/genshin-utility/blob/main/LICENSE) ![OS](https://img.shields.io/badge/OS-Windows-green.svg)
 
-A simple helper tool for Genshin Impact that allows you to change the FPS limit, disable fog and display current frame rate. **The keybind used to close the menu is INSERT**.
+A simple helper tool for Genshin Impact that allows you to change the FPS limit, disable fog, change field of view and display current frame rate. **The keybind used to close the menu is INSERT**.
 
 ## Usage
 
