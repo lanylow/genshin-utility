@@ -14,3 +14,6 @@ cmake-build-debug
 .idea
 /.vs
 /out/build
+/library/bin/release
+/loader/bin/release
+/out
