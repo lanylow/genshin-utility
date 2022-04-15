@@ -2,8 +2,40 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="lib\minhook\MinHook.h" />
+    <ClInclude Include="inc\common.hpp" />
+    <ClInclude Include="inc\utilities\windows.hpp" />
+    <ClInclude Include="inc\utilities\types.hpp" />
+    <ClInclude Include="lib\imgui\imconfig.h" />
+    <ClInclude Include="lib\imgui\imgui.h" />
+    <ClInclude Include="lib\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="lib\imgui\imgui_internal.h" />
+    <ClInclude Include="lib\imgui\imstb_rectpack.h" />
+    <ClInclude Include="lib\imgui\imstb_textedit.h" />
+    <ClInclude Include="lib\imgui\imstb_truetype.h" />
+    <ClInclude Include="inc\utilities\hook.hpp" />
+    <ClInclude Include="inc\gui\gui.hpp" />
+    <ClInclude Include="lib\kiero\kiero.h" />
+    <ClInclude Include="inc\hooks.hpp" />
+    <ClInclude Include="inc\utilities\instance.hpp" />
+    <ClInclude Include="lib\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="inc\gui\menu.hpp" />
+    <ClInclude Include="inc\gui\options.hpp" />
+    <ClInclude Include="inc\il2cpp.hpp" />
+    <ClInclude Include="inc\gui\fpscounter.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\entry.cpp" />
+    <ClCompile Include="lib\imgui\imgui.cpp" />
+    <ClCompile Include="lib\imgui\imgui_draw.cpp" />
+    <ClCompile Include="lib\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="lib\imgui\imgui_tables.cpp" />
+    <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\gui\gui.cpp" />
+    <ClCompile Include="lib\kiero\kiero.cpp" />
+    <ClCompile Include="src\hooks.cpp" />
+    <ClCompile Include="lib\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\gui\menu.cpp" />
+    <ClCompile Include="src\il2cpp.cpp" />
+    <ClCompile Include="src\gui\fpscounter.cpp" />
   </ItemGroup>
 </Project>
