@@ -14,6 +14,10 @@ loader.exe <path>
 
 Here is a [video showing the program](https://www.youtube.com/watch?v=ia_Q1pS92RI).
 
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/31806776/163605203-ef932772-6cc3-4e75-bef3-75c255439a08.png)
+
 ## Credits
 
 * [lanylow](https://github.com/lanylow) - for coding the whole thing.
