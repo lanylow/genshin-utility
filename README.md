@@ -16,7 +16,7 @@ Here is a [video showing the program](https://www.youtube.com/watch?v=ia_Q1pS92R
 
 ## Screenshots
 
-![image](https://user-images.githubusercontent.com/31806776/163605203-ef932772-6cc3-4e75-bef3-75c255439a08.png)
+![image](https://user-images.githubusercontent.com/31806776/163672802-f3de235a-c998-4475-9e45-0213d20cf7c3.png)
 
 ## Credits
 
