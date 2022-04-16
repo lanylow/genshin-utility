@@ -19,7 +19,7 @@ namespace GenshinUtility {
 
   private:
     float m_menuWidth = 324.f;
-    float m_menuHeight = 180.f;
+    float m_menuHeight = 200.f;
     float m_positionX = 100.f;
     float m_positionY = 100.f;
     float m_mouseDragX = 300.f;

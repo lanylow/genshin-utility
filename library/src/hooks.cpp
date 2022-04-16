@@ -99,8 +99,8 @@ namespace GenshinUtility {
 
     GIl2Cpp* il2cpp = GIl2Cpp::Get();
 
-    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.Application::set_targetFrameRate(int)"), Options.fpsLimit);
-    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.QualitySettings::set_vSyncCount(int)"), 0);
+    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.Application::set_targetFrameRate(int)"), (Options.enableVSync ? -1 : Options.fpsLimit));
+    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.QualitySettings::set_vSyncCount(int)"), (Options.enableVSync ? 1 : 0));
     GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.RenderSettings::set_fog(bool)"), !Options.disableFog);
 
     trampoline(instance, value, methodInfo);
