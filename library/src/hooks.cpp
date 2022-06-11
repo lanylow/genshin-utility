@@ -10,7 +10,7 @@ namespace GenshinUtility {
     kiero::init(kiero::RenderType::D3D11);
 
     m_presentHook.Create(reinterpret_cast<void*>(kiero::getMethodsTable()[8]), reinterpret_cast<void*>(&PresentHookHandler));
-    m_cameraSetFieldOfViewHook.Create(GIl2Cpp::Get()->GetMethod<void*>("UnityEngine.Camera::set_fieldOfView()"), reinterpret_cast<void*>(&CameraSetFieldOfViewHandler));
+    m_cameraSetFieldOfViewHook.Create(GIl2Cpp::Get()->m_setFieldOfView, reinterpret_cast<void*>(&CameraSetFieldOfViewHandler));
   }
 
   long __stdcall GHooks::PresentHookHandler(IDXGISwapChain* swapChain, UInt32 syncInterval, UInt32 flags) noexcept {
@@ -99,9 +99,9 @@ namespace GenshinUtility {
 
     GIl2Cpp* il2cpp = GIl2Cpp::Get();
 
-    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.Application::set_targetFrameRate(int)"), (Options.enableVSync ? -1 : Options.fpsLimit));
-    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.QualitySettings::set_vSyncCount(int)"), (Options.enableVSync ? 1 : 0));
-    GIl2Cpp::RunCdecl<void>(il2cpp->GetMethod<void*>("UnityEngine.RenderSettings::set_fog(bool)"), !Options.disableFog);
+    *reinterpret_cast<std::int32_t*>(il2cpp->m_targetFrameRate) = (Options.enableVSync ? -1 : Options.fpsLimit);
+    GIl2Cpp::RunCdecl<void>(il2cpp->m_setVsyncCount, (Options.enableVSync ? 1 : 0));
+    GIl2Cpp::RunCdecl<void>(il2cpp->m_setFog, !Options.disableFog);
 
     trampoline(instance, value, methodInfo);
   }
