@@ -2,10 +2,6 @@
 
 A simple helper tool for Genshin Impact that allows you to change the FPS limit, disable fog, change field of view and display current frame rate. **The keybind used to close the menu is INSERT**.
 
-## Disclaimer
-
-This is not working for 2.7 yet, wait for an update.
-
 ## Usage
 
 1. Download and extract binaries from the [latest release](https://github.com/lanylow/genshin-utility/releases).
