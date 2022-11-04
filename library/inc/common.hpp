@@ -5,6 +5,11 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <filesystem>
+#include <shlobj.h>
+#include <fstream>
+
+namespace fs = std::filesystem;
 
 #include <utilities/types.hpp>
 #include <utilities/windows.hpp>
@@ -16,5 +21,6 @@
 #include <gui/fpscounter.hpp>
 #include <il2cpp.hpp>
 #include <hooks.hpp>
+#include <config.hpp>
 
 using namespace GenshinUtility;

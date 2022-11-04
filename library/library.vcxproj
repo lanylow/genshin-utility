@@ -151,6 +151,7 @@ copy .\bin\release\library.dll ..\out\</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="inc\common.hpp" />
+    <ClInclude Include="inc\config.hpp" />
     <ClInclude Include="inc\gui\fpscounter.hpp" />
     <ClInclude Include="inc\gui\gui.hpp" />
     <ClInclude Include="inc\gui\menu.hpp" />
@@ -169,6 +170,40 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClInclude Include="lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="lib\imgui\imstb_textedit.h" />
     <ClInclude Include="lib\imgui\imstb_truetype.h" />
+    <ClInclude Include="lib\json\adl_serializer.hpp" />
+    <ClInclude Include="lib\json\detail\conversions\from_json.hpp" />
+    <ClInclude Include="lib\json\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="lib\json\detail\conversions\to_json.hpp" />
+    <ClInclude Include="lib\json\detail\exceptions.hpp" />
+    <ClInclude Include="lib\json\detail\input\binary_reader.hpp" />
+    <ClInclude Include="lib\json\detail\input\input_adapters.hpp" />
+    <ClInclude Include="lib\json\detail\input\json_sax.hpp" />
+    <ClInclude Include="lib\json\detail\input\lexer.hpp" />
+    <ClInclude Include="lib\json\detail\input\parser.hpp" />
+    <ClInclude Include="lib\json\detail\input\position_t.hpp" />
+    <ClInclude Include="lib\json\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="lib\json\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="lib\json\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="lib\json\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="lib\json\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="lib\json\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="lib\json\detail\json_pointer.hpp" />
+    <ClInclude Include="lib\json\detail\json_ref.hpp" />
+    <ClInclude Include="lib\json\detail\macro_scope.hpp" />
+    <ClInclude Include="lib\json\detail\macro_unscope.hpp" />
+    <ClInclude Include="lib\json\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="lib\json\detail\meta\detected.hpp" />
+    <ClInclude Include="lib\json\detail\meta\is_sax.hpp" />
+    <ClInclude Include="lib\json\detail\meta\type_traits.hpp" />
+    <ClInclude Include="lib\json\detail\meta\void_t.hpp" />
+    <ClInclude Include="lib\json\detail\output\binary_writer.hpp" />
+    <ClInclude Include="lib\json\detail\output\output_adapters.hpp" />
+    <ClInclude Include="lib\json\detail\output\serializer.hpp" />
+    <ClInclude Include="lib\json\detail\value_t.hpp" />
+    <ClInclude Include="lib\json\json.hpp" />
+    <ClInclude Include="lib\json\json_fwd.hpp" />
+    <ClInclude Include="lib\json\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="lib\json\thirdparty\hedley\hedley_undef.hpp" />
     <ClInclude Include="lib\kiero\kiero.h" />
     <ClInclude Include="lib\minhook\MinHook.h" />
   </ItemGroup>
@@ -180,6 +215,7 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClCompile Include="lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="lib\kiero\kiero.cpp" />
+    <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\entry.cpp" />
     <ClCompile Include="src\gui\fpscounter.cpp" />
     <ClCompile Include="src\gui\gui.cpp" />

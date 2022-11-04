@@ -12,10 +12,16 @@ namespace GenshinUtility {
 }
 
 bool __stdcall DllMain(UInt64 instance, FWindows::EDllEvents event, UInt64 reserved) {
-  if (event != FWindows::EDllEvents::ProcessAttach)
-    return false;
+  switch (event) {
+  case FWindows::EDllEvents::ProcessAttach:
+    GConfig::Get()->Load();
+    FWindows::NewThread(&GenshinUtility::InitThread);
+    break;
 
-  FWindows::NewThread(&GenshinUtility::InitThread);
+  case FWindows::EDllEvents::ProcessDetach:
+    GConfig::Get()->Save();
+    break;
+  }
 
   return true;
 }
