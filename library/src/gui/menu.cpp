@@ -6,7 +6,8 @@ namespace GenshinUtility {
       return;
 
     m_gui.AddWindow("Genshin Utility by lanylow");
-    m_gui.AddGroupbox(19, 20 + 18, 286, 144, "Settings");
+    m_gui.AddGroupbox(19, 20 + 18, 286, 162, "Settings");
+    m_gui.AddCheckbox("Open menu on start", &Options.openMenuOnStart);
     m_gui.AddCheckbox("Frame rate counter", &Options.fpsCounter);
     m_gui.AddCheckbox("Enable V-Sync", &Options.enableVSync);
     m_gui.AddCheckbox("Disable fog", &Options.disableFog);

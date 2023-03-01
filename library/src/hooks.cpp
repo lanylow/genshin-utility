@@ -36,6 +36,8 @@ namespace GenshinUtility {
 
       hooks->m_windowProcedure = reinterpret_cast<WNDPROC>(SetWindowLongPtrA(hooks->m_window, GWLP_WNDPROC, reinterpret_cast<Int64>(WndProcHandler)));
 
+      Options.menuOpened = Options.openMenuOnStart;
+
       ImGui::CreateContext();
 
       ImGuiIO& io = ImGui::GetIO();

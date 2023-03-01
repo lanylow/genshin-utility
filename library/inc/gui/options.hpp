@@ -3,6 +3,7 @@
 namespace GenshinUtility {
   struct FOptions {
     bool menuOpened{ true };
+    bool openMenuOnStart{ true };
     bool fpsCounter{ false };
     bool enableVSync{ false };
     bool disableFog{ false };

@@ -30,11 +30,12 @@ namespace GenshinUtility {
     }
 
     try {
-      Options.fpsCounter = config["fpsCounter"].get<bool>();
-      Options.enableVSync = config["enableVSync"].get<bool>();
-      Options.disableFog = config["disableFog"].get<bool>();
-      Options.fpsLimit = config["fpsLimit"].get<int>();
-      Options.cameraFov = config["cameraFov"].get<int>();
+      Options.openMenuOnStart = config["openMenuOnStart"];
+      Options.fpsCounter = config["fpsCounter"];
+      Options.enableVSync = config["enableVSync"];
+      Options.disableFog = config["disableFog"];
+      Options.fpsLimit = config["fpsLimit"];
+      Options.cameraFov = config["cameraFov"];
     }
     catch (nlohmann::detail::exception&) {
       // ignored
@@ -45,6 +46,7 @@ namespace GenshinUtility {
     nlohmann::json config = { };
 
     try {
+      config["openMenuOnStart"] = Options.openMenuOnStart;
       config["fpsCounter"] = Options.fpsCounter;
       config["enableVSync"] = Options.enableVSync;
       config["disableFog"] = Options.disableFog;
