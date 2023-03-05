@@ -96,14 +96,19 @@ namespace GenshinUtility {
   void GHooks::CameraSetFieldOfViewHandler(UInt64 instance, float value, UInt64 methodInfo) noexcept {
     static auto trampoline = GHooks::Get()->m_cameraSetFieldOfViewHook.GetTrampoline<decltype(&CameraSetFieldOfViewHandler)>();
 
-    if (floor(static_cast<Float64>(value)) == 45.0)
-      value = static_cast<Float32>(Options.cameraFov);
-
+    auto original_value = std::floor(value);
+    
     GIl2Cpp* il2cpp = GIl2Cpp::Get();
 
-    *reinterpret_cast<std::int32_t*>(il2cpp->m_targetFrameRate) = (Options.enableVSync ? -1 : Options.fpsLimit);
-    GIl2Cpp::RunCdecl<void>(il2cpp->m_setVsyncCount, (Options.enableVSync ? 1 : 0));
-    GIl2Cpp::RunCdecl<void>(il2cpp->m_setFog, !Options.disableFog);
+    if (original_value == 30.f) {
+      GIl2Cpp::RunCdecl<void>(il2cpp->m_setFog, false);
+    }
+    else if (original_value == 45.f) {
+      value = static_cast<Float32>(Options.cameraFov);
+      *reinterpret_cast<std::int32_t*>(il2cpp->m_targetFrameRate) = (Options.enableVSync ? -1 : Options.fpsLimit);
+      GIl2Cpp::RunCdecl<void>(il2cpp->m_setVsyncCount, (Options.enableVSync ? 1 : 0));
+      GIl2Cpp::RunCdecl<void>(il2cpp->m_setFog, !Options.disableFog);
+    }
 
     trampoline(instance, value, methodInfo);
   }
