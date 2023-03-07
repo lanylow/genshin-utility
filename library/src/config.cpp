@@ -1,85 +1,82 @@
 #include <common.hpp>
-#include <json/json.hpp>
 
-namespace GenshinUtility {
-  void GConfig::Load() noexcept {
-    if (!fs::is_directory(m_configFolder)) {
-      fs::remove(m_configFolder);
+void config::load() {
+  if (!std::filesystem::is_directory(config::config_folder)) {
+    std::filesystem::remove(config::config_folder);
 
-      if (!fs::create_directories(m_configFolder))
-        return;
-    }
-
-    std::ifstream inputFile(m_configPath.string(), std::ios::in);
-
-    if (!inputFile.good())
+    if (!std::filesystem::create_directories(config::config_folder))
       return;
-
-    nlohmann::json config = { };
-
-    try {
-      config = nlohmann::json::parse(inputFile, nullptr, false);
-
-      if (config.is_discarded())
-        return;
-
-      inputFile.close();
-    }
-    catch (std::ifstream::failure&) {
-      return;
-    }
-
-    try {
-      Options.openMenuOnStart = config["openMenuOnStart"];
-      Options.fpsCounter = config["fpsCounter"];
-      Options.enableVSync = config["enableVSync"];
-      Options.disableFog = config["disableFog"];
-      Options.fpsLimit = config["fpsLimit"];
-      Options.cameraFov = config["cameraFov"];
-    }
-    catch (nlohmann::detail::exception&) {
-      // ignored
-    }
   }
 
-  void GConfig::Save() noexcept {
-    nlohmann::json config = { };
+  std::ifstream input_file(config::config_path.string(), std::ios::in);
 
-    try {
-      config["openMenuOnStart"] = Options.openMenuOnStart;
-      config["fpsCounter"] = Options.fpsCounter;
-      config["enableVSync"] = Options.enableVSync;
-      config["disableFog"] = Options.disableFog;
-      config["fpsLimit"] = Options.fpsLimit;
-      config["cameraFov"] = Options.cameraFov;
-    }
-    catch (nlohmann::detail::exception&) {
-      return;
-    }
+  if (!input_file.good())
+    return;
 
-    std::ofstream outputFile(m_configPath.string(), std::ios::out | std::ios::trunc);
+  nlohmann::json config = { };
 
-    if (!outputFile.good())
+  try {
+    config = nlohmann::json::parse(input_file, nullptr, false);
+
+    if (config.is_discarded())
       return;
 
-    try {
-      outputFile << config.dump();
-      outputFile.close();
-    }
-    catch (std::ofstream::failure&) {
-      // ignored
-    }
+    input_file.close();
+  }
+  catch (std::ifstream::failure&) {
+    return;
   }
 
-  fs::path GConfig::GetWorkingPath() noexcept {
-    fs::path path;
-
-    if (wchar_t* pathToDocuments; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pathToDocuments))) {
-      path.assign(pathToDocuments);
-      path.append("genshin-utility");
-      CoTaskMemFree(pathToDocuments);
-    }
-
-    return path;
+  try {
+    variables::menu::open_on_start = config["openMenuOnStart"];
+    variables::tools::fps_counter = config["fpsCounter"];
+    variables::tools::enable_vsync = config["enableVSync"];
+    variables::tools::disable_fog = config["disableFog"];
+    variables::tools::fps_limit = config["fpsLimit"];
+    variables::tools::camera_fov = config["cameraFov"];
   }
+  catch (nlohmann::detail::exception&) {
+    // ignored
+  }
+}
+
+void config::save() {
+  nlohmann::json config = { };
+
+  try {
+    config["openMenuOnStart"] = variables::menu::open_on_start;
+    config["fpsCounter"] = variables::tools::fps_counter;
+    config["enableVSync"] = variables::tools::enable_vsync;
+    config["disableFog"] = variables::tools::disable_fog;
+    config["fpsLimit"] = variables::tools::fps_limit;
+    config["cameraFov"] = variables::tools::camera_fov;
+  }
+  catch (nlohmann::detail::exception&) {
+    return;
+  }
+
+  std::ofstream output_file(config::config_path.string(), std::ios::out | std::ios::trunc);
+
+  if (!output_file.good())
+    return;
+
+  try {
+    output_file << config.dump();
+    output_file.close();
+  }
+  catch (std::ofstream::failure&) {
+    // ignored
+  }
+}
+
+std::filesystem::path config::get_working_path() {
+  std::filesystem::path path;
+
+  if (wchar_t* path_to_documents; SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &path_to_documents))) {
+    path.assign(path_to_documents);
+    path.append("genshin-utility");
+    CoTaskMemFree(path_to_documents);
+  }
+
+  return path;
 }

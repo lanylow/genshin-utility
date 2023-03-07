@@ -1,26 +1,29 @@
 #pragma once
 
 #include <windows.h>
+#include <cstdint>
+#include <thread>
 #include <d3d11.h>
-#include <string>
-#include <unordered_map>
-#include <utility>
+#include <mutex>
 #include <filesystem>
-#include <shlobj.h>
 #include <fstream>
+#include <shlobj.h>
 
-namespace fs = std::filesystem;
+#include <minhook/MinHook.h>
+#include <kiero/kiero.h>
+#include <json/json.hpp>
 
-#include <utilities/types.hpp>
-#include <utilities/windows.hpp>
-#include <utilities/instance.hpp>
-#include <utilities/hook.hpp>
-#include <gui/options.hpp>
-#include <gui/gui.hpp>
-#include <gui/menu.hpp>
-#include <gui/fpscounter.hpp>
-#include <il2cpp.hpp>
-#include <hooks.hpp>
-#include <config.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_dx11.h>
+#include <imgui/imgui_impl_win32.h>
+#include <imgui/imgui_internal.h>
 
-using namespace GenshinUtility;
+#include "utils/fn.hpp"
+
+#include "unity/sdk.hpp"
+
+#include "ui/variables.hpp"
+#include "ui/gui.hpp"
+#include "ui/menu.hpp"
+
+#include "config.hpp"

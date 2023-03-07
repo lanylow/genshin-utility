@@ -1,25 +1,28 @@
 #include <common.hpp>
+#include <hooks.hpp>
 
-namespace GenshinUtility {
-  void __stdcall InitThread() noexcept {
-    do {
-      Sleep(10000);
-    } while (!GetModuleHandleA("UserAssembly.dll") && !GetModuleHandleA("UnityPlayer.dll"));
+void initialize() {
+  do {
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+  } while (!GetModuleHandleA("UserAssembly.dll") && !GetModuleHandleA("UnityPlayer.dll"));
 
-    GIl2Cpp::Get()->Init();
-    GHooks::Get()->Init();
-  }
+  config::load();
+  unity::sdk::initialize();
+  hooks::initialize();
 }
 
-bool __stdcall DllMain(UInt64 instance, FWindows::EDllEvents event, UInt64 reserved) {
-  switch (event) {
-  case FWindows::EDllEvents::ProcessAttach:
-    GConfig::Get()->Load();
-    FWindows::NewThread(&GenshinUtility::InitThread);
+bool DllMain(HMODULE module, unsigned int reason, void* reserved) {
+  DisableThreadLibraryCalls(module);
+
+  switch (reason) {
+  case DLL_PROCESS_ATTACH:
+    if (auto handle = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)(initialize), nullptr, 0, nullptr))
+      CloseHandle(handle);
+
     break;
 
-  case FWindows::EDllEvents::ProcessDetach:
-    GConfig::Get()->Save();
+  case DLL_PROCESS_DETACH:
+    config::save();
     break;
   }
 

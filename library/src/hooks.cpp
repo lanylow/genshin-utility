@@ -1,115 +1,81 @@
 #include <common.hpp>
+#include <hooks.hpp>
 
-#include <kiero/kiero.h>
+void hooks::initialize() {
+  MH_Initialize();
+  kiero::init(kiero::RenderType::D3D11);
 
-extern Int64 ImGui_ImplWin32_WndProcHandler(HWND window, UInt32 message, UInt64 wparam, Int64 lparam);
+  MH_CreateHook((void*)(kiero::getMethodsTable()[8]), (void*)(&hooks::present::hook), (void**)(&hooks::present::original));
+  MH_CreateHook((void*)(unity::sdk::set_field_of_view), (void*)(&hooks::set_field_of_view::hook), (void**)(&hooks::set_field_of_view::original));
 
-namespace GenshinUtility {
-  void GHooks::Init() noexcept {
-    MH_Initialize();
-    kiero::init(kiero::RenderType::D3D11);
+  MH_EnableHook(MH_ALL_HOOKS);
+}
 
-    m_presentHook.Create(reinterpret_cast<void*>(kiero::getMethodsTable()[8]), reinterpret_cast<void*>(&PresentHookHandler));
-    m_cameraSetFieldOfViewHook.Create(GIl2Cpp::Get()->m_setFieldOfView, reinterpret_cast<void*>(&CameraSetFieldOfViewHandler));
+#pragma warning(disable: 6387)
+
+long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags) {
+  std::call_once(hooks::present::flag, [&]() {
+    swap_chain->GetDevice(__uuidof(ID3D11Device), (void**)(&hooks::present::device));
+    hooks::present::device->GetImmediateContext(&hooks::present::context);
+
+    DXGI_SWAP_CHAIN_DESC swap_chain_desc;
+    swap_chain->GetDesc(&swap_chain_desc);
+    hooks::wndproc::window = swap_chain_desc.OutputWindow;
+
+    ID3D11Texture2D* back_buffer;
+    swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&back_buffer));
+    hooks::present::device->CreateRenderTargetView(back_buffer, nullptr, &hooks::present::render_target);
+    back_buffer->Release();
+
+    hooks::wndproc::original = (WNDPROC)(SetWindowLongPtrA(hooks::wndproc::window, GWLP_WNDPROC, (long long)(hooks::wndproc::hook)));
+
+    variables::menu::opened = variables::menu::open_on_start;
+    ui::menu::initialize();
+
+    QueryPerformanceFrequency(&hooks::present::performance_frequency);
+    QueryPerformanceCounter(&hooks::present::performance_counter);
+  });
+
+  hooks::present::frames++;
+
+  LARGE_INTEGER now;
+  QueryPerformanceCounter(&now);
+  auto delta = (double)(now.QuadPart - hooks::present::performance_counter.QuadPart) / hooks::present::performance_frequency.QuadPart;
+
+  if (delta >= 1.0) {
+    ui::menu::frame_rate = hooks::present::frames;
+    hooks::present::frames = 0;
+    QueryPerformanceCounter(&hooks::present::performance_counter);
   }
 
-  long __stdcall GHooks::PresentHookHandler(IDXGISwapChain* swapChain, UInt32 syncInterval, UInt32 flags) noexcept {
-    GHooks* hooks = GHooks::Get();
-    static auto trampoline = hooks->m_presentHook.GetTrampoline<decltype(&PresentHookHandler)>();
+  ui::gui::begin();
+  ui::menu::render_menu();
+  ui::menu::render_counter();
+  ui::gui::end();
 
-    static LARGE_INTEGER performanceCounter;
-    static LARGE_INTEGER frequency;
-    static int frames = 0;
+  return hooks::present::original(swap_chain, sync_interval, flags);
+}
 
-    static const auto once = [&swapChain, &hooks](LARGE_INTEGER* performanceCounter, LARGE_INTEGER* frequency) noexcept {
-      swapChain->GetDevice(__uuidof(ID3D11Device), reinterpret_cast<void**>(&hooks->m_device));
+#pragma warning(default: 6387)
 
-      DXGI_SWAP_CHAIN_DESC swapChainDesc;
-      ID3D11Texture2D* backBuffer;
+long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
+  ui::menu::handle_message(window, message, wparam, lparam);
+  return CallWindowProcA(hooks::wndproc::original, window, message, wparam, lparam);
+}
 
-      hooks->m_device->GetImmediateContext(&hooks->m_deviceContext);
-      swapChain->GetDesc(&swapChainDesc);
-      hooks->m_window = swapChainDesc.OutputWindow;
-      swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer));
-      hooks->m_device->CreateRenderTargetView(backBuffer, nullptr, &hooks->m_renderTarget);
-      backBuffer->Release();
+void hooks::set_field_of_view::hook(void* _this, float value, void* method_info) {
+  auto floored = std::floor(value);
 
-      hooks->m_windowProcedure = reinterpret_cast<WNDPROC>(SetWindowLongPtrA(hooks->m_window, GWLP_WNDPROC, reinterpret_cast<Int64>(WndProcHandler)));
+  if (floored == 30.f) {
+    unity::sdk::set_fog(false);
+  }
+  else if (floored == 45.f) {
+    value = (float)(variables::tools::camera_fov);
 
-      Options.menuOpened = Options.openMenuOnStart;
-
-      ImGui::CreateContext();
-
-      ImGuiIO& io = ImGui::GetIO();
-      io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-      io.Fonts->AddFontFromFileTTF(R"(C:\Windows\Fonts\tahoma.ttf)", 14.f);
-
-      ImGui_ImplWin32_Init(hooks->m_window);
-      ImGui_ImplDX11_Init(hooks->m_device, hooks->m_deviceContext);
-
-      QueryPerformanceFrequency(frequency);
-      QueryPerformanceCounter(performanceCounter);
-
-      return true;
-    } (&performanceCounter, &frequency);
-
-    LARGE_INTEGER now;
-    QueryPerformanceCounter(&now);
-    Float64 deltaTime = static_cast<Float64>(now.QuadPart - performanceCounter.QuadPart) / frequency.QuadPart;
-
-    if (deltaTime >= 1.0) {
-      GFpsCounter::Get()->SetFrameRate(frames);
-      frames = 0;
-      QueryPerformanceCounter(&performanceCounter);
-    }
-
-    frames++;
-
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
-    GMenu::Get()->Render();
-    GFpsCounter::Get()->Render();
-
-    ImGui::EndFrame();
-    ImGui::Render();
-
-    hooks->m_deviceContext->OMSetRenderTargets(1, &hooks->m_renderTarget, nullptr);
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    return trampoline(swapChain, syncInterval, flags);
+    unity::sdk::set_target_frame_rate(variables::tools::enable_vsync ? -1 : variables::tools::fps_limit);
+    unity::sdk::set_vsync_count(variables::tools::enable_vsync ? 1 : 0);
+    unity::sdk::set_fog(!variables::tools::disable_fog);
   }
 
-  Int64 __stdcall GHooks::WndProcHandler(HWND window, UInt32 message, UInt64 wparam, Int64 lparam) noexcept {
-    GHooks* hooks = GHooks::Get();
-
-    if (message == WM_KEYDOWN && LOWORD(wparam) == VK_INSERT)
-      Options.menuOpened = !Options.menuOpened;
-
-    if (Options.menuOpened && !ImGui_ImplWin32_WndProcHandler(window, message, wparam, lparam))
-      return true;
-
-    return CallWindowProcA(hooks->m_windowProcedure, window, message, wparam, lparam);
-  }
-
-  void GHooks::CameraSetFieldOfViewHandler(UInt64 instance, float value, UInt64 methodInfo) noexcept {
-    static auto trampoline = GHooks::Get()->m_cameraSetFieldOfViewHook.GetTrampoline<decltype(&CameraSetFieldOfViewHandler)>();
-
-    auto original_value = std::floor(value);
-    
-    GIl2Cpp* il2cpp = GIl2Cpp::Get();
-
-    if (original_value == 30.f) {
-      GIl2Cpp::RunCdecl<void>(il2cpp->m_setFog, false);
-    }
-    else if (original_value == 45.f) {
-      value = static_cast<Float32>(Options.cameraFov);
-      *reinterpret_cast<std::int32_t*>(il2cpp->m_targetFrameRate) = (Options.enableVSync ? -1 : Options.fpsLimit);
-      GIl2Cpp::RunCdecl<void>(il2cpp->m_setVsyncCount, (Options.enableVSync ? 1 : 0));
-      GIl2Cpp::RunCdecl<void>(il2cpp->m_setFog, !Options.disableFog);
-    }
-
-    trampoline(instance, value, methodInfo);
-  }
+  return hooks::set_field_of_view::original(_this, value, method_info);
 }

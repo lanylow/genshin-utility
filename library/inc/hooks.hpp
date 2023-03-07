@@ -1,22 +1,38 @@
 #pragma once
 
-namespace GenshinUtility {
-  class GHooks final : public GInstance<GHooks> {
-  public:
-    void Init() noexcept;
+namespace hooks {
+  void initialize();
+}
 
-  private:
-    static long __stdcall PresentHookHandler(IDXGISwapChain* swapChain, UInt32 syncInterval, UInt32 flags) noexcept;
-    static Int64 __stdcall WndProcHandler(HWND window, UInt32 message, UInt64 wparam, Int64 lparam) noexcept;
-    static void CameraSetFieldOfViewHandler(UInt64 instance, float value, UInt64 methodInfo) noexcept;
+namespace hooks::present {
+  inline ID3D11Device* device;
+  inline ID3D11DeviceContext* context;
+  inline ID3D11RenderTargetView* render_target;
 
-    FHook m_presentHook;
-    FHook m_cameraSetFieldOfViewHook;
+  inline LARGE_INTEGER performance_counter;
+  inline LARGE_INTEGER performance_frequency;
+  inline int frames = 0;
 
-    HWND m_window;
-    WNDPROC m_windowProcedure;
-    ID3D11Device* m_device;
-    ID3D11DeviceContext* m_deviceContext;
-    ID3D11RenderTargetView* m_renderTarget;
-  };
+  inline std::once_flag flag;
+
+  using function_type = long(__stdcall*)(IDXGISwapChain*, unsigned int, unsigned int);
+  inline function_type original;
+
+  long __stdcall hook(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags);
+}
+
+namespace hooks::wndproc {
+  inline HWND window;
+
+  using function_type = long long(__stdcall*)(HWND, unsigned int, unsigned long long, long long);
+  inline function_type original;
+
+  long long __stdcall hook(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
+}
+
+namespace hooks::set_field_of_view {
+  using function_type = void(*)(void*, float, void*);
+  inline function_type original;
+
+  void hook(void* _this, float value, void* method_info);
 }

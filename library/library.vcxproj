@@ -136,6 +136,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,16 +153,12 @@ copy .\bin\release\library.dll ..\out\</Command>
   <ItemGroup>
     <ClInclude Include="inc\common.hpp" />
     <ClInclude Include="inc\config.hpp" />
-    <ClInclude Include="inc\gui\fpscounter.hpp" />
-    <ClInclude Include="inc\gui\gui.hpp" />
-    <ClInclude Include="inc\gui\menu.hpp" />
-    <ClInclude Include="inc\gui\options.hpp" />
     <ClInclude Include="inc\hooks.hpp" />
-    <ClInclude Include="inc\il2cpp.hpp" />
-    <ClInclude Include="inc\utilities\hook.hpp" />
-    <ClInclude Include="inc\utilities\instance.hpp" />
-    <ClInclude Include="inc\utilities\types.hpp" />
-    <ClInclude Include="inc\utilities\windows.hpp" />
+    <ClInclude Include="inc\ui\gui.hpp" />
+    <ClInclude Include="inc\ui\menu.hpp" />
+    <ClInclude Include="inc\ui\variables.hpp" />
+    <ClInclude Include="inc\unity\sdk.hpp" />
+    <ClInclude Include="inc\utils\fn.hpp" />
     <ClInclude Include="lib\imgui\imconfig.h" />
     <ClInclude Include="lib\imgui\imgui.h" />
     <ClInclude Include="lib\imgui\imgui_impl_dx11.h" />
@@ -217,11 +214,10 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClCompile Include="lib\kiero\kiero.cpp" />
     <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\entry.cpp" />
-    <ClCompile Include="src\gui\fpscounter.cpp" />
-    <ClCompile Include="src\gui\gui.cpp" />
-    <ClCompile Include="src\gui\menu.cpp" />
     <ClCompile Include="src\hooks.cpp" />
-    <ClCompile Include="src\il2cpp.cpp" />
+    <ClCompile Include="src\ui\gui.cpp" />
+    <ClCompile Include="src\ui\menu.cpp" />
+    <ClCompile Include="src\unity\sdk.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

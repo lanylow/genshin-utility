@@ -1,13 +1,10 @@
 #pragma once
 
-namespace GenshinUtility {
-  class GConfig final : public GInstance<GConfig> {
-  public:
-    void Load() noexcept;
-    void Save() noexcept;
-    fs::path GetWorkingPath() noexcept;
+namespace config {
+  void load();
+  void save();
+  std::filesystem::path get_working_path();
 
-    const fs::path m_configFolder = GetWorkingPath();
-    const fs::path m_configPath = m_configFolder / "config.gu";
-  };
+  inline const std::filesystem::path config_folder = get_working_path();
+  inline const std::filesystem::path config_path = config_folder / "config.gu";
 }
