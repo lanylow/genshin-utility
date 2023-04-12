@@ -5,14 +5,11 @@ A simple helper tool for Genshin Impact that allows you to change the FPS limit,
 ## Usage
 
 1. Download and extract binaries from the [latest release](https://github.com/lanylow/genshin-utility/releases).
-2. Open CMD as administrator and `cd` into the extracted folder.
-3. Now when you're in the folder, run the following command. Replace `<path>` with location of `GenshinImpact.exe`:
-```
-loader.exe <path>
-```
-4. Genshin Impact will be opened and the program will be injected, a menu will pop up where you can configure your settings.
+2. Open `loader.exe` **as administrator**, a window should pop up informing you that it's waiting for the game.
+3. Now with that running, open Genshin Impact:
+4. The game will open and the mod will be loaded.
 
-Here is a [video showing the program](https://www.youtube.com/watch?v=ia_Q1pS92RI).
+Here is a [video showing the program (OUTDATED!)](https://www.youtube.com/watch?v=ia_Q1pS92RI).
 
 ## Screenshots
 
