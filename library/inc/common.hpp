@@ -27,3 +27,5 @@
 #include "ui/menu.hpp"
 
 #include "config.hpp"
+
+using namespace std::chrono_literals;

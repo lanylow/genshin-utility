@@ -3,7 +3,7 @@
 
 void initialize() {
   do {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(10s);
   } while (!GetModuleHandleA("UserAssembly.dll") && !GetModuleHandleA("UnityPlayer.dll"));
 
   config::load();
