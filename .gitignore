@@ -17,3 +17,4 @@ cmake-build-debug
 /library/bin/release
 /loader/bin/release
 /out
+/loader/target
