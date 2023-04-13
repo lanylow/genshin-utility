@@ -59,7 +59,9 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
 #pragma warning(default: 6387)
 
 long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
-  ui::menu::handle_message(window, message, wparam, lparam);
+  if (!ui::menu::handle_message(window, message, wparam, lparam) && variables::menu::opened)
+    return true;
+
   return CallWindowProcA(hooks::wndproc::original, window, message, wparam, lparam);
 }
 
