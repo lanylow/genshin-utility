@@ -61,7 +61,7 @@ unsafe fn get_process_id_by_name(name: &str) -> Result<u32, Box<dyn error::Error
     return Ok(0);
 }
 
-unsafe fn get_function_address<'a>(module: &str, function: &str) -> Result<u64, Box<dyn error::Error>> {
+unsafe fn get_function_address(module: &str, function: &str) -> Result<u64, Box<dyn error::Error>> {
     let mod_cstr = CString::new(module)?;
     let fn_cstr = CString::new(function)?;
 
