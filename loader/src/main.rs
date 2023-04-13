@@ -80,7 +80,35 @@ unsafe fn get_function_address<'a>(module: &str, function: &str) -> Result<u64, 
     return Ok(func as _);
 }
 
-fn main() -> Result<(), Box<dyn error::Error>> {
+unsafe fn inject(process_id: u32, dll_path: &str) -> Result<(), Box<dyn error::Error>> {
+    let path_cstr = CString::new(dll_path)?;
+    let path_len = path_cstr.as_bytes_with_nul().len();
+
+    let proc = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, process_id);
+
+    if proc.is_null() {
+        return Err(LoaderError::OpenProcessNull.into());
+    }
+
+    let allocation = VirtualAllocEx(proc, ptr::null_mut(), path_len, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+    println!("Allocated memory for the library path at 0x{:x}", allocation as usize);
+
+    if allocation.is_null() {
+        return Err(LoaderError::AllocationFailed.into());
+    }
+
+    WriteProcessMemory(proc, allocation, path_cstr.as_ptr() as LPVOID, path_len, ptr::null_mut());
+
+    let load_library: ThreadStartRoutine = mem::transmute(get_function_address("kernel32.dll", "LoadLibraryA")?);
+    println!("LoadLibraryA found at 0x{:x}", load_library as usize);
+
+    let thread = CreateRemoteThread(proc, ptr::null_mut(), 0, Some(load_library), allocation, 0, ptr::null_mut());
+    CloseHandle(thread);
+
+    return Ok(());
+}
+
+fn init() -> Result<(), Box<dyn error::Error>> {
     println!("Waiting for GenshinImpact.exe");
 
     let mut process_id;
@@ -93,31 +121,20 @@ fn main() -> Result<(), Box<dyn error::Error>> {
         }
     }
 
+    println!("Injecting into {}", process_id);
+
     let exe_path = std::env::current_dir()?;
     let dll_path = exe_path.join("library").with_extension(DLL_EXTENSION);
 
-    let dll_path_cstr = CString::new(dll_path.to_str().unwrap())?;
-    let dll_path_len = dll_path_cstr.as_bytes_with_nul().len();
+    println!("Library path: {}", dll_path.display());
 
-    let proc = unsafe { OpenProcess(PROCESS_CREATE_THREAD | PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, process_id) };
+    unsafe { inject(process_id, dll_path.to_str().unwrap())? };
 
-    if proc.is_null() {
-        return Err(LoaderError::OpenProcessNull.into());
-    }
-
-    let allocation = unsafe { VirtualAllocEx(proc, ptr::null_mut(), dll_path_len, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE) };
-
-    if allocation.is_null() {
-        return Err(LoaderError::AllocationFailed.into());
-    }
-
-    unsafe {
-        WriteProcessMemory(proc, allocation, dll_path_cstr.as_ptr() as LPVOID, dll_path_len, ptr::null_mut());
-
-        let load_library: ThreadStartRoutine = mem::transmute(get_function_address("kernel32.dll", "LoadLibraryA")?);
-        let thread = CreateRemoteThread(proc, ptr::null_mut(), 0, Some(load_library), allocation, 0, ptr::null_mut());
-        CloseHandle(thread);
-    };
+    println!("Done.");
 
     return Ok(());
+}
+
+fn main() {
+    init().unwrap_or_else(|e| println!("Failed to inject the library: {}", e));
 }
