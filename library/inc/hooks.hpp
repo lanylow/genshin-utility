@@ -31,8 +31,15 @@ namespace hooks::wndproc {
 }
 
 namespace hooks::set_field_of_view {
-  using function_type = void(*)(void*, float, void*);
+  using function_type = void(*)(void*, float);
   inline function_type original;
 
-  void hook(void* _this, float value, void* method_info);
+  void hook(void* _this, float value);
+}
+
+namespace hooks::quit {
+  using function_type = void(*)();
+  inline function_type original;
+
+  void hook();
 }

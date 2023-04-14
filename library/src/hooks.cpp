@@ -7,6 +7,7 @@ void hooks::initialize() {
 
   MH_CreateHook((void*)(kiero::getMethodsTable()[8]), (void*)(&hooks::present::hook), (void**)(&hooks::present::original));
   MH_CreateHook((void*)(unity::sdk::set_field_of_view), (void*)(&hooks::set_field_of_view::hook), (void**)(&hooks::set_field_of_view::original));
+  MH_CreateHook((void*)(unity::sdk::quit), (void*)(&hooks::quit::hook), (void**)(&hooks::quit::original));
 
   MH_EnableHook(MH_ALL_HOOKS);
 }
@@ -65,7 +66,7 @@ long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsi
   return CallWindowProcA(hooks::wndproc::original, window, message, wparam, lparam);
 }
 
-void hooks::set_field_of_view::hook(void* _this, float value, void* method_info) {
+void hooks::set_field_of_view::hook(void* _this, float value) {
   auto floored = std::floor(value);
 
   if (floored == 30.f) {
@@ -79,5 +80,11 @@ void hooks::set_field_of_view::hook(void* _this, float value, void* method_info)
     unity::sdk::set_fog(!variables::tools::disable_fog);
   }
 
-  return hooks::set_field_of_view::original(_this, value, method_info);
+  return hooks::set_field_of_view::original(_this, value);
+}
+
+void hooks::quit::hook() {
+  config::save();
+
+  return hooks::quit::original();
 }

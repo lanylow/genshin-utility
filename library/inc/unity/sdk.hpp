@@ -1,6 +1,9 @@
 #pragma once
 
 namespace unity::sdk {
+  // Application.Quit
+  inline unsigned long long quit;
+
   // UnityEngine.Camera
   inline unsigned long long set_field_of_view;
 
