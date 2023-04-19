@@ -6,6 +6,7 @@ void hooks::initialize() {
   kiero::init(kiero::RenderType::D3D11);
 
   MH_CreateHook((void*)(kiero::getMethodsTable()[8]), (void*)(&hooks::present::hook), (void**)(&hooks::present::original));
+  MH_CreateHook((void*)(kiero::getMethodsTable()[13]), (void*)(&hooks::resize_buffers::hook), (void**)(&hooks::resize_buffers::original));
   MH_CreateHook((void*)(unity::sdk::set_field_of_view), (void*)(&hooks::set_field_of_view::hook), (void**)(&hooks::set_field_of_view::original));
   MH_CreateHook((void*)(unity::sdk::quit), (void*)(&hooks::quit::hook), (void**)(&hooks::quit::original));
 
@@ -22,12 +23,6 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
     DXGI_SWAP_CHAIN_DESC swap_chain_desc;
     swap_chain->GetDesc(&swap_chain_desc);
     hooks::wndproc::window = swap_chain_desc.OutputWindow;
-
-    ID3D11Texture2D* back_buffer;
-    swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&back_buffer));
-    hooks::present::device->CreateRenderTargetView(back_buffer, nullptr, &hooks::present::render_target);
-    back_buffer->Release();
-
     hooks::wndproc::original = (WNDPROC)(SetWindowLongPtrA(hooks::wndproc::window, GWLP_WNDPROC, (long long)(hooks::wndproc::hook)));
 
     variables::menu::opened = variables::menu::open_on_start;
@@ -36,6 +31,15 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
     QueryPerformanceFrequency(&hooks::present::performance_frequency);
     QueryPerformanceCounter(&hooks::present::performance_counter);
   });
+
+  if (initalize_render_target) {
+    ID3D11Texture2D* back_buffer;
+    swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&back_buffer));
+    hooks::present::device->CreateRenderTargetView(back_buffer, nullptr, &hooks::present::render_target);
+    back_buffer->Release();
+
+    initalize_render_target = false;
+  }
 
   hooks::present::frames++;
 
@@ -58,6 +62,14 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
 }
 
 #pragma warning(default: 6387)
+
+long __stdcall hooks::resize_buffers::hook(IDXGISwapChain* swap_chain, unsigned int buffer_count, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int flags) {
+  hooks::present::render_target->Release();
+  hooks::present::render_target = nullptr;
+  hooks::present::initalize_render_target = true;
+
+  return hooks::resize_buffers::original(swap_chain, buffer_count, width, height, format, flags);
+}
 
 long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
   if (!ui::menu::handle_message(window, message, wparam, lparam) && variables::menu::opened)

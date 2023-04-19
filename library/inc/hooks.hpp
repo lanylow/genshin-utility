@@ -14,11 +14,19 @@ namespace hooks::present {
   inline int frames = 0;
 
   inline std::once_flag flag;
+  inline bool initalize_render_target = true;
 
   using function_type = long(__stdcall*)(IDXGISwapChain*, unsigned int, unsigned int);
   inline function_type original;
 
   long __stdcall hook(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags);
+}
+
+namespace hooks::resize_buffers {
+  using function_type = long(__stdcall*)(IDXGISwapChain*, unsigned int, unsigned int, unsigned int, DXGI_FORMAT, unsigned int);
+  inline function_type original;
+
+  long __stdcall hook(IDXGISwapChain* swap_chain, unsigned int buffer_count, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int flags);
 }
 
 namespace hooks::wndproc {
