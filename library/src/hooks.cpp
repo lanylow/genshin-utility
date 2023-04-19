@@ -27,9 +27,6 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
 
     variables::menu::opened = variables::menu::open_on_start;
     ui::menu::initialize();
-
-    QueryPerformanceFrequency(&hooks::present::performance_frequency);
-    QueryPerformanceCounter(&hooks::present::performance_counter);
   });
 
   if (initalize_render_target) {
@@ -41,18 +38,7 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
     initalize_render_target = false;
   }
 
-  hooks::present::frames++;
-
-  LARGE_INTEGER now;
-  QueryPerformanceCounter(&now);
-  auto delta = (double)(now.QuadPart - hooks::present::performance_counter.QuadPart) / hooks::present::performance_frequency.QuadPart;
-
-  if (delta >= 1.0) {
-    ui::menu::frame_rate = hooks::present::frames;
-    hooks::present::frames = 0;
-    QueryPerformanceCounter(&hooks::present::performance_counter);
-  }
-
+  ui::menu::handle_frame();
   ui::gui::begin();
   ui::menu::render_menu();
   ui::menu::render_counter();

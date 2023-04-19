@@ -2,6 +2,9 @@
 
 void ui::menu::initialize() {
   ui::gui::initialize_imgui();
+
+  QueryPerformanceFrequency(&ui::menu::performance_frequency);
+  QueryPerformanceCounter(&ui::menu::performance_counter);
 }
 
 long long ui::menu::handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
@@ -17,6 +20,20 @@ long long ui::menu::handle_message(HWND window, unsigned int message, unsigned l
   }
 
   return ui::gui::handle_message(window, message, wparam, lparam);
+}
+
+void ui::menu::handle_frame() {
+  ui::menu::frames++;
+
+  LARGE_INTEGER now;
+  QueryPerformanceCounter(&now);
+  auto delta = (double)(now.QuadPart - ui::menu::performance_counter.QuadPart) / ui::menu::performance_frequency.QuadPart;
+
+  if (delta >= 1.0) {
+    ui::menu::frame_rate = ui::menu::frames;
+    ui::menu::frames = 0;
+    QueryPerformanceCounter(&ui::menu::performance_counter);
+  }
 }
 
 void ui::menu::render_menu() {

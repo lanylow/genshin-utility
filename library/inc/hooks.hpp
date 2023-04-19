@@ -9,10 +9,6 @@ namespace hooks::present {
   inline ID3D11DeviceContext* context;
   inline ID3D11RenderTargetView* render_target;
 
-  inline LARGE_INTEGER performance_counter;
-  inline LARGE_INTEGER performance_frequency;
-  inline int frames = 0;
-
   inline std::once_flag flag;
   inline bool initalize_render_target = true;
 
