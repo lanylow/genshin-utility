@@ -2,15 +2,16 @@
 #include <hooks.hpp>
 
 void hooks::initialize() {
-  MH_Initialize();
+  utils::mh::init();
   kiero::init(kiero::RenderType::D3D11);
 
-  MH_CreateHook((void*)(kiero::getMethodsTable()[8]), (void*)(&hooks::present::hook), (void**)(&hooks::present::original));
-  MH_CreateHook((void*)(kiero::getMethodsTable()[13]), (void*)(&hooks::resize_buffers::hook), (void**)(&hooks::resize_buffers::original));
-  MH_CreateHook((void*)(unity::sdk::set_field_of_view), (void*)(&hooks::set_field_of_view::hook), (void**)(&hooks::set_field_of_view::original));
-  MH_CreateHook((void*)(unity::sdk::quit), (void*)(&hooks::quit::hook), (void**)(&hooks::quit::original));
+  utils::mh::hook_kiero(8, &hooks::present::hook, &hooks::present::original);
+  utils::mh::hook_kiero(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
 
-  MH_EnableHook(MH_ALL_HOOKS);
+  utils::mh::hook(unity::sdk::set_field_of_view, &hooks::set_field_of_view::hook, &hooks::set_field_of_view::original);
+  utils::mh::hook(unity::sdk::quit, &hooks::quit::hook, &hooks::quit::original);
+
+  utils::mh::enable_all();
 }
 
 #pragma warning(disable: 6387)

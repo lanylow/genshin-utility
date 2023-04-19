@@ -53,6 +53,7 @@
     <ClInclude Include="inc\ui\gui.hpp" />
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\config.hpp" />
+    <ClInclude Include="inc\utils\mh.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\imgui\imgui.cpp" />

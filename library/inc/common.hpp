@@ -19,6 +19,7 @@
 #include <imgui/imgui_internal.h>
 
 #include "utils/fn.hpp"
+#include "utils/mh.hpp"
 
 #include "unity/sdk.hpp"
 
