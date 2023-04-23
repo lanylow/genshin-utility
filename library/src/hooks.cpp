@@ -17,7 +17,7 @@ void hooks::initialize() {
 #pragma warning(disable: 6387)
 
 long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags) {
-  std::call_once(hooks::present::flag, [&]() {
+  std::call_once(hooks::present::init_flag, [&]() {
     swap_chain->GetDevice(__uuidof(ID3D11Device), (void**)(&hooks::present::device));
     hooks::present::device->GetImmediateContext(&hooks::present::context);
 
@@ -30,14 +30,12 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
     ui::menu::initialize();
   });
 
-  if (initalize_render_target) {
+  utils::call_if(hooks::present::render_target_flag, [&]() {
     ID3D11Texture2D* back_buffer;
     swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&back_buffer));
     hooks::present::device->CreateRenderTargetView(back_buffer, nullptr, &hooks::present::render_target);
     back_buffer->Release();
-
-    initalize_render_target = false;
-  }
+  });
 
   ui::menu::handle_frame();
   ui::gui::begin();
@@ -53,7 +51,7 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
 long __stdcall hooks::resize_buffers::hook(IDXGISwapChain* swap_chain, unsigned int buffer_count, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int flags) {
   hooks::present::render_target->Release();
   hooks::present::render_target = nullptr;
-  hooks::present::initalize_render_target = true;
+  hooks::present::render_target_flag.reset();
 
   return hooks::resize_buffers::original(swap_chain, buffer_count, width, height, format, flags);
 }
