@@ -109,14 +109,16 @@ unsafe fn inject(process_id: u32, dll_path: &str) -> Result<(), Box<dyn error::E
 }
 
 fn init() -> Result<(), Box<dyn error::Error>> {
-    println!("Waiting for GenshinImpact.exe");
+    println!("Waiting for GenshinImpact.exe or StarRail.exe");
 
-    let mut process_id;
+    let process_id;
 
     loop {
-        process_id = unsafe { get_process_id_by_name("GenshinImpact.exe")? };
+        let genshin_id = unsafe { get_process_id_by_name("GenshinImpact.exe")? };
+        let star_rail_id = unsafe { get_process_id_by_name("StarRail.exe")? };
 
-        if process_id != 0 {
+        if genshin_id != 0 || star_rail_id != 0 {
+            process_id = if genshin_id == 0 { star_rail_id } else { genshin_id };
             break;
         }
     }

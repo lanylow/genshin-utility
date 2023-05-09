@@ -4,10 +4,10 @@
 void initialize() {
   do {
     std::this_thread::sleep_for(10s);
-  } while (!GetModuleHandleA("UserAssembly.dll") && !GetModuleHandleA("UnityPlayer.dll"));
+  } while (!GetModuleHandleA("UnityPlayer.dll"));
 
   config::load();
-  unity::sdk::initialize();
+  GetModuleHandleA("GenshinImpact.exe") != nullptr ? unity::sdk::initialize_genshin_impact() : unity::sdk::initialize_star_rail();
   hooks::initialize();
 }
 

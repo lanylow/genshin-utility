@@ -6,7 +6,10 @@ namespace utils {
   class fn {
   public:
     constexpr fn() = default;
-    explicit constexpr fn(unsigned long long address) : address(address) { }
+
+    template <typename cast_type,
+      std::enable_if_t<std::is_integral_v<cast_type> || std::is_pointer_v<cast_type>, int> = 0>
+    explicit constexpr fn(cast_type address) : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
     constexpr return_type invoke(arg_type&&... args) {
@@ -21,8 +24,10 @@ namespace utils {
       return invoke(std::forward<arg_type>(args)...);
     }
 
-    constexpr utils::fn<return_type>& operator=(unsigned long long new_address) { 
-      address = new_address;
+    template <typename cast_type,
+      std::enable_if_t<std::is_integral_v<cast_type> || std::is_pointer_v<cast_type>, int> = 0>
+    constexpr utils::fn<return_type>& operator=(cast_type new_address) { 
+      address = (unsigned long long)(new_address);
       return *this;
     }
     
