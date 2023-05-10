@@ -158,7 +158,7 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClInclude Include="inc\ui\menu.hpp" />
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\unity\sdk.hpp" />
-    <ClInclude Include="inc\utils\callif.hpp" />
+    <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="inc\utils\fn.hpp" />
     <ClInclude Include="inc\utils\mh.hpp" />
     <ClInclude Include="lib\imgui\imconfig.h" />

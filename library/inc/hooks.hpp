@@ -9,8 +9,8 @@ namespace hooks::present {
   inline ID3D11DeviceContext* context;
   inline ID3D11RenderTargetView* render_target;
 
-  inline std::once_flag init_flag;
-  inline utils::if_flag render_target_flag;
+  inline utils::once_flag init_flag;
+  inline utils::once_flag render_target_flag;
 
   using function_type = long(__stdcall*)(IDXGISwapChain*, unsigned int, unsigned int);
   inline function_type original;

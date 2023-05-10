@@ -12,14 +12,14 @@ namespace utils {
       >
     > { };
 
-  struct if_flag {
-    explicit constexpr if_flag(bool init = true) : value(init) { }
+  struct once_flag {
+    explicit constexpr once_flag(bool init = true) : value(init) { }
 
     void reset() {
       value = true;
     }
 
-    utils::if_flag& operator=(const bool val) {
+    utils::once_flag& operator=(const bool val) {
       value = val;
       return *this;
     }
@@ -34,7 +34,7 @@ namespace utils {
 
   template <typename function_type, class... args_type,
     std::enable_if_t<utils::is_invocable_with<function_type, args_type...>::value, int> = 0>
-  constexpr void call_if(utils::if_flag& flag, function_type&& function, args_type&&... args) {
+  constexpr void call_once(utils::once_flag& flag, function_type&& function, args_type&&... args) {
     if (!flag)
       return;
 

@@ -54,7 +54,7 @@
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\config.hpp" />
     <ClInclude Include="inc\utils\mh.hpp" />
-    <ClInclude Include="inc\utils\callif.hpp" />
+    <ClInclude Include="inc\utils\once.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\imgui\imgui.cpp" />
