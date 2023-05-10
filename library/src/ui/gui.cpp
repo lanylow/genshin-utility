@@ -115,7 +115,7 @@ void ui::gui::add_slider(const char* name, int min, int max, int* item, int step
     *item -= step;
 
   if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::IsMouseHoveringRect({ ui::gui::groupbox_offset_x + 22 + 200, ui::gui::groupbox_offset_y + 12 }, { ui::gui::groupbox_offset_x + 22 + 200 + 15, ui::gui::groupbox_offset_y + 12 + 10 }))
-    *item -= step;
+    *item += step;
 
   if (*item > max)
     *item = max;
