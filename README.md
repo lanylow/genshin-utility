@@ -1,17 +1,17 @@
-# Genshin Utility [![License](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://github.com/lanylow/genshin-utility/blob/main/LICENSE) ![OS](https://img.shields.io/badge/OS-Windows-green.svg)
+# Genshin Utility [![License](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://github.com/lanylow/genshin-utility/blob/main/LICENSE) ![OS](https://img.shields.io/badge/OS-Windows-yellow.svg) [![Discord](https://img.shields.io/badge/chat-discord-informational)](https://discord.gg/MrtJvV5tKv)
 
-Free and open-source tool for Genshin Impact that includes a few quality-of-life features, developed as an internal module that's being loaded into the game process. Compatible only with the global version of the game.
+Free and open-source tool for Genshin Impact and Honkai: Start Rail that includes a few quality-of-life features, developed as an internal module that's being loaded into the game process. Compatible only with the global version of the game.
 
 ## FAQ
 
 ### How to load the mod?
 1. Download and extract binaries from the [latest release](https://github.com/lanylow/genshin-utility/releases).
 2. Open `loader.exe` **as administrator**, a window should pop up informing you that it's waiting for the game.
-3. Now with that running, open Genshin Impact.
+3. Now with that running, open Genshin Impact or Honkai: Star Rail.
 4. The game will open and the mod will be loaded.
 
 ### How do I open and close the menu?
-When you have the Genshin Impact window focused, press the <kbd>INSERT</kbd> key.
+When you have the game window focused, press the <kbd>INSERT</kbd> key.
 
 ### Where is my configuration saved?
 The `genshin-utility` folder within your Documents directory contains the saved configuration files. These files are in a human-readable format and can be edited as needed. However, after updates, it may be necessary to delete and recreate the configuration file.
