@@ -19,7 +19,7 @@ void unity::sdk::initialize_genshin_impact() {
 
 void unity::sdk::initialize_star_rail() {
   auto game_assembly = GetModuleHandleA("GameAssembly.dll");
-  auto resolve_icall = utils::fn<void*>(GetProcAddress(game_assembly, "il2cpp_resolve_icall"));
+  auto resolve_icall = utils::fn<void*>{ GetProcAddress(game_assembly, "il2cpp_resolve_icall") };
 
   unity::sdk::set_field_of_view = resolve_icall("UnityEngine.Camera::set_fieldOfView(System.Single)");
 

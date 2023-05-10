@@ -8,7 +8,7 @@ void config::load() {
       return;
   }
 
-  std::ifstream input_file(config::config_path.string(), std::ios::in);
+  std::ifstream input_file{ config::config_path.string(), std::ios::in };
 
   if (!input_file.good())
     return;
@@ -55,7 +55,7 @@ void config::save() {
     return;
   }
 
-  std::ofstream output_file(config::config_path.string(), std::ios::out | std::ios::trunc);
+  std::ofstream output_file{ config::config_path.string(), std::ios::out | std::ios::trunc };
 
   if (!output_file.good())
     return;
