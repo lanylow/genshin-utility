@@ -34,3 +34,7 @@ void unity::sdk::initialize_star_rail() {
 }
 
 #pragma warning(default: 6387)
+
+bool unity::sdk::is_genshin_impact() {
+  return unity::sdk::game == unity::sdk::game_type::genshin_impact;
+}

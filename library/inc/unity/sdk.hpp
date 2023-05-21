@@ -23,4 +23,6 @@ namespace unity::sdk {
 
   void initialize_genshin_impact();
   void initialize_star_rail();
+
+  bool is_genshin_impact();
 }

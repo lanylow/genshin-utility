@@ -84,7 +84,7 @@ bool hooks::set_field_of_view::star_rail(float value) {
 }
 
 void hooks::set_field_of_view::hook(void* _this, float value) {
-  auto res = unity::sdk::game == unity::sdk::game_type::genshin_impact ?
+  auto res = unity::sdk::is_genshin_impact() ?
     hooks::set_field_of_view::genshin_impact(value) : 
     hooks::set_field_of_view::star_rail(value);
 
