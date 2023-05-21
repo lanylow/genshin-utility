@@ -7,7 +7,11 @@ void initialize() {
   } while (!GetModuleHandleA("UnityPlayer.dll"));
 
   config::load();
-  GetModuleHandleA("GenshinImpact.exe") != nullptr ? unity::sdk::initialize_genshin_impact() : unity::sdk::initialize_star_rail();
+
+  GetModuleHandleA("GenshinImpact.exe") != nullptr ? 
+    unity::sdk::initialize_genshin_impact() : 
+    unity::sdk::initialize_star_rail();
+
   hooks::initialize();
 }
 

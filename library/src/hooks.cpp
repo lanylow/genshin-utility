@@ -63,13 +63,32 @@ long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsi
   return CallWindowProcA(hooks::wndproc::original, window, message, wparam, lparam);
 }
 
-void hooks::set_field_of_view::hook(void* _this, float value) {
+bool hooks::set_field_of_view::genshin_impact(float value) {
   auto floored = std::floor(value);
 
-  if (floored == 30.f) {
+  if (floored == 30.f)
     unity::sdk::set_fog(false);
-  }
-  else if (floored == 45.f) {
+  else if (floored == 45.f)
+    return true;
+
+  return false;
+}
+
+bool hooks::set_field_of_view::star_rail(float value) {
+  auto floored = std::floor(value);
+
+  if (floored == 30.f)
+    return false;
+
+  return true;
+}
+
+void hooks::set_field_of_view::hook(void* _this, float value) {
+  auto res = unity::sdk::game == unity::sdk::game_type::genshin_impact ?
+    hooks::set_field_of_view::genshin_impact(value) : 
+    hooks::set_field_of_view::star_rail(value);
+
+  if (res) {
     value = (float)(variables::tools::camera_fov);
 
     unity::sdk::set_target_frame_rate(variables::tools::enable_vsync ? -1 : variables::tools::fps_limit);

@@ -38,6 +38,8 @@ namespace hooks::set_field_of_view {
   using function_type = void(*)(void*, float);
   inline function_type original;
 
+  bool genshin_impact(float value);
+  bool star_rail(float value);
   void hook(void* _this, float value);
 }
 
