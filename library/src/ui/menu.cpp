@@ -54,13 +54,13 @@ void ui::menu::render_counter() {
   if (!variables::tools::fps_counter)
     return;
 
-  auto screen_width = ImGui::GetMainViewport()->Size.x;
   auto text = std::to_string(ui::menu::frame_rate) + " fps";
   auto text_size = ImGui::CalcTextSize(text.c_str());
 
-  auto rect_begin = screen_width - 2 - 5 - text_size.x - 5;
-  auto rect_end = screen_width - (rect_begin) - 2;
+  auto screen_width = ImGui::GetMainViewport()->Size.x;
   auto text_begin = screen_width - 2 - 5 - text_size.x;
+  auto rect_begin = text_begin - 5;
+  auto rect_end = screen_width - (rect_begin) - 2;
 
   ui::gui::add_rectangle(rect_begin, 2, rect_end, 20, 50, 50, 50, 255);
   ui::gui::add_rectangle(rect_begin, 21, rect_end, 1, 195, 141, 145, 255);
