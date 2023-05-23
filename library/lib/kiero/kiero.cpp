@@ -2,6 +2,11 @@
 #include <Windows.h>
 #include <assert.h>
 
+#include <thread>
+#include <chrono>
+
+using namespace std::chrono_literals;
+
 #if KIERO_INCLUDE_D3D9
 # include <d3d9.h>
 #endif
@@ -269,12 +274,8 @@ kiero::Status::Enum kiero::init(RenderType::Enum _renderType)
 			{
 #if KIERO_INCLUDE_D3D11
 				HMODULE libD3D11;
-				if ((libD3D11 = ::GetModuleHandle(KIERO_TEXT("d3d11.dll"))) == NULL)
-				{
-					::DestroyWindow(window);
-					::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-					return Status::ModuleNotFoundError;
-				}
+				while ((libD3D11 = ::GetModuleHandle(KIERO_TEXT("d3d11.dll"))) == NULL)
+					std::this_thread::sleep_for(10ms);
 
 				void* D3D11CreateDeviceAndSwapChain;
 				if ((D3D11CreateDeviceAndSwapChain = ::GetProcAddress(libD3D11, "D3D11CreateDeviceAndSwapChain")) == NULL)
@@ -317,7 +318,7 @@ kiero::Status::Enum kiero::init(RenderType::Enum _renderType)
 				ID3D11Device* device;
 				ID3D11DeviceContext* context;
 
-				if (((long(__stdcall*)(
+				while (((long(__stdcall*)(
 					IDXGIAdapter*,
 					D3D_DRIVER_TYPE,
 					HMODULE,
@@ -330,11 +331,9 @@ kiero::Status::Enum kiero::init(RenderType::Enum _renderType)
 					ID3D11Device**,
 					D3D_FEATURE_LEVEL*,
 					ID3D11DeviceContext**))(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, &featureLevel, &context) < 0)
-				{
-					::DestroyWindow(window);
-					::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-					return Status::UnknownError;
-				}
+					std::this_thread::sleep_for(10ms);
+
+				std::this_thread::sleep_for(10s);
 
 				g_methodsTable = (uint150_t*)::calloc(205, sizeof(uint150_t));
 				::memcpy(g_methodsTable, *(uint150_t**)swapChain, 18 * sizeof(uint150_t));
