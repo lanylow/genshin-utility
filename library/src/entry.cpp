@@ -2,10 +2,7 @@
 #include <hooks.hpp>
 
 void initialize() {
-  while (
-    !GetModuleHandleA("UnityPlayer.dll") ||
-    !(GetModuleHandleA("UserAssembly.dll") || GetModuleHandleA("GameAssembly.dll"))
-    )
+  while (!GetModuleHandleA("UnityPlayer.dll") || !(GetModuleHandleA("UserAssembly.dll") || GetModuleHandleA("GameAssembly.dll")))
     std::this_thread::sleep_for(10ms);
 
   config::load();
