@@ -35,6 +35,8 @@ namespace hooks::wndproc {
 }
 
 namespace hooks::set_field_of_view {
+  inline utils::once_flag present_flag;
+
   using function_type = void(*)(void*, float);
   inline function_type original;
 

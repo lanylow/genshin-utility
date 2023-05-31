@@ -19,6 +19,9 @@ namespace unity::sdk {
   // UnityEngine.RenderSettings
   inline utils::fn<void> set_fog;
 
+  // Only needed in Honkai: Star Rail
+  inline unsigned long long ult_fov_ret;
+
   inline unity::sdk::game_type game;
 
   void initialize_genshin_impact();

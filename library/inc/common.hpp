@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <shlobj.h>
+#include <intrin.h>
 
 #include <minhook/MinHook.h>
 #include <kiero/kiero.h>

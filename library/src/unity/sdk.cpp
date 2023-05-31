@@ -15,25 +15,23 @@ void unity::sdk::initialize_genshin_impact() {
   unity::sdk::game = unity::sdk::game_type::genshin_impact;
 }
 
-#pragma warning(disable: 6387)
-
 void unity::sdk::initialize_star_rail() {
-  auto game_assembly = GetModuleHandleA("GameAssembly.dll");
-  auto resolve_icall = utils::fn<void*>{ GetProcAddress(game_assembly, "il2cpp_resolve_icall") };
+  auto game_assembly = (unsigned long long)(GetModuleHandleA("GameAssembly.dll"));
+  auto unity_player = (unsigned long long)(GetModuleHandleA("UnityPlayer.dll"));
 
-  unity::sdk::set_field_of_view = resolve_icall("UnityEngine.Camera::set_fieldOfView(System.Single)");
+  unity::sdk::set_field_of_view = unity_player + 0xce1890;
 
-  unity::sdk::set_target_frame_rate = resolve_icall("UnityEngine.Application::set_targetFrameRate(System.Int32)");
-  unity::sdk::quit = resolve_icall("UnityEngine.Application::Quit(System.Int32)");
+  unity::sdk::set_target_frame_rate = unity_player + 0xcd1b30;
+  unity::sdk::quit = unity_player + 0xcd1550;
 
-  unity::sdk::set_vsync_count = resolve_icall("UnityEngine.QualitySettings::set_vSyncCount(System.Int32)");
+  unity::sdk::set_vsync_count = unity_player + 0xd2b9b0;
 
-  unity::sdk::set_fog = resolve_icall("UnityEngine.RenderSettings::set_fog(System.Boolean)");
+  unity::sdk::set_fog = unity_player + 0xd32d90;
+
+  unity::sdk::ult_fov_ret = game_assembly + 0x5878073;
 
   unity::sdk::game = unity::sdk::game_type::star_rail;
 }
-
-#pragma warning(default: 6387)
 
 bool unity::sdk::is_genshin_impact() {
   return unity::sdk::game == unity::sdk::game_type::genshin_impact;

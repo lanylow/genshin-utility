@@ -3,10 +3,6 @@
 
 void hooks::initialize() {
   utils::mh::init();
-  kiero::init(kiero::RenderType::D3D11);
-
-  utils::mh::hook_kiero(8, &hooks::present::hook, &hooks::present::original);
-  utils::mh::hook_kiero(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
 
   utils::mh::hook(unity::sdk::set_field_of_view, &hooks::set_field_of_view::hook, &hooks::set_field_of_view::original);
   utils::mh::hook(unity::sdk::quit, &hooks::quit::hook, &hooks::quit::original);
@@ -64,32 +60,37 @@ long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsi
 }
 
 bool hooks::set_field_of_view::genshin_impact(float value) {
-  auto floored = std::floor(value);
-
-  if (floored == 30.f)
+  if (value == 30.f)
     unity::sdk::set_fog(false);
-  else if (floored == 45.f)
-    return true;
-
-  return false;
+  
+  return value == 45.f;
 }
 
 bool hooks::set_field_of_view::star_rail(float value) {
-  auto floored = std::floor(value);
-
-  if (floored == 30.f)
-    return false;
-
-  return true;
+  return value != 30.f;
 }
 
 void hooks::set_field_of_view::hook(void* _this, float value) {
+  utils::call_once(hooks::set_field_of_view::present_flag, []() {
+    kiero::init(kiero::RenderType::D3D11);
+
+    utils::mh::hook_kiero(8, &hooks::present::hook, &hooks::present::original);
+    utils::mh::hook_kiero(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
+
+    utils::mh::enable_all();
+  });
+
+  auto floored = std::floor(value);
+
   auto res = unity::sdk::is_genshin_impact() ?
-    hooks::set_field_of_view::genshin_impact(value) : 
-    hooks::set_field_of_view::star_rail(value);
+    hooks::set_field_of_view::genshin_impact(floored) :
+    hooks::set_field_of_view::star_rail(floored);
 
   if (res) {
-    value = (float)(variables::tools::camera_fov);
+    auto ret = (unsigned long long)(_ReturnAddress());
+
+    if (ret != unity::sdk::ult_fov_ret)
+      value = (float)(variables::tools::camera_fov);
 
     unity::sdk::set_target_frame_rate(variables::tools::enable_vsync ? -1 : variables::tools::fps_limit);
     unity::sdk::set_vsync_count(variables::tools::enable_vsync ? 1 : 0);
