@@ -22,6 +22,7 @@
 #include "utils/fn.hpp"
 #include "utils/mh.hpp"
 #include "utils/once.hpp"
+#include "utils/console.hpp"
 
 #include "unity/sdk.hpp"
 

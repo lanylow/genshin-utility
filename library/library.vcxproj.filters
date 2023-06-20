@@ -55,6 +55,7 @@
     <ClInclude Include="inc\config.hpp" />
     <ClInclude Include="inc\utils\mh.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
+    <ClInclude Include="inc\utils\console.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\imgui\imgui.cpp" />
@@ -70,5 +71,6 @@
     <ClCompile Include="src\ui\menu.cpp" />
     <ClCompile Include="src\ui\gui.cpp" />
     <ClCompile Include="src\config.cpp" />
+    <ClCompile Include="src\utils\console.cpp" />
   </ItemGroup>
 </Project>
