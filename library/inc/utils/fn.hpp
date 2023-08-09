@@ -1,6 +1,13 @@
 #pragma once
 
 namespace utils {
+  template <typename cast_type>
+  struct is_fn_convertible :
+    std::disjunction<
+      std::is_integral<cast_type>,
+      std::is_pointer<cast_type>
+    > { };
+
   template <typename return_type, 
     std::enable_if_t<std::is_arithmetic_v<return_type> || std::is_void_v<return_type> || std::is_pointer_v<return_type>, int> = 0>
   class fn {
@@ -8,7 +15,7 @@ namespace utils {
     constexpr fn() = default;
 
     template <typename cast_type,
-      std::enable_if_t<std::is_integral_v<cast_type> || std::is_pointer_v<cast_type>, int> = 0>
+      std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
     explicit constexpr fn(cast_type address) : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
@@ -25,14 +32,14 @@ namespace utils {
     }
 
     template <typename cast_type,
-      std::enable_if_t<std::is_integral_v<cast_type> || std::is_pointer_v<cast_type>, int> = 0>
+      std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
     constexpr utils::fn<return_type>& operator=(cast_type new_address) { 
       address = (unsigned long long)(new_address);
       return *this;
     }
     
     template <typename cast_type,
-      std::enable_if_t<std::is_integral_v<cast_type> || std::is_pointer_v<cast_type>, int> = 0>
+      std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
     constexpr operator cast_type() const {
       return (cast_type)(address);
     }
