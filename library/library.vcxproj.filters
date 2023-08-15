@@ -46,7 +46,7 @@
     <ClInclude Include="lib\json\json.hpp" />
     <ClInclude Include="lib\json\json_fwd.hpp" />
     <ClInclude Include="inc\common.hpp" />
-    <ClInclude Include="inc\unity\sdk.hpp" />
+    <ClInclude Include="inc\sdk.hpp" />
     <ClInclude Include="inc\utils\fn.hpp" />
     <ClInclude Include="inc\hooks.hpp" />
     <ClInclude Include="inc\ui\menu.hpp" />
@@ -66,7 +66,7 @@
     <ClCompile Include="lib\kiero\kiero.cpp" />
     <ClCompile Include="lib\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="src\entry.cpp" />
-    <ClCompile Include="src\unity\sdk.cpp" />
+    <ClCompile Include="src\sdk.cpp" />
     <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\ui\menu.cpp" />
     <ClCompile Include="src\ui\gui.cpp" />

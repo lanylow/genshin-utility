@@ -450,7 +450,7 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     {
       static const char* pixelShader;
 
-        if (unity::sdk::is_genshin_impact())
+        if (sdk::is_genshin_impact())
           pixelShader =
           "struct PS_INPUT\
             {\

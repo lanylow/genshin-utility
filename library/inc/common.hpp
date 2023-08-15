@@ -24,7 +24,7 @@
 #include "utils/once.hpp"
 #include "utils/console.hpp"
 
-#include "unity/sdk.hpp"
+#include "sdk.hpp"
 
 #include "ui/variables.hpp"
 #include "ui/gui.hpp"

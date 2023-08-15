@@ -8,8 +8,8 @@ void initialize() {
   config::load();
 
   GetModuleHandleA("GenshinImpact.exe") != nullptr ? 
-    unity::sdk::initialize_genshin_impact() : 
-    unity::sdk::initialize_star_rail();
+    sdk::initialize_genshin_impact() : 
+    sdk::initialize_star_rail();
 
   hooks::initialize();
 }

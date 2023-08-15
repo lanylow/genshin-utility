@@ -1,6 +1,6 @@
 #pragma once
 
-namespace unity::sdk {
+namespace sdk {
   enum class game_type {
     genshin_impact,
     star_rail
@@ -22,7 +22,7 @@ namespace unity::sdk {
   // Only needed in Honkai: Star Rail
   inline unsigned long long ult_fov_ret;
 
-  inline unity::sdk::game_type game;
+  inline sdk::game_type game;
 
   void initialize_genshin_impact();
   void initialize_star_rail();
