@@ -23,7 +23,7 @@ namespace utils {
       if (!address)
         return return_type{ };
 
-      return reinterpret_cast<return_type(*)(arg_type...)>(address)(std::forward<arg_type>(args)...);
+      return ((return_type(*)(arg_type...))(address))(std::forward<arg_type>(args)...);
     }
 
     template <typename... arg_type>
