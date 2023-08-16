@@ -72,10 +72,8 @@ bool hooks::set_field_of_view::star_rail(float value) {
 
 void hooks::set_field_of_view::hook(void* _this, float value) {
   utils::call_once(hooks::set_field_of_view::present_flag, []() {
-    kiero::init(kiero::RenderType::D3D11);
-
-    utils::mh::hook_kiero(8, &hooks::present::hook, &hooks::present::original);
-    utils::mh::hook_kiero(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
+    utils::mh::hook_swap_chain(8, &hooks::present::hook, &hooks::present::original);
+    utils::mh::hook_swap_chain(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
 
     utils::mh::enable_all();
   });

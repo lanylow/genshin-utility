@@ -11,7 +11,6 @@
 #include <intrin.h>
 
 #include <minhook/MinHook.h>
-#include <kiero/kiero.h>
 #include <json/json.hpp>
 
 #include <imgui/imgui.h>
@@ -19,6 +18,7 @@
 #include <imgui/imgui_impl_win32.h>
 #include <imgui/imgui_internal.h>
 
+#include "utils/dx.hpp"
 #include "utils/fn.hpp"
 #include "utils/mh.hpp"
 #include "utils/once.hpp"

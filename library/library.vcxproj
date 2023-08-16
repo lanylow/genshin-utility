@@ -159,6 +159,7 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\sdk.hpp" />
     <ClInclude Include="inc\utils\console.hpp" />
+    <ClInclude Include="inc\utils\dx.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="inc\utils\fn.hpp" />
     <ClInclude Include="inc\utils\mh.hpp" />
@@ -204,7 +205,6 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClInclude Include="lib\json\json_fwd.hpp" />
     <ClInclude Include="lib\json\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="lib\json\thirdparty\hedley\hedley_undef.hpp" />
-    <ClInclude Include="lib\kiero\kiero.h" />
     <ClInclude Include="lib\minhook\MinHook.h" />
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +214,6 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClCompile Include="lib\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="lib\kiero\kiero.cpp" />
     <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\entry.cpp" />
     <ClCompile Include="src\hooks.cpp" />
@@ -222,6 +221,7 @@ copy .\bin\release\library.dll ..\out\</Command>
     <ClCompile Include="src\ui\menu.cpp" />
     <ClCompile Include="src\sdk.cpp" />
     <ClCompile Include="src\utils\console.cpp" />
+    <ClCompile Include="src\utils\dx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

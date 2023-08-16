@@ -9,7 +9,6 @@
     <ClInclude Include="lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="lib\imgui\imstb_textedit.h" />
     <ClInclude Include="lib\imgui\imstb_truetype.h" />
-    <ClInclude Include="lib\kiero\kiero.h" />
     <ClInclude Include="lib\imgui\imgui_impl_win32.h" />
     <ClInclude Include="lib\json\detail\conversions\from_json.hpp" />
     <ClInclude Include="lib\json\detail\conversions\to_chars.hpp" />
@@ -56,6 +55,7 @@
     <ClInclude Include="inc\utils\mh.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="inc\utils\console.hpp" />
+    <ClInclude Include="inc\utils\dx.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\imgui\imgui.cpp" />
@@ -63,7 +63,6 @@
     <ClCompile Include="lib\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="lib\kiero\kiero.cpp" />
     <ClCompile Include="lib\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="src\entry.cpp" />
     <ClCompile Include="src\sdk.cpp" />
@@ -72,5 +71,6 @@
     <ClCompile Include="src\ui\gui.cpp" />
     <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\utils\console.cpp" />
+    <ClCompile Include="src\utils\dx.cpp" />
   </ItemGroup>
 </Project>
