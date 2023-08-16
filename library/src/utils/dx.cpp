@@ -1,9 +1,9 @@
 #include <common.hpp>
 
-#define RETURN(val) \
+#define RETURN(val) { \
 	DestroyWindow(window); \
 	UnregisterClassA(wnd_class.lpszClassName, wnd_class.hInstance); \
-	return val;
+	return val; }
 
 void** utils::dx::get_swap_chain_vmt() {
   static auto vmt = []() -> void** {
@@ -25,15 +25,13 @@ void** utils::dx::get_swap_chain_vmt() {
     auto window = CreateWindowExA(0, wnd_class.lpszClassName, "GenshinUtilityWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, wnd_class.hInstance, nullptr);
     auto d3d11 = GetModuleHandleA("d3d11.dll");
 
-    if (!d3d11) {
+    if (!d3d11)
       RETURN(nullptr);
-    }
 
     auto d3d11_create_device_and_swap_chain = (decltype(&D3D11CreateDeviceAndSwapChain))(GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain"));
 
-    if (!d3d11_create_device_and_swap_chain) {
+    if (!d3d11_create_device_and_swap_chain)
       RETURN(nullptr);
-    }
 
     D3D_FEATURE_LEVEL feature_level;
     D3D_FEATURE_LEVEL feature_levels[] = { D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_11_0 };
@@ -70,15 +68,13 @@ void** utils::dx::get_swap_chain_vmt() {
 
     auto res = d3d11_create_device_and_swap_chain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, feature_levels, 2, D3D11_SDK_VERSION, &swap_chain_desc, &swap_chain, &device, &feature_level, &context);
 
-    if (res < 0) {
+    if (res < 0)
       RETURN(nullptr);
-    }
 
     auto vmt = (void**)(std::calloc(18, sizeof(void*)));
 
-    if (!vmt) {
+    if (!vmt)
       RETURN(nullptr);
-    }
 
     std::memcpy(vmt, *(void***)(swap_chain), 18 * sizeof(void*));
 
