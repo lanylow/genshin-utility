@@ -24,7 +24,6 @@ The `genshin-utility` folder within your Documents directory contains the saved 
 
 * [imgui](https://github.com/ocornut/imgui) - Graphical User interface for C++
 * [json](https://github.com/nlohmann/json) - JSON for Modern C++ 
-* [kiero](https://github.com/Rebzzel/kiero) - Universal graphical hook
 * [minhook](https://github.com/TsudaKageyu/minhook) - API Hooking Library for Windows 
 
 ## License
