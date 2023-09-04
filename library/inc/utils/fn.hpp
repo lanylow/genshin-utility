@@ -16,7 +16,7 @@ namespace utils {
 
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    explicit constexpr fn(cast_type address) : address((unsigned long long)(address)) { }
+    [[maybe_unused]] explicit constexpr fn(cast_type address) : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
     constexpr return_type invoke(arg_type&&... args) {
@@ -40,7 +40,7 @@ namespace utils {
     
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    constexpr operator cast_type() const {
+    constexpr explicit operator cast_type() const {
       return (cast_type)(address);
     }
 
