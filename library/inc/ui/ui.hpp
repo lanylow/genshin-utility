@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ui::gui {
+namespace ui {
   void initialize_imgui();
   long long handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
 

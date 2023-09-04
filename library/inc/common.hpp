@@ -27,7 +27,7 @@
 #include "sdk.hpp"
 
 #include "ui/variables.hpp"
-#include "ui/gui.hpp"
+#include "ui/ui.hpp"
 #include "ui/menu.hpp"
 
 #include "config.hpp"

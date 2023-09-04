@@ -34,10 +34,10 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
   });
 
   ui::menu::handle_frame();
-  ui::gui::begin();
+  ui::begin();
   ui::menu::render_menu();
   ui::menu::render_counter();
-  ui::gui::end();
+  ui::end();
 
   return hooks::present::original(swap_chain, sync_interval, flags);
 }
