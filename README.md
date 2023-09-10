@@ -16,6 +16,9 @@ When you have the game window focused, press the <kbd>INSERT</kbd> key.
 ### Where is my configuration saved?
 The `genshin-utility` folder within your Documents directory contains the saved configuration files. These files are in a human-readable format and can be edited as needed. However, after updates, it may be necessary to delete and recreate the configuration file.
 
+### What do I do if the Genshin Utility menu doesn't pop up?
+The most common cause of this problem are third-party overlays. Make sure programs such as MSI Afterburner (RTSS) or Discord Game Overlay are not attached to the game, because they might interfere with the menu of this tool. Another possible cause is that you are not running the game through the launcher, this program will not work if you open the game's executable directly.
+
 ## Screenshots
 
 ![screenshot](https://user-images.githubusercontent.com/31806776/199519142-020e5ded-3b42-46dd-bd40-846a2a9caea1.png)
