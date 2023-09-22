@@ -19,21 +19,24 @@ namespace utils {
     [[maybe_unused]] explicit constexpr fn(cast_type address) : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
-    constexpr return_type invoke(arg_type&&... args) {
-      if (!address)
-        return return_type{ };
+    constexpr return_type invoke(arg_type&&... args) const {
+      if (address)
+        return ((return_type(*)(arg_type...))(address))(std::forward<arg_type>(args)...);
 
-      return ((return_type(*)(arg_type...))(address))(std::forward<arg_type>(args)...);
+      if constexpr (std::is_void_v<return_type>)
+        return;
+      else
+        return return_type{ };
     }
 
     template <typename... arg_type>
-    constexpr return_type operator()(arg_type&&... args) {
+    constexpr return_type operator()(arg_type&&... args) const {
       return invoke(std::forward<arg_type>(args)...);
     }
 
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    constexpr utils::fn<return_type>& operator=(cast_type new_address) { 
+    constexpr utils::fn<return_type>& operator=(cast_type new_address) {
       address = (unsigned long long)(new_address);
       return *this;
     }
