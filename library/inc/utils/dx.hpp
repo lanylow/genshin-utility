@@ -1,5 +1,7 @@
 #pragma once
 
+#include "once.hpp"
+
 namespace utils::dx {
   inline void** swap_chain_vmt;
 

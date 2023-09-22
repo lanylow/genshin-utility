@@ -1,4 +1,6 @@
-#include <common.hpp>
+#include <utils/console.hpp>
+
+#include <windows.h>
 
 [[maybe_unused]] void utils::console::attach(const char* title) {
   AllocConsole();

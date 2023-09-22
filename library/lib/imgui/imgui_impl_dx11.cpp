@@ -40,7 +40,7 @@
 #pragma comment(lib, "d3dcompiler") // Automatically link with d3dcompiler.lib as we are using D3DCompile() below.
 #endif
 
-#include <common.hpp>
+#include <sdk.hpp>
 
 // DirectX11 data
 struct ImGui_ImplDX11_Data

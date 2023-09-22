@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 namespace utils {
   template <typename cast_type>
   struct is_fn_convertible :

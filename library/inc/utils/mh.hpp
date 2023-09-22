@@ -1,5 +1,11 @@
 #pragma once
 
+#include "dx.hpp"
+
+#include <minhook/MinHook.h>
+
+#include <type_traits>
+
 namespace utils::mh {
   inline void init() {
     MH_Initialize();

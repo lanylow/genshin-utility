@@ -1,5 +1,9 @@
 #pragma once
 
+#include "utils/once.hpp"
+
+#include <d3d11.h>
+
 namespace hooks {
   void initialize();
 }

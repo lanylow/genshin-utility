@@ -1,5 +1,14 @@
-#include <common.hpp>
 #include <hooks.hpp>
+#include <sdk.hpp>
+#include <config.hpp>
+#include <ui/variables.hpp>
+#include <ui/menu.hpp>
+#include <ui/ui.hpp>
+
+#include <utils/mh.hpp>
+
+#include <d3d11.h>
+#include <intrin.h>
 
 void hooks::initialize() {
   utils::mh::init();

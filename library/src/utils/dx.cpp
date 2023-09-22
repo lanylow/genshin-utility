@@ -1,4 +1,7 @@
-#include <common.hpp>
+#include <utils/dx.hpp>
+
+#include <windows.h>
+#include <d3d11.h>
 
 struct window_manager {
   HWND window;

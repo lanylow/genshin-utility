@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/fn.hpp"
+
 namespace sdk {
   enum class game_type {
     genshin_impact,

@@ -1,4 +1,10 @@
-#include <common.hpp>
+#include <config.hpp>
+#include <ui/variables.hpp>
+
+#include <nlohmann/json.hpp>
+
+#include <fstream>
+#include <shlobj.h>
 
 void config::load() {
   if (!std::filesystem::is_directory(config::config_folder)) {

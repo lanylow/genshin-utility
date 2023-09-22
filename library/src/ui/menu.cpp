@@ -1,4 +1,10 @@
-#include <common.hpp>
+#include <ui/variables.hpp>
+#include <ui/menu.hpp>
+#include <ui/ui.hpp>
+
+#include <imgui/imgui.h>
+
+#include <format>
 
 void ui::menu::initialize() {
   ui::initialize_imgui();

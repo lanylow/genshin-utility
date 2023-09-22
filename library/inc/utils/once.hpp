@@ -1,5 +1,8 @@
 #pragma once
 
+#include <functional>
+#include <atomic>
+
 namespace utils {
   template <typename function_type, typename... args_type>
   struct is_invocable_with :

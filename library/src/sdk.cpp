@@ -1,4 +1,6 @@
-#include <common.hpp>
+#include <sdk.hpp>
+
+#include <windows.h>
 
 void sdk::initialize_genshin_impact() {
   auto unity_player = (unsigned long long)(GetModuleHandleA("UnityPlayer.dll"));

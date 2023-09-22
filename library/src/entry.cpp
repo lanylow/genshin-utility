@@ -1,5 +1,10 @@
-#include <common.hpp>
+#include <sdk.hpp>
 #include <hooks.hpp>
+#include <config.hpp>
+
+#include <thread>
+
+using namespace std::chrono_literals;
 
 void initialize() {
   while (!GetModuleHandleA("UnityPlayer.dll") || !(GetModuleHandleA("UserAssembly.dll") || GetModuleHandleA("GameAssembly.dll")))
