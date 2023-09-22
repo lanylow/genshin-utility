@@ -54,7 +54,7 @@ void ui::menu::render_counter() {
   if (!variables::tools::fps_counter)
     return;
 
-  auto text = std::to_string(ui::menu::frame_rate) + " fps";
+  auto text = std::format("{} fps", ui::menu::frame_rate);
   auto text_size = ImGui::CalcTextSize(text.c_str());
 
   auto screen_width = ImGui::GetMainViewport()->Size.x;

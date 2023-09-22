@@ -123,7 +123,7 @@ void ui::add_slider(const char* name, int min, int max, int* item, int step) {
   if (*item < min)
     *item = min;
 
-  auto text = std::string(name) + " [" + std::to_string(*item) + "]";
+  auto text = std::format("{} [{}]", name, *item);
   ui::add_text(text.c_str(), ui::groupbox_offset_x + 29, ui::groupbox_offset_y - 3, 185, 185, 185, 255);
   ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, 200, 10, 50, 50, 50, 255);
 
