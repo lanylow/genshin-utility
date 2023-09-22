@@ -27,7 +27,7 @@ void ui::menu::handle_frame() {
 
   LARGE_INTEGER now;
   QueryPerformanceCounter(&now);
-  auto delta = (double)(now.QuadPart - ui::menu::performance_counter.QuadPart) / ui::menu::performance_frequency.QuadPart;
+  auto delta = (double)(now.QuadPart - ui::menu::performance_counter.QuadPart) / (double)(ui::menu::performance_frequency.QuadPart);
 
   if (delta >= 1.0) {
     ui::menu::frame_rate = ui::menu::frames;

@@ -14,7 +14,7 @@ void initialize() {
   hooks::initialize();
 }
 
-bool DllMain(HMODULE module, unsigned int reason, void* reserved) {
+[[maybe_unused]] bool DllMain(HMODULE module, unsigned int reason, [[maybe_unused]] void* reserved) {
   DisableThreadLibraryCalls(module);
 
   if (reason == DLL_PROCESS_ATTACH)

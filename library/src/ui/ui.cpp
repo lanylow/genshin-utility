@@ -71,7 +71,6 @@ void ui::add_groupbox(const char* name, float x, float y, float width, float hei
 
   ui::groupbox_bottom = ui::position_y + y + height;
   ui::groupbox_top = ui::position_y + y;
-  ui::groupbox_width = ui::position_x + x + width;
 }
 
 void ui::add_checkbox(const char* name, bool* item) {
@@ -104,9 +103,9 @@ void ui::add_slider(const char* name, int min, int max, int* item, int step) {
   if (ui::groupbox_bottom <= ui::groupbox_offset_y + 30)
     return;
 
-  auto pixel_size = (max - min) / 200.f;
+  auto pixel_size = ((float)(max - min) / 200.f);
   auto mouse_position = ImGui::GetMousePos();
-  auto hovered_value = (int)(std::abs((int)(mouse_position.x - (ui::groupbox_offset_x + 29))) * pixel_size);
+  auto hovered_value = (int)((float)(std::abs((int)(mouse_position.x - (ui::groupbox_offset_x + 29)))) * pixel_size);
 
   if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14 }, { ui::groupbox_offset_x + 29 + 201, ui::groupbox_offset_y + 14 + 10 }))
     *item = hovered_value;
@@ -131,7 +130,7 @@ void ui::add_slider(const char* name, int min, int max, int* item, int step) {
     if (*item == max)
       ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, 200, 10, 195, 141, 145, 255);
     else
-      ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, *item / pixel_size, 10, 195, 141, 145, 255);
+      ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, (float)(*item) / pixel_size, 10, 195, 141, 145, 255);
   }
 
   ui::add_outlined_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, 200, 10, 101, 101, 101, 255);
@@ -139,7 +138,7 @@ void ui::add_slider(const char* name, int min, int max, int* item, int step) {
   ui::add_text("+", ui::groupbox_offset_x + 22 + 200 + 12, ui::groupbox_offset_y + 11, 185, 185, 185, 255);
 
   if (ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14 }, { ui::groupbox_offset_x + 29 + 200 + 1, ui::groupbox_offset_y + 14 + 10 })) {
-    ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, hovered_value / pixel_size, 10, 101, 101, 101, 255);
+    ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, (float)(hovered_value) / pixel_size, 10, 101, 101, 101, 255);
     ui::add_text(std::to_string(hovered_value).c_str(), mouse_position.x + 12, mouse_position.y - 5, 185, 185, 185, 255);
   }
 

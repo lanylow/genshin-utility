@@ -52,11 +52,11 @@ long __stdcall hooks::resize_buffers::hook(IDXGISwapChain* swap_chain, unsigned 
   return hooks::resize_buffers::original(swap_chain, buffer_count, width, height, format, flags);
 }
 
-long long __stdcall hooks::wndproc::hook(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
-  if (!ui::menu::handle_message(window, message, wparam, lparam) && variables::menu::opened)
+long long __stdcall hooks::wndproc::hook(HWND hwnd, unsigned int message, unsigned long long wparam, long long lparam) {
+  if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && variables::menu::opened)
     return true;
 
-  return CallWindowProcA(hooks::wndproc::original, window, message, wparam, lparam);
+  return CallWindowProcA(hooks::wndproc::original, hwnd, message, wparam, lparam);
 }
 
 bool hooks::set_field_of_view::genshin_impact(float value) {

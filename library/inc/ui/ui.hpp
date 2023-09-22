@@ -31,5 +31,4 @@ namespace ui {
   inline float groupbox_offset_y;
   inline float groupbox_top;
   inline float groupbox_bottom;
-  inline float groupbox_width;
 }
