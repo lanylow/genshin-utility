@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utils/once.hpp>
+#include <utils/hook.hpp>
 
 #include <d3d11.h>
 
@@ -16,15 +17,13 @@ namespace hooks::present {
   inline utils::once_flag init_flag;
   inline utils::once_flag render_target_flag;
 
-  using function_type = long(__stdcall*)(IDXGISwapChain*, unsigned int, unsigned int);
-  inline function_type original;
+  inline utils::hook instance;
 
   long __stdcall hook(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags);
 }
 
 namespace hooks::resize_buffers {
-  using function_type = long(__stdcall*)(IDXGISwapChain*, unsigned int, unsigned int, unsigned int, DXGI_FORMAT, unsigned int);
-  inline function_type original;
+  inline utils::hook instance;
 
   long __stdcall hook(IDXGISwapChain* swap_chain, unsigned int buffer_count, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int flags);
 }
@@ -32,8 +31,7 @@ namespace hooks::resize_buffers {
 namespace hooks::wndproc {
   inline HWND window;
 
-  using function_type = long long(__stdcall*)(HWND, unsigned int, unsigned long long, long long);
-  inline function_type original;
+  inline utils::hook instance;
 
   long long __stdcall hook(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
 }
@@ -41,8 +39,7 @@ namespace hooks::wndproc {
 namespace hooks::set_field_of_view {
   inline utils::once_flag present_flag;
 
-  using function_type = void(*)(void*, float);
-  inline function_type original;
+  inline utils::hook instance;
 
   bool genshin_impact(float value);
   bool star_rail(float value);
@@ -50,8 +47,7 @@ namespace hooks::set_field_of_view {
 }
 
 namespace hooks::quit {
-  using function_type = void(*)();
-  inline function_type original;
+  inline utils::hook instance;
 
   void hook();
 }

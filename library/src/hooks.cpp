@@ -5,18 +5,16 @@
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
 
-#include <utils/minhook.hpp>
+#include <utils/hook.hpp>
 
 #include <d3d11.h>
 #include <intrin.h>
 
 void hooks::initialize() {
-  utils::minhook::init();
+  MH_Initialize();
 
-  utils::minhook::hook(sdk::set_field_of_view, &hooks::set_field_of_view::hook, &hooks::set_field_of_view::original);
-  utils::minhook::hook(sdk::quit, &hooks::quit::hook, &hooks::quit::original);
-
-  utils::minhook::enable_all();
+  hooks::set_field_of_view::instance.install(sdk::set_field_of_view,  &hooks::set_field_of_view::hook);
+  hooks::quit::instance.install(sdk::quit, &hooks::quit::hook);
 }
 
 #pragma warning(disable: 6387)
@@ -29,7 +27,7 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
     DXGI_SWAP_CHAIN_DESC swap_chain_desc;
     swap_chain->GetDesc(&swap_chain_desc);
     hooks::wndproc::window = swap_chain_desc.OutputWindow;
-    hooks::wndproc::original = (WNDPROC)(SetWindowLongPtrA(hooks::wndproc::window, GWLP_WNDPROC, (long long)(hooks::wndproc::hook)));
+    hooks::wndproc::instance.set_trampoline(SetWindowLongPtrA(hooks::wndproc::window, GWLP_WNDPROC, (long long)(hooks::wndproc::hook)));
 
     variables::menu::opened = variables::menu::open_on_start;
     ui::menu::initialize();
@@ -48,7 +46,7 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
   ui::menu::render_counter();
   ui::end();
 
-  return hooks::present::original(swap_chain, sync_interval, flags);
+  return hooks::present::instance.get_trampoline<decltype(&hooks::present::hook)>()(swap_chain, sync_interval, flags);
 }
 
 #pragma warning(default: 6387)
@@ -58,14 +56,14 @@ long __stdcall hooks::resize_buffers::hook(IDXGISwapChain* swap_chain, unsigned 
   hooks::present::render_target = nullptr;
   hooks::present::render_target_flag.reset();
 
-  return hooks::resize_buffers::original(swap_chain, buffer_count, width, height, format, flags);
+  return hooks::resize_buffers::instance.get_trampoline<decltype(&hooks::resize_buffers::hook)>()(swap_chain, buffer_count, width, height, format, flags);
 }
 
 long long __stdcall hooks::wndproc::hook(HWND hwnd, unsigned int message, unsigned long long wparam, long long lparam) {
   if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && variables::menu::opened)
     return true;
 
-  return CallWindowProcA(hooks::wndproc::original, hwnd, message, wparam, lparam);
+  return CallWindowProcA(hooks::wndproc::instance.get_trampoline<decltype(&hooks::wndproc::hook)>(), hwnd, message, wparam, lparam);
 }
 
 bool hooks::set_field_of_view::genshin_impact(float value) {
@@ -81,10 +79,8 @@ bool hooks::set_field_of_view::star_rail(float value) {
 
 void hooks::set_field_of_view::hook(void* _this, float value) {
   utils::call_once(hooks::set_field_of_view::present_flag, []() {
-    utils::minhook::hook_swap_chain(8, &hooks::present::hook, &hooks::present::original);
-    utils::minhook::hook_swap_chain(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
-
-    utils::minhook::enable_all();
+    hooks::present::instance.install_swap_chain(8, &hooks::present::hook);
+    hooks::resize_buffers::instance.install_swap_chain(13, &hooks::resize_buffers::hook);
   });
 
   auto floored = std::floor(value);
@@ -104,11 +100,11 @@ void hooks::set_field_of_view::hook(void* _this, float value) {
     sdk::set_fog(!variables::tools::disable_fog);
   }
 
-  return hooks::set_field_of_view::original(_this, value);
+  return hooks::set_field_of_view::instance.get_trampoline<decltype(&hooks::set_field_of_view::hook)>()(_this, value);
 }
 
 void hooks::quit::hook() {
   config::save();
 
-  return hooks::quit::original();
+  return hooks::quit::instance.get_trampoline<decltype(&hooks::quit::hook)>()();
 }

@@ -28,7 +28,7 @@
     <ClInclude Include="inc\utils\console.hpp" />
     <ClInclude Include="inc\utils\directx.hpp" />
     <ClInclude Include="inc\utils\function.hpp" />
-    <ClInclude Include="inc\utils\minhook.hpp" />
+    <ClInclude Include="inc\utils\hook.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="lib\imgui\imconfig.h" />
     <ClInclude Include="lib\imgui\imgui.h" />

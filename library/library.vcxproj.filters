@@ -7,7 +7,7 @@
     <ClInclude Include="inc\utils\console.hpp" />
     <ClInclude Include="inc\utils\directx.hpp" />
     <ClInclude Include="inc\utils\function.hpp" />
-    <ClInclude Include="inc\utils\minhook.hpp" />
+    <ClInclude Include="inc\utils\hook.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="inc\config.hpp" />
     <ClInclude Include="inc\hooks.hpp" />
