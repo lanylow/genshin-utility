@@ -13,30 +13,30 @@
 void hooks::initialize() {
   MH_Initialize();
 
-  hooks::set_field_of_view::instance.install(sdk::set_field_of_view,  &hooks::set_field_of_view::hook);
-  hooks::quit::instance.install(sdk::quit, &hooks::quit::hook);
+  hooks::set_field_of_view.install(sdk::set_field_of_view,  &hooks::endpoints::set_field_of_view);
+  hooks::quit.install(sdk::quit, &hooks::endpoints::quit);
 }
 
 #pragma warning(disable: 6387)
 
-long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags) {
-  utils::call_once(hooks::present::init_flag, [&]() {
-    swap_chain->GetDevice(__uuidof(ID3D11Device), (void**)(&hooks::present::device));
-    hooks::present::device->GetImmediateContext(&hooks::present::context);
+long __stdcall hooks::endpoints::present(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags) {
+  utils::call_once(hooks::present.storage.init_flag, [&]() {
+    swap_chain->GetDevice(__uuidof(ID3D11Device), (void**)(&hooks::present.storage.device));
+    hooks::present.storage.device->GetImmediateContext(&hooks::present.storage.context);
 
     DXGI_SWAP_CHAIN_DESC swap_chain_desc;
     swap_chain->GetDesc(&swap_chain_desc);
-    hooks::wndproc::window = swap_chain_desc.OutputWindow;
-    hooks::wndproc::instance.set_trampoline(SetWindowLongPtrA(hooks::wndproc::window, GWLP_WNDPROC, (long long)(hooks::wndproc::hook)));
+    hooks::wndproc.storage.window = swap_chain_desc.OutputWindow;
+    hooks::wndproc.set_trampoline(SetWindowLongPtrA(hooks::wndproc.storage.window, GWLP_WNDPROC, (long long)(hooks::endpoints::wndproc)));
 
     variables::menu::opened = variables::menu::open_on_start;
     ui::menu::initialize();
   });
 
-  utils::call_once(hooks::present::render_target_flag, [&]() {
+  utils::call_once(hooks::present.storage.render_target_flag, [&]() {
     ID3D11Texture2D* back_buffer;
     swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&back_buffer));
-    hooks::present::device->CreateRenderTargetView(back_buffer, nullptr, &hooks::present::render_target);
+    hooks::present.storage.device->CreateRenderTargetView(back_buffer, nullptr, &hooks::present.storage.render_target);
     back_buffer->Release();
   });
 
@@ -46,48 +46,48 @@ long __stdcall hooks::present::hook(IDXGISwapChain* swap_chain, unsigned int syn
   ui::menu::render_counter();
   ui::end();
 
-  return hooks::present::instance.get_trampoline<decltype(&hooks::present::hook)>()(swap_chain, sync_interval, flags);
+  return hooks::present.get_trampoline<decltype(&hooks::endpoints::present)>()(swap_chain, sync_interval, flags);
 }
 
 #pragma warning(default: 6387)
 
-long __stdcall hooks::resize_buffers::hook(IDXGISwapChain* swap_chain, unsigned int buffer_count, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int flags) {
-  hooks::present::render_target->Release();
-  hooks::present::render_target = nullptr;
-  hooks::present::render_target_flag.reset();
+long __stdcall hooks::endpoints::resize_buffers(IDXGISwapChain* swap_chain, unsigned int buffer_count, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int flags) {
+  hooks::present.storage.render_target->Release();
+  hooks::present.storage.render_target = nullptr;
+  hooks::present.storage.render_target_flag.reset();
 
-  return hooks::resize_buffers::instance.get_trampoline<decltype(&hooks::resize_buffers::hook)>()(swap_chain, buffer_count, width, height, format, flags);
+  return hooks::resize_buffers.get_trampoline<decltype(&hooks::endpoints::resize_buffers)>()(swap_chain, buffer_count, width, height, format, flags);
 }
 
-long long __stdcall hooks::wndproc::hook(HWND hwnd, unsigned int message, unsigned long long wparam, long long lparam) {
+long long __stdcall hooks::endpoints::wndproc(HWND hwnd, unsigned int message, unsigned long long wparam, long long lparam) {
   if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && variables::menu::opened)
     return true;
 
-  return CallWindowProcA(hooks::wndproc::instance.get_trampoline<decltype(&hooks::wndproc::hook)>(), hwnd, message, wparam, lparam);
+  return CallWindowProcA(hooks::wndproc.get_trampoline<decltype(&hooks::endpoints::wndproc)>(), hwnd, message, wparam, lparam);
 }
 
-bool hooks::set_field_of_view::genshin_impact(float value) {
-  if (value == 30.f)
-    sdk::set_fog(false);
-  
-  return value == 45.f;
-}
-
-bool hooks::set_field_of_view::star_rail(float value) {
-  return value != 30.f;
-}
-
-void hooks::set_field_of_view::hook(void* _this, float value) {
-  utils::call_once(hooks::set_field_of_view::present_flag, []() {
-    hooks::present::instance.install_swap_chain(8, &hooks::present::hook);
-    hooks::resize_buffers::instance.install_swap_chain(13, &hooks::resize_buffers::hook);
+void hooks::endpoints::set_field_of_view(void* _this, float value) {
+  utils::call_once(hooks::set_field_of_view.storage.present_flag, []() {
+    hooks::present.install_swap_chain(8, &hooks::endpoints::present);
+    hooks::resize_buffers.install_swap_chain(13, &hooks::endpoints::resize_buffers);
   });
+
+  auto genshin_impact = [](float value) -> bool {
+    if (value == 30.f)
+      sdk::set_fog(false);
+
+    return value == 45.f;
+  };
+
+  auto star_rail = [](float value) -> bool {
+    return value != 30.f;
+  };
 
   auto floored = std::floor(value);
 
   auto res = sdk::is_genshin_impact() ?
-    hooks::set_field_of_view::genshin_impact(floored) :
-    hooks::set_field_of_view::star_rail(floored);
+    genshin_impact(floored) :
+    star_rail(floored);
 
   if (res) {
     auto ret = (unsigned long long)(_ReturnAddress());
@@ -100,11 +100,11 @@ void hooks::set_field_of_view::hook(void* _this, float value) {
     sdk::set_fog(!variables::tools::disable_fog);
   }
 
-  return hooks::set_field_of_view::instance.get_trampoline<decltype(&hooks::set_field_of_view::hook)>()(_this, value);
+  return hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
 }
 
-void hooks::quit::hook() {
+void hooks::endpoints::quit() {
   config::save();
 
-  return hooks::quit::instance.get_trampoline<decltype(&hooks::quit::hook)>()();
+  return hooks::quit.get_trampoline<decltype(&hooks::endpoints::quit)>()();
 }

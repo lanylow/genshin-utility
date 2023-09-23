@@ -18,8 +18,8 @@ void ui::initialize_imgui() {
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   io.Fonts->AddFontFromFileTTF(R"(C:\Windows\Fonts\tahoma.ttf)", 14.f);
 
-  ImGui_ImplWin32_Init(hooks::wndproc::window);
-  ImGui_ImplDX11_Init(hooks::present::device, hooks::present::context);
+  ImGui_ImplWin32_Init(hooks::wndproc.storage.window);
+  ImGui_ImplDX11_Init(hooks::present.storage.device, hooks::present.storage.context);
 }
 
 long long ui::handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
@@ -36,7 +36,7 @@ void ui::end() {
   ImGui::EndFrame();
   ImGui::Render();
 
-  hooks::present::context->OMSetRenderTargets(1, &hooks::present::render_target, nullptr);
+  hooks::present.storage.context->OMSetRenderTargets(1, &hooks::present.storage.render_target, nullptr);
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
