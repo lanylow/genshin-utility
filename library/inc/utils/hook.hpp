@@ -21,7 +21,7 @@ namespace utils {
   public:
     template <typename target_type, typename detour_type,
       std::enable_if_t<std::is_pointer_v<detour_type>, int> = 0>
-    constexpr void install(target_type target, detour_type detour) {
+    void install(target_type target, detour_type detour) {
       address = (void*)(target);
       create((void*)(detour));
     }
@@ -46,7 +46,7 @@ namespace utils {
     }
 
   private:
-    void* address{ };
-    void* trampoline{ };
+    void* address{ nullptr };
+    void* trampoline{ nullptr };
   };
 }

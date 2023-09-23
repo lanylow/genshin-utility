@@ -32,7 +32,7 @@ namespace utils {
     }
 
   private:
-    mutable std::atomic_bool value;
+    mutable std::atomic_bool value{ true };
   };
 
   template <typename function_type, class... args_type,

@@ -21,7 +21,7 @@ namespace utils {
     [[maybe_unused]] explicit constexpr function(cast_type address) : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
-    constexpr return_type invoke(arg_type&&... args) const {
+    return_type invoke(arg_type&&... args) const {
       if (address)
         return ((return_type(*)(arg_type...))(address))(std::forward<arg_type>(args)...);
 
@@ -32,7 +32,7 @@ namespace utils {
     }
 
     template <typename... arg_type>
-    constexpr return_type operator()(arg_type&&... args) const {
+    return_type operator()(arg_type&&... args) const {
       return invoke(std::forward<arg_type>(args)...);
     }
 
@@ -50,6 +50,6 @@ namespace utils {
     }
 
   private:
-    unsigned long long address{ };
+    unsigned long long address{ 0 };
   };
 }
