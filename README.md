@@ -21,7 +21,7 @@ The most common cause of this problem are third-party overlays. Make sure progra
 
 ## Screenshots
 
-![screenshot](https://user-images.githubusercontent.com/31806776/199519142-020e5ded-3b42-46dd-bd40-846a2a9caea1.png)
+![image](https://github.com/lanylow/genshin-utility/assets/31806776/88492fe8-4016-447a-80ec-b8c4d9225cc9)
 
 ## Utilized third-party libraries
 
