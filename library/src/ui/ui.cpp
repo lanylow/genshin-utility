@@ -1,5 +1,5 @@
 #include <ui/ui.hpp>
-#include <hooks.hpp>
+#include <hooks/hooks.hpp>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_dx11.h>

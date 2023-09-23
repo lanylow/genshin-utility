@@ -7,10 +7,11 @@
     <ClInclude Include="inc\utils\console.hpp" />
     <ClInclude Include="inc\utils\directx.hpp" />
     <ClInclude Include="inc\utils\function.hpp" />
-    <ClInclude Include="inc\utils\hook.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
+    <ClInclude Include="inc\hooks\hook.hpp" />
+    <ClInclude Include="inc\hooks\endpoints.hpp" />
+    <ClInclude Include="inc\hooks\hooks.hpp" />
     <ClInclude Include="inc\config.hpp" />
-    <ClInclude Include="inc\hooks.hpp" />
     <ClInclude Include="inc\sdk.hpp" />
     <ClInclude Include="lib\imgui\imconfig.h" />
     <ClInclude Include="lib\imgui\imgui.h" />
@@ -77,9 +78,10 @@
     <ClCompile Include="src\ui\ui.cpp" />
     <ClCompile Include="src\utils\console.cpp" />
     <ClCompile Include="src\utils\directx.cpp" />
+    <ClCompile Include="src\hooks\hooks.cpp" />
+    <ClCompile Include="src\hooks\endpoints.cpp" />
     <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\entry.cpp" />
-    <ClCompile Include="src\hooks.cpp" />
     <ClCompile Include="src\sdk.cpp" />
   </ItemGroup>
 </Project>

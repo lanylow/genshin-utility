@@ -1,5 +1,5 @@
 #include <sdk.hpp>
-#include <hooks.hpp>
+#include <hooks/hooks.hpp>
 #include <config.hpp>
 
 #include <thread>

@@ -7,13 +7,13 @@
 
 #include <type_traits>
 
-namespace utils {
+namespace hooks {
   struct hook_storage {
     void* address{ nullptr };
     void* trampoline{ nullptr };
   };
 
-  template <typename storage_type = utils::hook_storage,
+  template <typename storage_type = hooks::hook_storage,
     std::enable_if_t<(std::is_base_of_v<hook_storage, storage_type> || std::is_same_v<hook_storage, storage_type>) && std::is_default_constructible_v<storage_type>, int> = 0>
   class hook {
   public:

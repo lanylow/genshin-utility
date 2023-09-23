@@ -1,21 +1,13 @@
-#include <hooks.hpp>
+#include <hooks/hooks.hpp>
+#include <hooks/endpoints.hpp>
+
 #include <sdk.hpp>
 #include <config.hpp>
 #include <ui/variables.hpp>
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
 
-#include <utils/hook.hpp>
-
-#include <d3d11.h>
 #include <intrin.h>
-
-void hooks::initialize() {
-  MH_Initialize();
-
-  hooks::set_field_of_view.install(sdk::set_field_of_view,  &hooks::endpoints::set_field_of_view);
-  hooks::quit.install(sdk::quit, &hooks::endpoints::quit);
-}
 
 #pragma warning(disable: 6387)
 
@@ -86,8 +78,8 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
   auto floored = std::floor(value);
 
   auto res = sdk::is_genshin_impact() ?
-    genshin_impact(floored) :
-    star_rail(floored);
+             genshin_impact(floored) :
+             star_rail(floored);
 
   if (res) {
     auto ret = (unsigned long long)(_ReturnAddress());
