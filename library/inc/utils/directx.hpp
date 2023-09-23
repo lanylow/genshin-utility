@@ -2,7 +2,7 @@
 
 #include <utils/once.hpp>
 
-namespace utils::dx {
+namespace utils::directx {
   inline void** swap_chain_vmt;
 
   inline utils::once_flag init_flag;

@@ -5,18 +5,18 @@
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
 
-#include <utils/mh.hpp>
+#include <utils/minhook.hpp>
 
 #include <d3d11.h>
 #include <intrin.h>
 
 void hooks::initialize() {
-  utils::mh::init();
+  utils::minhook::init();
 
-  utils::mh::hook(sdk::set_field_of_view, &hooks::set_field_of_view::hook, &hooks::set_field_of_view::original);
-  utils::mh::hook(sdk::quit, &hooks::quit::hook, &hooks::quit::original);
+  utils::minhook::hook(sdk::set_field_of_view, &hooks::set_field_of_view::hook, &hooks::set_field_of_view::original);
+  utils::minhook::hook(sdk::quit, &hooks::quit::hook, &hooks::quit::original);
 
-  utils::mh::enable_all();
+  utils::minhook::enable_all();
 }
 
 #pragma warning(disable: 6387)
@@ -81,10 +81,10 @@ bool hooks::set_field_of_view::star_rail(float value) {
 
 void hooks::set_field_of_view::hook(void* _this, float value) {
   utils::call_once(hooks::set_field_of_view::present_flag, []() {
-    utils::mh::hook_swap_chain(8, &hooks::present::hook, &hooks::present::original);
-    utils::mh::hook_swap_chain(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
+    utils::minhook::hook_swap_chain(8, &hooks::present::hook, &hooks::present::original);
+    utils::minhook::hook_swap_chain(13, &hooks::resize_buffers::hook, &hooks::resize_buffers::original);
 
-    utils::mh::enable_all();
+    utils::minhook::enable_all();
   });
 
   auto floored = std::floor(value);

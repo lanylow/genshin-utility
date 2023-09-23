@@ -5,9 +5,9 @@
     <ClInclude Include="inc\ui\ui.hpp" />
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\utils\console.hpp" />
-    <ClInclude Include="inc\utils\dx.hpp" />
-    <ClInclude Include="inc\utils\fn.hpp" />
-    <ClInclude Include="inc\utils\mh.hpp" />
+    <ClInclude Include="inc\utils\directx.hpp" />
+    <ClInclude Include="inc\utils\function.hpp" />
+    <ClInclude Include="inc\utils\minhook.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="inc\config.hpp" />
     <ClInclude Include="inc\hooks.hpp" />
@@ -76,7 +76,7 @@
     <ClCompile Include="src\ui\menu.cpp" />
     <ClCompile Include="src\ui\ui.cpp" />
     <ClCompile Include="src\utils\console.cpp" />
-    <ClCompile Include="src\utils\dx.cpp" />
+    <ClCompile Include="src\utils\directx.cpp" />
     <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\entry.cpp" />
     <ClCompile Include="src\hooks.cpp" />

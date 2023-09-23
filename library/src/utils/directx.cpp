@@ -1,4 +1,4 @@
-#include <utils/dx.hpp>
+#include <utils/directx.hpp>
 
 #include <windows.h>
 #include <d3d11.h>
@@ -15,8 +15,8 @@ struct window_manager {
   }
 };
 
-void** utils::dx::get_swap_chain_vmt() {
-  utils::call_once(utils::dx::init_flag, [&]() {
+void** utils::directx::get_swap_chain_vmt() {
+  utils::call_once(utils::directx::init_flag, [&]() {
     WNDCLASSEX wnd_class;
     wnd_class.cbSize = sizeof(WNDCLASSEX);
     wnd_class.style = CS_HREDRAW | CS_VREDRAW;
@@ -84,12 +84,12 @@ void** utils::dx::get_swap_chain_vmt() {
 
     auto vmt = new void*[18];
     std::memcpy(vmt, *(void***)(swap_chain), 18 * sizeof(void*));
-    utils::dx::swap_chain_vmt = vmt;
+    utils::directx::swap_chain_vmt = vmt;
 
     swap_chain->Release();
     device->Release();
     context->Release();
   });
 
-  return utils::dx::swap_chain_vmt;
+  return utils::directx::swap_chain_vmt;
 }

@@ -26,9 +26,9 @@
     <ClInclude Include="inc\ui\ui.hpp" />
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\utils\console.hpp" />
-    <ClInclude Include="inc\utils\dx.hpp" />
-    <ClInclude Include="inc\utils\fn.hpp" />
-    <ClInclude Include="inc\utils\mh.hpp" />
+    <ClInclude Include="inc\utils\directx.hpp" />
+    <ClInclude Include="inc\utils\function.hpp" />
+    <ClInclude Include="inc\utils\minhook.hpp" />
     <ClInclude Include="inc\utils\once.hpp" />
     <ClInclude Include="lib\imgui\imconfig.h" />
     <ClInclude Include="lib\imgui\imgui.h" />
@@ -98,7 +98,7 @@
     <ClCompile Include="src\ui\menu.cpp" />
     <ClCompile Include="src\ui\ui.cpp" />
     <ClCompile Include="src\utils\console.cpp" />
-    <ClCompile Include="src\utils\dx.cpp" />
+    <ClCompile Include="src\utils\directx.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

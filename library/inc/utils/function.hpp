@@ -12,13 +12,13 @@ namespace utils {
 
   template <typename return_type, 
     std::enable_if_t<std::is_arithmetic_v<return_type> || std::is_void_v<return_type> || std::is_pointer_v<return_type>, int> = 0>
-  class fn {
+  class function {
   public:
-    constexpr fn() = default;
+    constexpr function() = default;
 
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    [[maybe_unused]] explicit constexpr fn(cast_type address) : address((unsigned long long)(address)) { }
+    [[maybe_unused]] explicit constexpr function(cast_type address) : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
     constexpr return_type invoke(arg_type&&... args) const {
@@ -38,7 +38,7 @@ namespace utils {
 
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    constexpr utils::fn<return_type>& operator=(cast_type new_address) {
+    constexpr utils::function<return_type>& operator=(cast_type new_address) {
       address = (unsigned long long)(new_address);
       return *this;
     }

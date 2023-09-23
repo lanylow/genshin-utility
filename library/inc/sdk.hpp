@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utils/fn.hpp>
+#include <utils/function.hpp>
 
 namespace sdk {
   enum class game_type {
@@ -9,17 +9,17 @@ namespace sdk {
   };
 
   // UnityEngine.Camera
-  inline utils::fn<void> set_field_of_view;
+  inline utils::function<void> set_field_of_view;
 
   // UnityEngine.Application
-  inline utils::fn<void> set_target_frame_rate;
-  inline utils::fn<void> quit;
+  inline utils::function<void> set_target_frame_rate;
+  inline utils::function<void> quit;
 
   // UnityEngine.QualitySettings
-  inline utils::fn<void> set_vsync_count;
+  inline utils::function<void> set_vsync_count;
 
   // UnityEngine.RenderSettings
-  inline utils::fn<void> set_fog;
+  inline utils::function<void> set_fog;
 
   // Only needed in Honkai: Star Rail
   inline unsigned long long ult_fov_ret;
