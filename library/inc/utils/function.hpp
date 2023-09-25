@@ -11,7 +11,7 @@ namespace utils {
     > { };
 
   template <typename return_type, 
-    std::enable_if_t<std::is_arithmetic_v<return_type> || std::is_void_v<return_type> || std::is_pointer_v<return_type>, int> = 0>
+    std::enable_if_t<std::is_default_constructible_v<return_type> || std::is_void_v<return_type>, int> = 0>
   class function {
   public:
     constexpr function() = default;

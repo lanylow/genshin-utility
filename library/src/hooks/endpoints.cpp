@@ -78,8 +78,8 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
   auto floored = std::floor(value);
 
   auto res = sdk::is_genshin_impact() ?
-             genshin_impact(floored) :
-             star_rail(floored);
+    genshin_impact(floored) :
+    star_rail(floored);
 
   if (res) {
     auto ret = (unsigned long long)(_ReturnAddress());
