@@ -2,8 +2,7 @@
 #include <hooks/endpoints.hpp>
 
 #include <sdk.hpp>
-#include <config.hpp>
-#include <ui/variables.hpp>
+#include <ui/options.hpp>
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
 
@@ -21,7 +20,7 @@ long __stdcall hooks::endpoints::present(IDXGISwapChain* swap_chain, unsigned in
     hooks::wndproc.storage.window = swap_chain_desc.OutputWindow;
     hooks::wndproc.set_trampoline(SetWindowLongPtrA(hooks::wndproc.storage.window, GWLP_WNDPROC, (long long)(hooks::endpoints::wndproc)));
 
-    variables::menu::opened = variables::menu::open_on_start;
+    ui::options::menu::opened = ui::options::menu::open_on_start;
     ui::menu::initialize();
   });
 
@@ -52,7 +51,7 @@ long __stdcall hooks::endpoints::resize_buffers(IDXGISwapChain* swap_chain, unsi
 }
 
 long long __stdcall hooks::endpoints::wndproc(HWND hwnd, unsigned int message, unsigned long long wparam, long long lparam) {
-  if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && variables::menu::opened)
+  if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && ui::options::menu::opened)
     return true;
 
   return CallWindowProcA(hooks::wndproc.get_trampoline<decltype(&hooks::endpoints::wndproc)>(), hwnd, message, wparam, lparam);
@@ -85,18 +84,18 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     auto ret = (unsigned long long)(_ReturnAddress());
 
     if (ret != sdk::ult_fov_ret)
-      value = (float)(variables::tools::camera_fov);
+      value = (float)(ui::options::tools::camera_fov);
 
-    sdk::set_target_frame_rate(variables::tools::enable_vsync ? -1 : variables::tools::fps_limit);
-    sdk::set_vsync_count(variables::tools::enable_vsync ? 1 : 0);
-    sdk::set_fog(!variables::tools::disable_fog);
+    sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
+    sdk::set_vsync_count(ui::options::tools::enable_vsync ? 1 : 0);
+    sdk::set_fog(!ui::options::tools::disable_fog);
   }
 
   return hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
 }
 
 void hooks::endpoints::quit() {
-  config::save();
+  ui::options::save();
 
   return hooks::quit.get_trampoline<decltype(&hooks::endpoints::quit)>()();
 }

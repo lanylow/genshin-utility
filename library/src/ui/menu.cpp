@@ -1,4 +1,4 @@
-#include <ui/variables.hpp>
+#include <ui/options.hpp>
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
 
@@ -18,7 +18,7 @@ long long ui::menu::handle_message(HWND window, unsigned int message, unsigned l
 
   if (wparam == VK_INSERT) {
     if (message == WM_KEYDOWN && !insert) {
-      variables::menu::opened = !variables::menu::opened;
+      ui::options::menu::opened = !ui::options::menu::opened;
       insert = true;
     }
     else if (message == WM_KEYUP) 
@@ -43,21 +43,21 @@ void ui::menu::handle_frame() {
 }
 
 void ui::menu::render_menu() {
-  if (!variables::menu::opened)
+  if (!ui::options::menu::opened)
     return;
 
   ui::add_window("Genshin Utility by lanylow");
   ui::add_groupbox("Settings", 19, 20 + 18, 286, 162);
-  ui::add_checkbox("Open menu on start", &variables::menu::open_on_start);
-  ui::add_checkbox("Frame rate counter", &variables::tools::fps_counter);
-  ui::add_checkbox("Enable V-Sync", &variables::tools::enable_vsync);
-  ui::add_checkbox("Disable fog", &variables::tools::disable_fog);
-  ui::add_slider("Frame rate limit", 10, 360, &variables::tools::fps_limit, 1);
-  ui::add_slider("Camera field of view", 5, 175, &variables::tools::camera_fov, 1);
+  ui::add_checkbox("Open menu on start", &ui::options::menu::open_on_start);
+  ui::add_checkbox("Frame rate counter", &ui::options::tools::fps_counter);
+  ui::add_checkbox("Enable V-Sync", &ui::options::tools::enable_vsync);
+  ui::add_checkbox("Disable fog", &ui::options::tools::disable_fog);
+  ui::add_slider("Frame rate limit", 10, 360, &ui::options::tools::fps_limit, 1);
+  ui::add_slider("Camera field of view", 5, 175, &ui::options::tools::camera_fov, 1);
 }
 
 void ui::menu::render_counter() {
-  if (!variables::tools::fps_counter)
+  if (!ui::options::tools::fps_counter)
     return;
 
   auto text = std::format("{} fps", ui::menu::frame_rate);

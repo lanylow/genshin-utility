@@ -1,6 +1,6 @@
 #include <sdk.hpp>
 #include <hooks/hooks.hpp>
-#include <config.hpp>
+#include <ui/options.hpp>
 
 #include <thread>
 
@@ -10,7 +10,7 @@ void initialize() {
   while (!GetModuleHandleA("UnityPlayer.dll") || !(GetModuleHandleA("UserAssembly.dll") || GetModuleHandleA("GameAssembly.dll")))
     std::this_thread::sleep_for(10ms);
 
-  config::load();
+  ui::options::load();
 
   GetModuleHandleA("GenshinImpact.exe") != nullptr ? 
     sdk::initialize_genshin_impact() : 

@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\config.hpp" />
+    <ClInclude Include="inc\lff.hpp" />
     <ClInclude Include="inc\sdk.hpp" />
     <ClInclude Include="inc\ui\menu.hpp" />
+    <ClInclude Include="inc\ui\options.hpp" />
     <ClInclude Include="inc\ui\ui.hpp" />
     <ClInclude Include="inc\ui\variables.hpp" />
     <ClInclude Include="inc\utils\console.hpp" />
@@ -40,50 +41,6 @@
     <ClInclude Include="lib\imgui\imstb_textedit.h" />
     <ClInclude Include="lib\imgui\imstb_truetype.h" />
     <ClInclude Include="lib\minhook\MinHook.h" />
-    <ClInclude Include="lib\nlohmann\adl_serializer.hpp" />
-    <ClInclude Include="lib\nlohmann\byte_container_with_subtype.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\abi_macros.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\conversions\from_json.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\conversions\to_chars.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\conversions\to_json.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\exceptions.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\hash.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\input\binary_reader.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\input\input_adapters.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\input\json_sax.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\input\lexer.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\input\parser.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\input\position_t.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\iterators\internal_iterator.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\iterators\iteration_proxy.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\iterators\iterator_traits.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\iterators\iter_impl.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\iterators\json_reverse_iterator.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\iterators\primitive_iterator.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\json_pointer.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\json_ref.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\macro_scope.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\macro_unscope.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\call_std\begin.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\call_std\end.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\cpp_future.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\detected.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\identity_tag.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\is_sax.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\std_fs.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\type_traits.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\meta\void_t.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\output\binary_writer.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\output\output_adapters.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\output\serializer.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\string_concat.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\string_escape.hpp" />
-    <ClInclude Include="lib\nlohmann\detail\value_t.hpp" />
-    <ClInclude Include="lib\nlohmann\json.hpp" />
-    <ClInclude Include="lib\nlohmann\json_fwd.hpp" />
-    <ClInclude Include="lib\nlohmann\ordered_map.hpp" />
-    <ClInclude Include="lib\nlohmann\thirdparty\hedley\hedley.hpp" />
-    <ClInclude Include="lib\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\imgui\imgui.cpp" />
@@ -92,10 +49,11 @@
     <ClCompile Include="lib\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="lib\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\entry.cpp" />
+    <ClCompile Include="src\lff.cpp" />
     <ClCompile Include="src\sdk.cpp" />
     <ClCompile Include="src\ui\menu.cpp" />
+    <ClCompile Include="src\ui\options.cpp" />
     <ClCompile Include="src\ui\ui.cpp" />
     <ClCompile Include="src\utils\console.cpp" />
     <ClCompile Include="src\utils\directx.cpp" />
