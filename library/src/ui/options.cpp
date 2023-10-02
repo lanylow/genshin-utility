@@ -1,5 +1,5 @@
 #include <ui/options.hpp>
-#include <lff.hpp>
+#include <lff/lff.hpp>
 
 #include <shlobj.h>
 
