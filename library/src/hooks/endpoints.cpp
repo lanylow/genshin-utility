@@ -67,7 +67,7 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     if (value == 30.f)
       sdk::set_fog(false);
 
-    return value == 45.f;
+    return value >= 45.f && value <= 55.f;
   };
 
   auto star_rail = [](float value) -> bool {
