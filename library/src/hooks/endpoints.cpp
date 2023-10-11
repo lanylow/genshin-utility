@@ -81,9 +81,7 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     star_rail(floored);
 
   if (res) {
-    auto ret = (unsigned long long)(_ReturnAddress());
-
-    if (ret != sdk::ult_fov_ret)
+    if (!hooks::set_field_of_view.storage.is_in_battle)
       value = (float)(ui::options::tools::camera_fov);
 
     sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
@@ -91,11 +89,20 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     sdk::set_fog(!ui::options::tools::disable_fog);
   }
 
-  return hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
+  hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
 }
 
 void hooks::endpoints::quit() {
   ui::options::save();
+  hooks::quit.get_trampoline<decltype(&hooks::endpoints::quit)>()();
+}
 
-  return hooks::quit.get_trampoline<decltype(&hooks::endpoints::quit)>()();
+void hooks::endpoints::enter(void* _this) {
+  hooks::set_field_of_view.storage.is_in_battle = true;
+  hooks::enter.get_trampoline<decltype(&hooks::endpoints::enter)>()(_this);
+}
+
+void hooks::endpoints::leave(void* _this, void* a1) {
+  hooks::set_field_of_view.storage.is_in_battle = false;
+  hooks::leave.get_trampoline<decltype(&hooks::endpoints::leave)>()(_this, a1);
 }

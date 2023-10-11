@@ -8,4 +8,6 @@ namespace hooks::endpoints {
   long long __stdcall wndproc(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
   void set_field_of_view(void* _this, float value);
   void quit();
+  void enter(void* _this);
+  void leave(void* _this, void* a1);
 }

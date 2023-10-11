@@ -20,6 +20,8 @@ namespace hooks {
   };
 
   struct set_field_of_view_storage : hooks::hook_storage {
+    bool is_in_battle{ false };
+
     utils::once_flag present_flag;
   };
 }
@@ -32,4 +34,6 @@ namespace hooks {
   inline hooks::hook<hooks::wndproc_storage> wndproc;
   inline hooks::hook<hooks::set_field_of_view_storage> set_field_of_view;
   inline hooks::hook<> quit;
+  inline hooks::hook<> enter;
+  inline hooks::hook<> leave;
 }

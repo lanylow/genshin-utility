@@ -22,7 +22,9 @@ namespace sdk {
   inline utils::function<void> set_fog;
 
   // Only needed in Honkai: Star Rail
-  inline unsigned long long ult_fov_ret;
+  // RPG.Client.BattleGamePhase
+  inline utils::function<void> enter;
+  inline utils::function<void> leave;
 
   inline sdk::game_type game;
 
