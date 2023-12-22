@@ -84,8 +84,15 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     if (!hooks::set_field_of_view.storage.is_in_battle)
       value = (float)(ui::options::tools::camera_fov);
 
-    sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
-    sdk::set_vsync_count(ui::options::tools::enable_vsync ? 1 : 0);
+    if (hooks::wndproc.storage.window == GetForegroundWindow()) {
+      sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
+      sdk::set_vsync_count(ui::options::tools::enable_vsync ? 1 : 0);
+    }
+    else {
+      sdk::set_target_frame_rate(30);
+      sdk::set_vsync_count(0);
+    }
+
     sdk::set_fog(!ui::options::tools::disable_fog);
   }
 
