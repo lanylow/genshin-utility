@@ -5,14 +5,14 @@
 void sdk::initialize_genshin_impact() {
   auto unity_player = (unsigned long long)(GetModuleHandleA("UnityPlayer.dll"));
 
-  sdk::set_field_of_view = unity_player + 0xd260c0;
+  sdk::set_field_of_view = unity_player + 0xd06d80;
 
-  sdk::set_target_frame_rate = unity_player + 0xabac70;
-  sdk::quit = unity_player + 0xd1cfe0;
+  sdk::set_target_frame_rate = unity_player + 0xd016a0;
+  sdk::quit = unity_player + 0xcfd080;
 
-  sdk::set_vsync_count = unity_player + 0x13add40;
+  sdk::set_vsync_count = unity_player + 0x138f5c0;
 
-  sdk::set_fog = unity_player + 0x13afe20;
+  sdk::set_fog = unity_player + 0x1391e90;
 
   sdk::game = sdk::game_type::genshin_impact;
 }
