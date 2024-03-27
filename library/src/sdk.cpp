@@ -21,17 +21,17 @@ void sdk::initialize_star_rail() {
   auto game_assembly = (unsigned long long)(GetModuleHandleA("GameAssembly.dll"));
   auto unity_player = (unsigned long long)(GetModuleHandleA("UnityPlayer.dll"));
 
-  sdk::set_field_of_view = game_assembly + 0x25d11d0;
+  sdk::set_field_of_view = game_assembly + 0x28fee30;
 
-  sdk::set_target_frame_rate = game_assembly + 0x28800b0;
-  sdk::quit = game_assembly + 0x287eca0;
+  sdk::set_target_frame_rate = game_assembly + 0x29f2680;
+  sdk::quit = game_assembly + 0x29f1320;
 
-  sdk::set_vsync_count = game_assembly + 0x2819d90;
+  sdk::set_vsync_count = game_assembly + 0x2ab1c80;
 
-  sdk::set_fog = unity_player + 0xe6f470;
+  sdk::set_fog = unity_player + 0xe1bab0;
 
-  sdk::enter = game_assembly + 0x367aef0;
-  sdk::leave = game_assembly + 0x367c380;
+  sdk::enter = game_assembly + 0x39650c0;
+  sdk::leave = game_assembly + 0x39667b0;
 
   sdk::game = sdk::game_type::star_rail;
 }
