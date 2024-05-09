@@ -26,6 +26,9 @@ namespace sdk {
   inline utils::function<void> enter;
   inline utils::function<void> leave;
 
+  // UnityPlayer
+  inline utils::function<void*> get_game_manager_if_exists;
+
   inline sdk::game_type game;
 
   void initialize_genshin_impact();

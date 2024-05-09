@@ -87,7 +87,10 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
     sdk::set_vsync_count(ui::options::tools::enable_vsync ? 1 : 0);
 
-    sdk::set_fog(!ui::options::tools::disable_fog);
+    if (sdk::is_genshin_impact())
+      sdk::set_fog(!ui::options::tools::disable_fog);
+    else
+      *(bool*)((unsigned long long)(sdk::get_game_manager_if_exists(20)) + 348) = !ui::options::tools::disable_fog;
   }
 
   hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
