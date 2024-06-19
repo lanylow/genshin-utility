@@ -27,7 +27,7 @@ namespace sdk {
   inline utils::function<void> leave;
 
   // UnityPlayer
-  inline utils::function<void*> get_game_manager_if_exists;
+  inline utils::function<unsigned long long> get_game_manager_if_exists;
 
   inline sdk::game_type game;
 
