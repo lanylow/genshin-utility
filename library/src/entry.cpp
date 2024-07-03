@@ -12,9 +12,9 @@ void initialize() {
 
   ui::options::load();
 
-  GetModuleHandleA("GenshinImpact.exe") != nullptr ? 
-    sdk::initialize_genshin_impact() : 
-    sdk::initialize_star_rail();
+  GetModuleHandleA("StarRail.exe") != nullptr ?
+    sdk::initialize_star_rail() :
+    sdk::initialize_genshin_impact();
 
   hooks::initialize();
 }
