@@ -9,10 +9,10 @@ namespace ui {
   void begin();
   void end();
 
-  void add_window(const char* name);
+  void add_window(const char* text_left, const char* text_right);
   void add_groupbox(const char* name, float x, float y, float width, float height);
 
-  void add_checkbox(const char* name, bool* item);
+  void add_checkbox(const char* name, bool* item, bool grayed_out = false);
   void add_slider(const char* name, int min, int max, int* item, int step);
 
   void add_text(const char* name, float x, float y, int r, int g, int b, int a);

@@ -3,11 +3,26 @@
 #include <utils/function.hpp>
 
 namespace sdk {
-  enum class game_type {
-    genshin_impact,
-    star_rail
-  };
+  struct game_t {
+    enum {
+      genshin_impact,
+      star_rail
+    };
 
+    static bool is(int game) {
+      return value == game;
+    }
+
+    static void set(int game) {
+      value = game;
+    }
+
+  private:
+    static inline int value;
+  };
+}
+
+namespace sdk {
   // UnityEngine.Camera
   inline utils::function<void> set_field_of_view;
 
@@ -25,14 +40,10 @@ namespace sdk {
   // RPG.Client.BattleGamePhase
   inline utils::function<void> enter;
   inline utils::function<void> leave;
+}
 
-  // UnityPlayer
-  inline utils::function<unsigned long long> get_game_manager_if_exists;
-
-  inline sdk::game_type game;
-
+namespace sdk {
   void initialize_genshin_impact();
   void initialize_star_rail();
-
-  bool is_genshin_impact();
+  void initialize();
 }

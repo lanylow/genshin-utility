@@ -1,6 +1,7 @@
 #include <ui/options.hpp>
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
+#include <sdk.hpp>
 
 #include <imgui/imgui.h>
 
@@ -46,12 +47,12 @@ void ui::menu::render_menu() {
   if (!ui::options::menu::opened)
     return;
 
-  ui::add_window("Genshin Utility by lanylow");
+  ui::add_window("Genshin Utility by lanylow", "v1.5.1");
   ui::add_groupbox("Settings", 19, 20 + 18, 286, 162);
   ui::add_checkbox("Open menu on start", &ui::options::menu::open_on_start);
   ui::add_checkbox("Frame rate counter", &ui::options::tools::fps_counter);
   ui::add_checkbox("Enable V-Sync", &ui::options::tools::enable_vsync);
-  ui::add_checkbox("Disable fog", &ui::options::tools::disable_fog);
+  ui::add_checkbox("Disable fog", &ui::options::tools::disable_fog, sdk::game_t::is(sdk::game_t::star_rail));
   ui::add_slider("Frame rate limit", 10, 360, &ui::options::tools::fps_limit, 1);
   ui::add_slider("Camera field of view", 5, 175, &ui::options::tools::camera_fov, 1);
 }

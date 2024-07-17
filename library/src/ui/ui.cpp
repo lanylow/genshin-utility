@@ -40,7 +40,7 @@ void ui::end() {
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ui::add_window(const char* name) {
+void ui::add_window(const char* text_left, const char* text_right) {
   ui::mouse_clicked = ImGui::IsMouseDown(ImGuiMouseButton_Left);
   auto mouse_position = ImGui::GetMousePos();
 
@@ -62,7 +62,11 @@ void ui::add_window(const char* name) {
   ui::add_rectangle(ui::position_x, ui::position_y, ui::menu_width, ui::menu_height, 50, 50, 50, 255);
   ui::add_rectangle(ui::position_x, ui::position_y + 20, ui::menu_width, 1, 195, 141, 146, 255);
   ui::add_outlined_rectangle(ui::position_x, ui::position_y, ui::menu_width, ui::menu_height, 0, 0, 0, 85);
-  ui::add_text(name, ui::position_x + 5, ui::position_y + 2, 180, 180, 180, 255);
+
+  ui::add_text(text_left, ui::position_x + 5, ui::position_y + 2, 180, 180, 180, 255);
+
+  auto text_right_size = ImGui::CalcTextSize(text_right);
+  ui::add_text(text_right, ui::position_x + ui::menu_width - text_right_size.x - 5, ui::position_y + 2, 180, 180, 180, 255);
 }
 
 void ui::add_groupbox(const char* name, float x, float y, float width, float height) {
@@ -80,7 +84,7 @@ void ui::add_groupbox(const char* name, float x, float y, float width, float hei
   ui::groupbox_top = ui::position_y + y;
 }
 
-void ui::add_checkbox(const char* name, bool* item) {
+void ui::add_checkbox(const char* name, bool* item, bool grayed_out) {
   if (ui::groupbox_bottom <= ui::groupbox_offset_y + 18)
     return;
 
@@ -89,19 +93,25 @@ void ui::add_checkbox(const char* name, bool* item) {
 
   auto text_size = ImGui::CalcTextSize(name);
 
-  if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 7, ui::groupbox_offset_y }, { ui::groupbox_offset_x + 7 + 12 + text_size.x, ui::groupbox_offset_y + 12 }))
+  if (!grayed_out && ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 7, ui::groupbox_offset_y }, { ui::groupbox_offset_x + 7 + 12 + text_size.x, ui::groupbox_offset_y + 12 }))
     *item = !*item;
 
-  if (*item)
-    ui::add_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 195, 141, 145, 255);
-  else
-    ui::add_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 50, 50, 50, 255);
+  if (grayed_out) {
+    ui::add_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 101, 101, 101, 255);
+    ui::add_text(name, ui::groupbox_offset_x + 29, ui::groupbox_offset_y - 2, 101, 101, 101, 255);
+  }
+  else {
+    if (*item)
+      ui::add_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 195, 141, 145, 255);
+    else
+      ui::add_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 50, 50, 50, 255);
 
-  ui::add_outlined_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 101, 101, 101, 255);
-  ui::add_text(name, ui::groupbox_offset_x + 29, ui::groupbox_offset_y - 2, 185, 185, 185, 255);
+    ui::add_outlined_rectangle(ui::groupbox_offset_x + 8, ui::groupbox_offset_y, 12, 12, 101, 101, 101, 255);
+    ui::add_text(name, ui::groupbox_offset_x + 29, ui::groupbox_offset_y - 2, 185, 185, 185, 255);
 
-  if (ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 7, ui::groupbox_offset_y }, { ui::groupbox_offset_x + 7 + 12 + text_size.x, ui::groupbox_offset_y + 12 }))
-    ui::add_outlined_rectangle(ui::groupbox_offset_x + 9, ui::groupbox_offset_y + 1, 10, 10, 101, 101, 101, 255);
+    if (ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 7, ui::groupbox_offset_y }, { ui::groupbox_offset_x + 7 + 12 + text_size.x, ui::groupbox_offset_y + 12 }))
+      ui::add_outlined_rectangle(ui::groupbox_offset_x + 9, ui::groupbox_offset_y + 1, 10, 10, 101, 101, 101, 255);
+  }
 
   ui::groupbox_offset_y += 18;
 }
@@ -110,9 +120,9 @@ void ui::add_slider(const char* name, int min, int max, int* item, int step) {
   if (ui::groupbox_bottom <= ui::groupbox_offset_y + 30)
     return;
 
-  auto pixel_size = ((float)(max - min) / 200.f);
+  auto pixel_size = (float)(max - min) / 200.f;
   auto mouse_position = ImGui::GetMousePos();
-  auto hovered_value = (int)((float)(std::abs((int)(mouse_position.x - (ui::groupbox_offset_x + 29)))) * pixel_size);
+  auto hovered_value = (int)((float)(std::abs((int)(mouse_position.x - (ui::groupbox_offset_x + 29)))) * pixel_size) + min;
 
   if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14 }, { ui::groupbox_offset_x + 29 + 201, ui::groupbox_offset_y + 14 + 10 }))
     *item = hovered_value;
@@ -133,19 +143,15 @@ void ui::add_slider(const char* name, int min, int max, int* item, int step) {
   ui::add_text(text.c_str(), ui::groupbox_offset_x + 29, ui::groupbox_offset_y - 3, 185, 185, 185, 255);
   ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, 200, 10, 50, 50, 50, 255);
 
-  if (*item) {
-    if (*item == max)
-      ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, 200, 10, 195, 141, 145, 255);
-    else
-      ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, (float)(*item) / pixel_size, 10, 195, 141, 145, 255);
-  }
+  if (*item)
+    ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, (float)(*item - min) / pixel_size, 10, 195, 141, 145, 255);
 
   ui::add_outlined_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, 200, 10, 101, 101, 101, 255);
   ui::add_text("-", ui::groupbox_offset_x + 22, ui::groupbox_offset_y + 10, 185, 185, 185, 255);
   ui::add_text("+", ui::groupbox_offset_x + 22 + 200 + 12, ui::groupbox_offset_y + 11, 185, 185, 185, 255);
 
   if (ImGui::IsMouseHoveringRect({ ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14 }, { ui::groupbox_offset_x + 29 + 200 + 1, ui::groupbox_offset_y + 14 + 10 })) {
-    ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, (float)(hovered_value) / pixel_size, 10, 101, 101, 101, 255);
+    ui::add_rectangle(ui::groupbox_offset_x + 29, ui::groupbox_offset_y + 14, (float)(hovered_value - min) / pixel_size, 10, 101, 101, 101, 255);
     ui::add_text(std::to_string(hovered_value).c_str(), mouse_position.x + 12, mouse_position.y - 5, 185, 185, 185, 255);
   }
 

@@ -6,8 +6,6 @@
 #include <ui/menu.hpp>
 #include <ui/ui.hpp>
 
-#include <intrin.h>
-
 #pragma warning(disable: 6387)
 
 long __stdcall hooks::endpoints::present(IDXGISwapChain* swap_chain, unsigned int sync_interval, unsigned int flags) {
@@ -76,7 +74,7 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
 
   auto floored = std::floor(value);
 
-  auto res = sdk::is_genshin_impact() ?
+  auto res = sdk::game_t::is(sdk::game_t::genshin_impact) ?
     genshin_impact(floored) :
     star_rail(floored);
 
@@ -87,10 +85,8 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
     sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
     sdk::set_vsync_count(ui::options::tools::enable_vsync ? 1 : 0);
 
-    if (sdk::is_genshin_impact())
+    if (sdk::game_t::is(sdk::game_t::genshin_impact))
       sdk::set_fog(!ui::options::tools::disable_fog);
-    else
-      *(bool*)(sdk::get_game_manager_if_exists(20) + 348) = !ui::options::tools::disable_fog;
   }
 
   hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);

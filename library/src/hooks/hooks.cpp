@@ -8,7 +8,7 @@ void hooks::initialize() {
   hooks::set_field_of_view.install(sdk::set_field_of_view, &hooks::endpoints::set_field_of_view);
   hooks::quit.install(sdk::quit, &hooks::endpoints::quit);
 
-  if (sdk::is_genshin_impact())
+  if (!sdk::game_t::is(sdk::game_t::star_rail))
     return;
 
   hooks::enter.install(sdk::enter, &hooks::endpoints::enter);

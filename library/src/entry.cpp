@@ -7,15 +7,12 @@
 using namespace std::chrono_literals;
 
 void initialize() {
-  while (!GetModuleHandleA("UnityPlayer.dll") || !(GetModuleHandleA("UserAssembly.dll") || GetModuleHandleA("GameAssembly.dll")))
-    std::this_thread::sleep_for(10ms);
+  if (GetModuleHandleA("StarRail.exe"))
+    while (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll"))
+      std::this_thread::sleep_for(10ms);
 
   ui::options::load();
-
-  GetModuleHandleA("StarRail.exe") != nullptr ?
-    sdk::initialize_star_rail() :
-    sdk::initialize_genshin_impact();
-
+  sdk::initialize();
   hooks::initialize();
 }
 
