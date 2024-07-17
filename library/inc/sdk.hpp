@@ -43,7 +43,8 @@ namespace sdk {
 }
 
 namespace sdk {
-  void initialize_genshin_impact();
+  void initialize_genshin_impact_global();
+  void initialize_genshin_impact_chinese();
   void initialize_star_rail();
   void initialize();
 }
