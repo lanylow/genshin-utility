@@ -12,6 +12,8 @@ file(GLOB_RECURSE SOURCES
   "${CMAKE_SOURCE_DIR}/library/*.hpp"
 )
 
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/out/")
+
 add_library(library SHARED ${SOURCES})
 
 set_target_properties(library PROPERTIES
