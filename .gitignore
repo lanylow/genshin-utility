@@ -12,6 +12,7 @@ _deps
 cmake-build-release
 cmake-build-debug
 .idea
+.cache
 /.vs
 /out/build
 /library/bin/release
