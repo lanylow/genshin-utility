@@ -47,7 +47,7 @@ void ui::menu::render_menu() {
   if (!ui::options::menu::opened)
     return;
 
-  ui::add_window("Genshin Utility by lanylow", "v1.5.6");
+  ui::add_window("Genshin Utility by lanylow", "v1.5.7");
   ui::add_groupbox("Settings", 19, 20 + 18, 286, 162);
   ui::add_checkbox("Open menu on start", &ui::options::menu::open_on_start);
   ui::add_checkbox("Frame rate counter", &ui::options::tools::fps_counter);
