@@ -1,22 +1,24 @@
 #pragma once
 
 #include <windows.h>
-#include <ui/ui.hpp>
+
+#include <ui/widgets.hpp>
 
 namespace ui {
   class menu {
   public:
     menu();
 
-    static long long handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
+    static long long handle_message(HWND window, uint32_t message, WPARAM wparam, LPARAM lparam);
 
     void render();
 
   private:
     void render_menu();
-    void render_counter();
+    void render_fps_counter();
+    void update_fps_counter();
 
-    ui::window window;
+    widgets::window window;
     LARGE_INTEGER performance_counter = { 0 };
     LARGE_INTEGER performance_frequency = { 0 };
     int frames = 0;

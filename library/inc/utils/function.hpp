@@ -14,11 +14,12 @@ namespace utils {
     std::enable_if_t<std::is_default_constructible_v<return_type> || std::is_void_v<return_type>, int> = 0>
   class function {
   public:
-    constexpr function() = default;
+    function() = default;
 
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    [[maybe_unused]] explicit constexpr function(cast_type address) : address((unsigned long long)(address)) { }
+    explicit function(cast_type address)
+      : address((unsigned long long)(address)) { }
 
     template <typename... arg_type>
     return_type invoke(arg_type&&... args) const {
@@ -38,14 +39,14 @@ namespace utils {
 
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    constexpr utils::function<return_type>& operator=(cast_type new_address) {
+    utils::function<return_type>& operator=(cast_type new_address) {
       address = (unsigned long long)(new_address);
       return *this;
     }
     
     template <typename cast_type,
       std::enable_if_t<utils::is_fn_convertible<cast_type>::value, int> = 0>
-    constexpr explicit operator cast_type() const {
+    explicit operator cast_type() const {
       return (cast_type)(address);
     }
 

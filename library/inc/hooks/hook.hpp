@@ -17,7 +17,7 @@ namespace hooks {
     std::enable_if_t<(std::is_base_of_v<hook_storage, storage_type> || std::is_same_v<hook_storage, storage_type>) && std::is_default_constructible_v<storage_type>, int> = 0>
   class hook {
   public:
-    constexpr hook() = default;
+    hook() = default;
 
   private:
     void create(void* detour) {
@@ -42,13 +42,13 @@ namespace hooks {
 
     template <typename trampoline_type,
       std::enable_if_t<utils::is_fn_convertible<trampoline_type>::value, int> = 0>
-    constexpr trampoline_type get_trampoline() const {
+    trampoline_type get_trampoline() const {
       return (trampoline_type)(storage.trampoline);
     }
 
     template <typename trampoline_type,
       std::enable_if_t<utils::is_fn_convertible<trampoline_type>::value, int> = 0>
-    constexpr void set_trampoline(trampoline_type value) {
+    void set_trampoline(trampoline_type value) {
       storage.trampoline = (void*)(value);
     }
 

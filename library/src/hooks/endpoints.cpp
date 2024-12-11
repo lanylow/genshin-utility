@@ -1,10 +1,10 @@
-#include <hooks/hooks.hpp>
 #include <hooks/endpoints.hpp>
 
-#include <sdk.hpp>
-#include <ui/options.hpp>
+#include <hooks/hooks.hpp>
+#include <ui/renderer.hpp>
 #include <ui/menu.hpp>
-#include <ui/ui.hpp>
+#include <options.hpp>
+#include <sdk.hpp>
 
 #pragma warning(disable: 6387)
 
@@ -19,7 +19,7 @@ long __stdcall hooks::endpoints::present(IDXGISwapChain* swap_chain, unsigned in
     hooks::wndproc.set_trampoline(SetWindowLongPtrA(hooks::wndproc.storage.window, GWLP_WNDPROC, (long long)(hooks::endpoints::wndproc)));
 
     ui::renderer::initialize();
-    ui::options::menu::opened = ui::options::menu::open_on_start;
+    options::menu.opened = options::menu.open_on_start;
   });
 
   utils::call_once(hooks::present.storage.render_target_flag, [&]() {
@@ -47,7 +47,7 @@ long __stdcall hooks::endpoints::resize_buffers(IDXGISwapChain* swap_chain, unsi
 }
 
 long long __stdcall hooks::endpoints::wndproc(HWND hwnd, unsigned int message, unsigned long long wparam, long long lparam) {
-  if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && ui::options::menu::opened)
+  if (!ui::menu::handle_message(hwnd, message, wparam, lparam) && options::menu.opened)
     return true;
 
   return CallWindowProcA(hooks::wndproc.get_trampoline<decltype(&hooks::endpoints::wndproc)>(), hwnd, message, wparam, lparam);
@@ -78,20 +78,20 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
 
   if (res) {
     if (!hooks::set_field_of_view.storage.is_in_battle)
-      value = (float)(ui::options::tools::camera_fov);
+      value = (float)(options::tools.camera_fov);
 
-    sdk::set_target_frame_rate(ui::options::tools::enable_vsync ? -1 : ui::options::tools::fps_limit);
-    sdk::set_vsync_count(ui::options::tools::enable_vsync ? 1 : 0);
+    sdk::set_target_frame_rate(options::tools.enable_vsync ? -1 : options::tools.fps_limit);
+    sdk::set_vsync_count(options::tools.enable_vsync ? 1 : 0);
 
     if (sdk::game_t::is(sdk::game_t::genshin_impact))
-      sdk::set_fog(!ui::options::tools::disable_fog);
+      sdk::set_fog(!options::tools.disable_fog);
   }
 
   hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
 }
 
 void hooks::endpoints::quit() {
-  ui::options::save();
+  options::save();
   hooks::quit.get_trampoline<decltype(&hooks::endpoints::quit)>()();
 }
 

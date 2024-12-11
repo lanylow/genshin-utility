@@ -1,8 +1,8 @@
-#include <sdk.hpp>
-#include <hooks/hooks.hpp>
-#include <ui/options.hpp>
-
 #include <thread>
+
+#include <hooks/hooks.hpp>
+#include <options.hpp>
+#include <sdk.hpp>
 
 using namespace std::chrono_literals;
 
@@ -11,7 +11,7 @@ void initialize() {
     while (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll"))
       std::this_thread::sleep_for(10ms);
 
-  ui::options::load();
+  options::load();
   sdk::initialize();
   hooks::initialize();
 }
