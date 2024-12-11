@@ -18,8 +18,8 @@ long __stdcall hooks::endpoints::present(IDXGISwapChain* swap_chain, unsigned in
     hooks::wndproc.storage.window = swap_chain_desc.OutputWindow;
     hooks::wndproc.set_trampoline(SetWindowLongPtrA(hooks::wndproc.storage.window, GWLP_WNDPROC, (long long)(hooks::endpoints::wndproc)));
 
+    ui::renderer::initialize();
     ui::options::menu::opened = ui::options::menu::open_on_start;
-    ui::menu::initialize();
   });
 
   utils::call_once(hooks::present.storage.render_target_flag, [&]() {
@@ -29,11 +29,9 @@ long __stdcall hooks::endpoints::present(IDXGISwapChain* swap_chain, unsigned in
     back_buffer->Release();
   });
 
-  ui::menu::handle_frame();
-  ui::begin();
-  ui::menu::render_menu();
-  ui::menu::render_counter();
-  ui::end();
+  ui::renderer::begin();
+  hooks::present.storage.menu.render();
+  ui::renderer::end();
 
   return hooks::present.get_trampoline<decltype(&hooks::endpoints::present)>()(swap_chain, sync_interval, flags);
 }

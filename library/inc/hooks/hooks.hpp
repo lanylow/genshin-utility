@@ -2,6 +2,7 @@
 
 #include <utils/once.hpp>
 #include <hooks/hook.hpp>
+#include <ui/menu.hpp>
 
 #include <d3d11.h>
 
@@ -13,6 +14,8 @@ namespace hooks {
 
     utils::once_flag init_flag;
     utils::once_flag render_target_flag;
+
+    ui::menu menu;
   };
 
   struct wndproc_storage : hooks::hook_storage {

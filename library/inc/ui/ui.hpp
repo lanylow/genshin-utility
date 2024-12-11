@@ -1,36 +1,45 @@
 #pragma once
 
 #include <windows.h>
+#include <string>
 
-namespace ui {
-  void initialize_imgui();
+#include <imgui/imgui.h>
+
+namespace ui::renderer {
+  void initialize();
   long long handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
 
   void begin();
   void end();
 
-  void add_window(const char* text_left, const char* text_right);
-  void add_groupbox(const char* name, float x, float y, float width, float height);
+  void add_text(const char* name, ImVec2 pos, int r, int g, int b, int a);
+  void add_rectangle(ImVec2 pos, ImVec2 size, int r, int g, int b, int a);
+  void add_outlined_rectangle(ImVec2 pos, ImVec2 size, int r, int g, int b, int a);
+}
 
-  void add_checkbox(const char* name, bool* item, bool grayed_out = false);
-  void add_slider(const char* name, int min, int max, int* item, int step);
+namespace ui {
+  class window {
+  public:
+    window(ImVec2 size, std::string  text_left, std::string  text_right);
 
-  void add_text(const char* name, float x, float y, int r, int g, int b, int a);
-  void add_rectangle(float x, float y, float width, float height, int r, int g, int b, int a);
-  void add_outlined_rectangle(float x, float y, float width, float height, int r, int g, int b, int a);
+    void begin();
+    void add_groupbox(const char* name, float x, float y, float width, float height);
+    void add_checkbox(const char* name, bool* item, bool grayed_out = false);
+    void add_slider(const char* name, int min, int max, int* item, int step);
 
-  inline float menu_width = 324.f;
-  inline float menu_height = 218.f;
-  inline float position_x = 100.f;
-  inline float position_y = 100.f;
+  private:
+    std::string text_left;
+    std::string text_right;
 
-  inline float mouse_drag_x = 300.f;
-  inline float mouse_drag_y = 300.f;
-  inline bool mouse_clicked;
-  inline bool mouse_dragging;
+    ImVec2 size = ImVec2(324.f, 218.f);
+    ImVec2 pos = ImVec2(100.f, 100.f);
+    ImVec2 mouse_drag = ImVec2(300.f, 300.f);
 
-  inline float groupbox_offset_x;
-  inline float groupbox_offset_y;
-  inline float groupbox_top;
-  inline float groupbox_bottom;
+    bool mouse_clicked = false;
+    bool mouse_dragging = false;
+
+    ImVec2 groupbox_offset;
+    float groupbox_top = 0.f;
+    float groupbox_bottom = 0.f;
+  };
 }
