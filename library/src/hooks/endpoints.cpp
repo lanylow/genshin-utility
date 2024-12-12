@@ -1,6 +1,7 @@
 #include <hooks/endpoints.hpp>
 
 #include <hooks/hooks.hpp>
+#include <hooks/veh.hpp>
 #include <ui/renderer.hpp>
 #include <ui/menu.hpp>
 #include <options.hpp>
@@ -88,6 +89,23 @@ void hooks::endpoints::set_field_of_view(void* _this, float value) {
   }
 
   hooks::set_field_of_view.get_trampoline<decltype(&hooks::endpoints::set_field_of_view)>()(_this, value);
+}
+
+void hooks::endpoints::set_field_of_view_gi(void* _this, float value) {
+  hooks::veh::call_original(_this, value);
+
+  utils::call_once(hooks::set_field_of_view.storage.present_flag, []() {
+    hooks::present.install_swap_chain(8, &hooks::endpoints::present);
+    hooks::resize_buffers.install_swap_chain(13, &hooks::endpoints::resize_buffers);
+  });
+
+  if (value != 45.f)
+    return;
+
+  hooks::set_field_of_view.install(sdk::set_field_of_view, &hooks::endpoints::set_field_of_view);
+  hooks::quit.install(sdk::quit, &hooks::endpoints::quit);
+
+  hooks::veh::destroy();
 }
 
 void hooks::endpoints::quit() {
