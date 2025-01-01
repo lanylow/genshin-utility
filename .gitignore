@@ -12,6 +12,7 @@ _deps
 cmake-build-release
 cmake-build-debug
 .idea
+.vscode
 .cache
 /.vs
 /out/build

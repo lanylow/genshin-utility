@@ -5,14 +5,14 @@
 void sdk::initialize_genshin_impact_global() {
   auto mod = (unsigned long long)(GetModuleHandleA(nullptr));
 
-  sdk::set_field_of_view = mod + 0x13f87c0;
+  sdk::set_field_of_view = mod + 0xf08370;
 
-  sdk::set_target_frame_rate = mod + 0x15fcc80;
-  sdk::quit = mod + 0x13fcc80;
+  sdk::set_target_frame_rate = mod + 0x110c970;
+  sdk::quit = mod + 0xf0c720;
 
-  sdk::set_vsync_count = mod + 0xca9ca0;
+  sdk::set_vsync_count = mod + 0x7b5470;
 
-  sdk::set_fog = mod + 0xca8d50;
+  sdk::set_fog = mod + 0x7b4520;
 
   sdk::game_t::set(sdk::game_t::genshin_impact);
 }
@@ -20,14 +20,14 @@ void sdk::initialize_genshin_impact_global() {
 void sdk::initialize_genshin_impact_chinese() {
   auto mod = (unsigned long long)(GetModuleHandleA(nullptr));
 
-  sdk::set_field_of_view = mod + 0x13f38a0;
+  sdk::set_field_of_view = mod + 0xf0a370;
 
-  sdk::set_target_frame_rate = mod + 0x15f7d60;
-  sdk::quit = mod + 0x13f7d60;
+  sdk::set_target_frame_rate = mod + 0x110e970;
+  sdk::quit = mod + 0xf0e720;
 
-  sdk::set_vsync_count = mod + 0xca4da0;
+  sdk::set_vsync_count = mod + 0x7b7470;
 
-  sdk::set_fog = mod + 0xca3e50;
+  sdk::set_fog = mod + 0x7b6520;
 
   sdk::game_t::set(sdk::game_t::genshin_impact);
 }
