@@ -35,15 +35,15 @@ void sdk::initialize_genshin_impact_chinese() {
 void sdk::initialize_star_rail() {
   auto game_assembly = (unsigned long long)(GetModuleHandleA("GameAssembly.dll"));
 
-  sdk::set_field_of_view = game_assembly + 0x1889690;
+  sdk::set_field_of_view = game_assembly + 0x682b70;
 
-  sdk::set_target_frame_rate = game_assembly + 0x19d2c40;
-  sdk::quit = game_assembly + 0x19d18b0;
+  sdk::set_target_frame_rate = game_assembly + 0x7cdc80;
+  sdk::quit = game_assembly + 0x7cc8f0;
 
-  sdk::set_vsync_count = game_assembly + 0x1a31a00;
+  sdk::set_vsync_count = game_assembly + 0x83c360;
 
-  sdk::enter = game_assembly + 0x2904390;
-  sdk::leave = game_assembly + 0x2905600;
+  sdk::enter = game_assembly + 0x17a8760;
+  sdk::leave = game_assembly + 0x17a99c0;
 
   sdk::game_t::set(sdk::game_t::star_rail);
 }
