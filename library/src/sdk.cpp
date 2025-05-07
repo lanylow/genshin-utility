@@ -2,32 +2,17 @@
 
 #include <windows.h>
 
-void sdk::initialize_genshin_impact_global() {
+void sdk::initialize_genshin_impact() {
   const auto mod = (unsigned long long)GetModuleHandleA(nullptr);
 
-  sdk::set_field_of_view = mod + 0xfa2f70;
+  sdk::set_field_of_view = mod + 0xfd8be0;
 
-  sdk::set_target_frame_rate = mod + 0xfa76b0;
-  sdk::quit = mod + 0xfa7230;
+  sdk::set_target_frame_rate = mod + 0xfdd330;
+  sdk::quit = mod + 0xfdceb0;
 
-  sdk::set_vsync_count = mod + 0x885e70;
+  sdk::set_vsync_count = mod + 0x8ae8f0;
 
-  sdk::set_fog = mod + 0x884ee0;
-
-  sdk::game_t::set(sdk::game_t::genshin_impact);
-}
-
-void sdk::initialize_genshin_impact_chinese() {
-  const auto mod = (unsigned long long)GetModuleHandleA(nullptr);
-
-  sdk::set_field_of_view = mod + 0xfa0f70;
-
-  sdk::set_target_frame_rate = mod + 0xfa56b0;
-  sdk::quit = mod + 0xfa5230;
-
-  sdk::set_vsync_count = mod + 0x883e70;
-
-  sdk::set_fog = mod + 0x882ee0;
+  sdk::set_fog = mod + 0x8ad960;
 
   sdk::game_t::set(sdk::game_t::genshin_impact);
 }
@@ -51,8 +36,6 @@ void sdk::initialize_star_rail() {
 void sdk::initialize() {
   if (GetModuleHandleA("StarRail.exe"))
     sdk::initialize_star_rail();
-  else if (GetModuleHandleA("GenshinImpact.exe"))
-    sdk::initialize_genshin_impact_global();
   else
-    sdk::initialize_genshin_impact_chinese();
+    sdk::initialize_genshin_impact();
 }
