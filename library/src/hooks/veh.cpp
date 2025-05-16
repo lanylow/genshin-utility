@@ -8,22 +8,22 @@ namespace hooks::veh {
 
 long hooks::veh::exception_handler(EXCEPTION_POINTERS* info) {
   switch (info->ExceptionRecord->ExceptionCode) {
-    case EXCEPTION_GUARD_PAGE:
-      if (info->ExceptionRecord->ExceptionAddress == data.target)
-        info->ContextRecord->Rip = (uintptr_t)data.detour;
+  case EXCEPTION_GUARD_PAGE:
+    if (info->ExceptionRecord->ExceptionAddress == data.target)
+      info->ContextRecord->Rip = (uintptr_t)data.detour;
 
-      info->ContextRecord->EFlags |= PAGE_GUARD;
+    info->ContextRecord->EFlags |= PAGE_GUARD;
 
-      return EXCEPTION_CONTINUE_EXECUTION;
+    return EXCEPTION_CONTINUE_EXECUTION;
 
-    case EXCEPTION_SINGLE_STEP:
-      unsigned long old;
-      VirtualProtect(data.target, data.system_info.dwPageSize, PAGE_EXECUTE_READ | PAGE_GUARD, &old);
+  case EXCEPTION_SINGLE_STEP:
+    unsigned long old;
+    VirtualProtect(data.target, data.system_info.dwPageSize, PAGE_EXECUTE_READ | PAGE_GUARD, &old);
 
-      return EXCEPTION_CONTINUE_EXECUTION;
+    return EXCEPTION_CONTINUE_EXECUTION;
 
-    default:
-      return EXCEPTION_CONTINUE_SEARCH;
+  default:
+    return EXCEPTION_CONTINUE_SEARCH;
   }
 }
 

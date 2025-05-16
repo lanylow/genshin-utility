@@ -9,7 +9,7 @@
 #include <sdk.hpp>
 
 ui::menu::menu()
-  : window({ 324.f, 218.f }, "Genshin Utility by lanylow", "v1.5.16") {
+  : window({324.f, 218.f}, "Genshin Utility by lanylow", "v1.5.17") {
   QueryPerformanceFrequency(&performance_frequency);
   QueryPerformanceCounter(&performance_counter);
 }
@@ -22,8 +22,9 @@ long long ui::menu::handle_message(HWND window, uint32_t message, WPARAM wparam,
       options::menu.opened = !options::menu.opened;
       insert = true;
     }
-    else if (message == WM_KEYUP) 
+    else if (message == WM_KEYUP) {
       insert = false;
+    }
   }
 
   return ui::renderer::handle_message(window, message, wparam, lparam);
@@ -54,18 +55,18 @@ void ui::menu::render_fps_counter() {
   if (!options::tools.fps_counter)
     return;
 
-  auto text = std::format("{} fps", frame_rate);
-  auto text_size = ImGui::CalcTextSize(text.c_str());
+  const auto text = std::format("{} fps", frame_rate);
+  const auto text_size = ImGui::CalcTextSize(text.c_str());
 
-  auto screen_width = ImGui::GetMainViewport()->Size.x;
-  auto text_begin = screen_width - 2 - 5 - text_size.x;
-  auto rect_begin = text_begin - 5;
-  auto rect_end = screen_width - (rect_begin) - 2;
+  const auto screen_width = ImGui::GetMainViewport()->Size.x;
+  const auto text_begin = screen_width - 2 - 5 - text_size.x;
+  const auto rect_begin = text_begin - 5;
+  const auto rect_end = screen_width - (rect_begin) - 2;
 
-  renderer::add_rectangle({ rect_begin, 2 }, { rect_end, 20 }, { 50, 50, 50, 255 });
-  renderer::add_rectangle({ rect_begin, 21 }, { rect_end, 1 }, { 195, 141, 145, 255 });
-  renderer::add_outlined_rectangle({ rect_begin, 2 }, { rect_end, 20 }, { 0, 0, 0, 84 });
-  renderer::add_text(text.c_str(), { text_begin, 4 }, { 180, 180, 180, 255 });
+  renderer::add_rectangle({rect_begin, 2}, {rect_end, 20}, {50, 50, 50, 255});
+  renderer::add_rectangle({rect_begin, 21}, {rect_end, 1}, {195, 141, 145, 255});
+  renderer::add_outlined_rectangle({rect_begin, 2}, {rect_end, 20}, {0, 0, 0, 84});
+  renderer::add_text(text.c_str(), {text_begin, 4}, {180, 180, 180, 255});
 }
 
 void ui::menu::update_fps_counter() {
@@ -73,7 +74,7 @@ void ui::menu::update_fps_counter() {
 
   LARGE_INTEGER now;
   QueryPerformanceCounter(&now);
-  auto delta = (double)(now.QuadPart - performance_counter.QuadPart) / (double)(performance_frequency.QuadPart);
+  const auto delta = (double)(now.QuadPart - performance_counter.QuadPart) / (double)performance_frequency.QuadPart;
 
   if (delta < 1.0)
     return;

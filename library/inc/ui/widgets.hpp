@@ -28,13 +28,13 @@ namespace ui::widgets {
     widgets::groupbox add_groupbox(const char* name, float x, float y, float width, float height) const;
 
   private:
-    ImVec2 size = ImVec2(100.f, 100.f);
-    ImVec2 pos = ImVec2(100.f, 100.f);
+    ImVec2 size = {100.f, 100.f};
+    ImVec2 pos = {100.f, 100.f};
 
     std::string text_left;
     std::string text_right;
 
-    ImVec2 mouse_drag = ImVec2(300.f, 300.f);
+    ImVec2 mouse_drag = {300.f, 300.f};
     bool mouse_clicked = false;
     bool mouse_dragging = false;
   };

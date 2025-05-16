@@ -7,7 +7,7 @@ struct window_manager {
   HWND window;
   WNDCLASSEX wnd_class;
 
-  window_manager(HWND window, WNDCLASSEX wnd_class) : window(window), wnd_class(wnd_class) { }
+  window_manager(HWND window, const WNDCLASSEX& wnd_class) : window(window), wnd_class(wnd_class) {}
 
   ~window_manager() {
     DestroyWindow(window);
@@ -16,7 +16,7 @@ struct window_manager {
 };
 
 void** utils::directx::get_swap_chain_vmt() {
-  utils::call_once(utils::directx::init_flag, [&]() {
+  utils::call_once(utils::directx::init_flag, [&] {
     WNDCLASSEX wnd_class;
     wnd_class.cbSize = sizeof(WNDCLASSEX);
     wnd_class.style = CS_HREDRAW | CS_VREDRAW;
@@ -39,13 +39,13 @@ void** utils::directx::get_swap_chain_vmt() {
     if (!d3d11)
       return;
 
-    auto d3d11_create_device_and_swap_chain = (decltype(&D3D11CreateDeviceAndSwapChain))(GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain"));
+    auto d3d11_create_device_and_swap_chain = (decltype(&D3D11CreateDeviceAndSwapChain))GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain");
 
     if (!d3d11_create_device_and_swap_chain)
       return;
 
     D3D_FEATURE_LEVEL feature_level;
-    D3D_FEATURE_LEVEL feature_levels[] = { D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_11_0 };
+    D3D_FEATURE_LEVEL feature_levels[] = {D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_11_0};
 
     DXGI_RATIONAL refresh_rate;
     refresh_rate.Numerator = 60;
@@ -83,7 +83,7 @@ void** utils::directx::get_swap_chain_vmt() {
       return;
 
     auto vmt = new void*[18];
-    std::memcpy(vmt, *(void***)(swap_chain), 18 * sizeof(void*));
+    std::memcpy(vmt, *(void***)swap_chain, 18 * sizeof(void*));
     utils::directx::swap_chain_vmt = vmt;
 
     swap_chain->Release();

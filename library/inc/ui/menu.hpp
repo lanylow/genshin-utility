@@ -9,9 +9,9 @@ namespace ui {
   public:
     menu();
 
-    static long long handle_message(HWND window, uint32_t message, WPARAM wparam, LPARAM lparam);
-
     void render();
+
+    static long long handle_message(HWND window, uint32_t message, WPARAM wparam, LPARAM lparam);
 
   private:
     void render_menu();
@@ -19,8 +19,8 @@ namespace ui {
     void update_fps_counter();
 
     widgets::window window;
-    LARGE_INTEGER performance_counter = { 0 };
-    LARGE_INTEGER performance_frequency = { 0 };
+    LARGE_INTEGER performance_counter = {};
+    LARGE_INTEGER performance_frequency = {};
     int frames = 0;
     int frame_rate = 0;
   };
