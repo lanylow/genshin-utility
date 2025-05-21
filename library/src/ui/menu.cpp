@@ -9,7 +9,7 @@
 #include <sdk.hpp>
 
 ui::menu::menu()
-  : window({324.f, 218.f}, "Genshin Utility by lanylow", "v1.5.17") {
+  : window({324.f, 218.f}, "Genshin Utility by lanylow", "v1.5.18") {
   QueryPerformanceFrequency(&performance_frequency);
   QueryPerformanceCounter(&performance_counter);
 }
@@ -45,7 +45,7 @@ void ui::menu::render_menu() {
   auto groupbox = window.add_groupbox("Settings", 19, 20 + 18, 286, 162);
   groupbox.add_checkbox("Open menu on start", &options::menu.open_on_start);
   groupbox.add_checkbox("Frame rate counter", &options::tools.fps_counter);
-  groupbox.add_checkbox("Enable V-Sync", &options::tools.enable_vsync);
+  groupbox.add_checkbox("Enable V-Sync", &options::tools.enable_vsync, sdk::game_t::is(sdk::game_t::star_rail));
   groupbox.add_checkbox("Disable fog", &options::tools.disable_fog, sdk::game_t::is(sdk::game_t::star_rail));
   groupbox.add_slider("Frame rate limit", 10, 360, &options::tools.fps_limit, 1);
   groupbox.add_slider("Camera field of view", 5, 175, &options::tools.camera_fov, 1);
