@@ -15,8 +15,8 @@ struct window_manager {
   }
 };
 
-void** utils::directx::get_swap_chain_vmt() {
-  utils::call_once(utils::directx::init_flag, [&] {
+std::array<void*, 18> utils::directx::get_swap_chain_vmt() {
+  static auto vmt = [] {
     WNDCLASSEX wnd_class;
     wnd_class.cbSize = sizeof(WNDCLASSEX);
     wnd_class.style = CS_HREDRAW | CS_VREDRAW;
@@ -33,16 +33,7 @@ void** utils::directx::get_swap_chain_vmt() {
 
     RegisterClassExA(&wnd_class);
     auto window = CreateWindowExA(0, wnd_class.lpszClassName, "GenshinUtilityWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, wnd_class.hInstance, nullptr);
-    auto d3d11 = GetModuleHandleA("d3d11.dll");
     auto manager = window_manager(window, wnd_class);
-
-    if (!d3d11)
-      return;
-
-    auto d3d11_create_device_and_swap_chain = (decltype(&D3D11CreateDeviceAndSwapChain))GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain");
-
-    if (!d3d11_create_device_and_swap_chain)
-      return;
 
     D3D_FEATURE_LEVEL feature_level;
     D3D_FEATURE_LEVEL feature_levels[] = {D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_11_0};
@@ -77,19 +68,17 @@ void** utils::directx::get_swap_chain_vmt() {
     ID3D11Device* device;
     ID3D11DeviceContext* context;
 
-    auto res = d3d11_create_device_and_swap_chain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, feature_levels, 2, D3D11_SDK_VERSION, &swap_chain_desc, &swap_chain, &device, &feature_level, &context);
+    auto table = std::array<void*, 18>();
 
-    if (res < 0)
-      return;
-
-    auto vmt = new void*[18];
-    std::memcpy(vmt, *(void***)swap_chain, 18 * sizeof(void*));
-    utils::directx::swap_chain_vmt = vmt;
+    if (SUCCEEDED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, feature_levels, 2, D3D11_SDK_VERSION, &swap_chain_desc, &swap_chain, &device, &feature_level, &context)))
+      std::memcpy(table.data(), *(void***)swap_chain, table.size() * sizeof(void*));
 
     swap_chain->Release();
     device->Release();
     context->Release();
-  });
 
-  return utils::directx::swap_chain_vmt;
+    return table;
+  }();
+
+  return vmt;
 }

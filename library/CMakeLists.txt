@@ -20,7 +20,7 @@ set_target_properties(library PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/library/bin/release/"
 )
 
-target_link_libraries(library "minhook/minhook.x64")
+target_link_libraries(library "minhook/minhook.x64" "d3d11")
 
 add_custom_command(TARGET library POST_BUILD COMMAND
   ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/library/bin/release/library.dll" "${CMAKE_SOURCE_DIR}/out/"

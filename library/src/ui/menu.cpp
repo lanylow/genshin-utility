@@ -9,7 +9,7 @@
 #include <sdk.hpp>
 
 ui::menu::menu()
-  : window({324.f, 218.f}, "Genshin Utility by lanylow", "v1.5.18") {
+  : window({324.f, 218.f}, "Genshin Utility by lanylow", "v1.5.19") {
   QueryPerformanceFrequency(&performance_frequency);
   QueryPerformanceCounter(&performance_counter);
 }

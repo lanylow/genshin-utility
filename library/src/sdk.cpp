@@ -3,22 +3,22 @@
 #include <windows.h>
 
 void sdk::initialize_genshin_impact() {
-  const auto mod = (unsigned long long)GetModuleHandleA(nullptr);
+  const auto mod = (uintptr_t)GetModuleHandleA(nullptr);
 
-  sdk::set_field_of_view = mod + 0xfd8be0;
+  sdk::set_field_of_view = mod + 0x1066530;
 
-  sdk::set_target_frame_rate = mod + 0xfdd330;
-  sdk::quit = mod + 0xfdceb0;
+  sdk::set_target_frame_rate = mod + 0x106aca0;
+  sdk::quit = mod + 0x106a820;
 
-  sdk::set_vsync_count = mod + 0x8ae8f0;
+  sdk::set_vsync_count = mod + 0x938a20;
 
-  sdk::set_fog = mod + 0x8ad960;
+  sdk::set_fog = mod + 0x937a90;
 
   sdk::game_t::set(sdk::game_t::genshin_impact);
 }
 
 void sdk::initialize_star_rail() {
-  const auto game_assembly = (unsigned long long)GetModuleHandleA("GameAssembly.dll");
+  const auto game_assembly = (uintptr_t)GetModuleHandleA("GameAssembly.dll");
 
   sdk::set_field_of_view = game_assembly + 0xe6e8100;
 

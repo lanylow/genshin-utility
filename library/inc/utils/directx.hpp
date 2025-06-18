@@ -1,10 +1,7 @@
 #pragma once
 
-#include <utils/once.hpp>
+#include <array>
 
 namespace utils::directx {
-  inline utils::once_flag init_flag;
-  inline void** swap_chain_vmt;
-
-  void** get_swap_chain_vmt();
+  std::array<void*, 18> get_swap_chain_vmt();
 }
