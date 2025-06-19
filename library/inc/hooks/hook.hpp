@@ -1,56 +1,51 @@
 #pragma once
 
-#include <utils/directx.hpp>
-#include <utils/function.hpp>
+#include <type_traits>
 
 #include <minhook/MinHook.h>
 
-#include <type_traits>
+#include <utils/directx.hpp>
+#include <utils/function.hpp>
 
 namespace hooks {
-  struct hook_storage {
+  struct HookStorage {
     void* address = nullptr;
     void* trampoline = nullptr;
   };
 
-  template <typename storage_type = hooks::hook_storage>
-    requires (std::is_base_of_v<hook_storage, storage_type> || std::is_same_v<hook_storage, storage_type>) && std::is_default_constructible_v<storage_type>
-  class hook {
+  template <typename StorageType = HookStorage>
+    requires (std::is_base_of_v<HookStorage, StorageType> || std::is_same_v<HookStorage, StorageType>) && std::is_default_constructible_v<StorageType>
+  class Hook {
   public:
-    template <typename target_type, typename detour_type>
-      requires std::is_pointer_v<detour_type>
-    void install(target_type target, detour_type detour) {
-      storage.address = (void*)target;
-      create((void*)detour);
+    template <typename TargetType, typename DetourType>
+      requires std::is_pointer_v<DetourType>
+    void Install(TargetType target, DetourType detour) {
+      storage_.address = (void*)target;
+      Create((void*)detour);
     }
 
-    template <typename detour_type>
-      requires std::is_pointer_v<detour_type>
-    void install_swap_chain(int index, detour_type detour) {
-      storage.address = utils::directx::get_swap_chain_vmt()[index];
-      create((void*)detour);
+    template <typename DetourType>
+      requires std::is_pointer_v<DetourType>
+    void InstallSwapChain(int index, DetourType detour) {
+      storage_.address = utils::directx::get_swap_chain_vmt()[index];
+      Create((void*)detour);
     }
 
-    template <utils::fn_convertible trampoline_type>
-    trampoline_type get_trampoline() const {
-      return (trampoline_type)storage.trampoline;
-    }
+    template <utils::fn_convertible TrampolineType>
+    TrampolineType GetTrampoline() const { return (TrampolineType)storage_.trampoline; }
 
-    template <utils::fn_convertible trampoline_type>
-    void set_trampoline(trampoline_type value) {
-      storage.trampoline = (void*)value;
-    }
+    template <utils::fn_convertible TrampolineType>
+    void SetTrampoline(TrampolineType value) { storage_.trampoline = (void*)value; }
 
-    storage_type& get_storage() {
-      return storage;
-    }
+    StorageType& GetStorage() { return storage_; }
 
   private:
-    void create(void* detour) {
-      MH_CreateHook(storage.address, detour, &storage.trampoline);
-      MH_EnableHook(storage.address);
+    void Create(void* detour) {
+      static auto init = MH_Initialize();
+      MH_CreateHook(storage_.address, detour, &storage_.trampoline);
+      MH_EnableHook(storage_.address);
     }
 
-    storage_type storage;
+    StorageType storage_;
   };
 }

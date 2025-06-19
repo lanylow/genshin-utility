@@ -6,22 +6,22 @@
 
 using namespace std::chrono_literals;
 
-void initialize() {
+void Init() {
   if (GetModuleHandleA("StarRail.exe"))
     while (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll"))
       std::this_thread::sleep_for(10ms);
 
   options::load();
   sdk::initialize();
-  hooks::initialize();
+  static auto hooks = new hooks::Hooks();
 }
 
-bool DllMain(HMODULE module, unsigned int reason, void*) {
+BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID) {
   DisableThreadLibraryCalls(module);
 
   if (reason == DLL_PROCESS_ATTACH)
-    if (const auto handle = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)initialize, nullptr, 0, nullptr))
+    if (const auto handle = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)Init, nullptr, 0, nullptr))
       CloseHandle(handle);
 
-  return true;
+  return TRUE;
 }

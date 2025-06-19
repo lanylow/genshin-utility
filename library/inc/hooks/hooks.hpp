@@ -7,36 +7,51 @@
 #include <d3d11.h>
 
 namespace hooks {
-  struct present_storage : hooks::hook_storage {
+  struct RenderData {
+    HWND window = nullptr;
     ID3D11Device* device = nullptr;
     ID3D11DeviceContext* context = nullptr;
     ID3D11RenderTargetView* render_target = nullptr;
+  };
 
+  struct PresentStorage : HookStorage {
     utils::once_flag init_flag;
     utils::once_flag render_target_flag;
-
     ui::menu menu;
   };
 
-  struct wndproc_storage : hooks::hook_storage {
-    HWND window = nullptr;
-  };
-
-  struct set_field_of_view_storage : hooks::hook_storage {
+  struct SetFieldOfViewStorage : HookStorage {
     bool is_in_battle = false;
-
     utils::once_flag present_flag;
   };
 }
 
 namespace hooks {
-  void initialize();
+  class Hooks {
+  public:
+    Hooks();
 
-  inline hooks::hook<hooks::present_storage> present;
-  inline hooks::hook<> resize_buffers;
-  inline hooks::hook<hooks::wndproc_storage> wndproc;
-  inline hooks::hook<hooks::set_field_of_view_storage> set_field_of_view;
-  inline hooks::hook<> quit;
-  inline hooks::hook<> enter;
-  inline hooks::hook<> leave;
+  private:
+    static HRESULT Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags);
+    static HRESULT ResizeBuffers(IDXGISwapChain* _this, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags);
+    static LRESULT WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
+
+    static void SetFieldOfView(void* _this, float value);
+    static void SetFieldOfViewGi(void* _this, float value);
+    static void Quit();
+    static void Enter(void* _this);
+    static void Leave(void* _this, void* a1);
+
+    static inline Hooks* inst_ = nullptr;
+
+    RenderData render_data_;
+
+    Hook<PresentStorage> present_;
+    Hook<> resize_buffers_;
+    Hook<> wndproc_;
+    Hook<SetFieldOfViewStorage> set_field_of_view_;
+    Hook<> quit_;
+    Hook<> enter_;
+    Hook<> leave_;
+  };
 }

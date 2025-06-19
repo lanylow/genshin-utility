@@ -8,18 +8,14 @@ namespace utils {
     explicit once_flag(bool init = true)
       : value(init) {}
 
-    void reset() {
-      value = true;
-    }
+    void reset() { value = true; }
 
-    utils::once_flag& operator=(bool val) {
+    once_flag& operator=(bool val) {
       value = val;
       return *this;
     }
 
-    explicit operator bool() const {
-      return value.load();
-    }
+    explicit operator bool() const { return value.load(); }
 
   private:
     mutable std::atomic_bool value = true;
@@ -27,7 +23,7 @@ namespace utils {
 
   template <typename fn_type, class... args_type>
     requires std::is_invocable_v<fn_type, args_type...>
-  void call_once(utils::once_flag& flag, fn_type&& function, args_type&&... args) {
+  void call_once(once_flag& flag, fn_type&& function, args_type&&... args) {
     if (!flag)
       return;
 

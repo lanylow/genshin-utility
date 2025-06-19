@@ -2,8 +2,6 @@
 
 #include <windows.h>
 
-#include <vector>
-
 namespace hooks::veh {
   struct veh_data_t {
     SYSTEM_INFO system_info;

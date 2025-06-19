@@ -12,7 +12,7 @@ namespace utils {
   public:
     function() = default;
 
-    template <utils::fn_convertible cast_type>
+    template <fn_convertible cast_type>
     explicit function(cast_type address)
       : address((uintptr_t)address) {}
 
@@ -28,20 +28,16 @@ namespace utils {
     }
 
     template <typename... arg_type>
-    return_type operator()(arg_type&&... args) const {
-      return invoke(std::forward<arg_type>(args)...);
-    }
+    return_type operator()(arg_type&&... args) const { return invoke(std::forward<arg_type>(args)...); }
 
-    template <utils::fn_convertible cast_type>
+    template <fn_convertible cast_type>
     utils::function<return_type>& operator=(cast_type new_address) {
       address = (uintptr_t)new_address;
       return *this;
     }
 
-    template <utils::fn_convertible cast_type>
-    explicit operator cast_type() const {
-      return (cast_type)address;
-    }
+    template <fn_convertible cast_type>
+    explicit operator cast_type() const { return (cast_type)address; }
 
   private:
     uintptr_t address = 0ll;

@@ -4,12 +4,14 @@
 
 #include <imgui/imgui.h>
 
+#include <hooks/hooks.hpp>
+
 namespace ui::renderer {
-  void initialize();
-  long long handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam);
+  void initialize(const hooks::RenderData& render_data);
+  LRESULT handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
 
   void begin();
-  void end();
+  void end(const hooks::RenderData& render_data);
 
   void add_text(const char* name, ImVec2 pos, ImColor color);
   void add_rectangle(ImVec2 pos, ImVec2 size, ImColor color);

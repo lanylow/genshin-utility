@@ -14,20 +14,20 @@ ui::menu::menu()
   QueryPerformanceCounter(&performance_counter);
 }
 
-long long ui::menu::handle_message(HWND window, uint32_t message, WPARAM wparam, LPARAM lparam) {
+LRESULT ui::menu::handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam) {
   static bool insert = false;
 
   if (wparam == VK_INSERT) {
-    if (message == WM_KEYDOWN && !insert) {
+    if (msg == WM_KEYDOWN && !insert) {
       options::menu.opened = !options::menu.opened;
       insert = true;
     }
-    else if (message == WM_KEYUP) {
+    else if (msg == WM_KEYUP) {
       insert = false;
     }
   }
 
-  return ui::renderer::handle_message(window, message, wparam, lparam);
+  return ui::renderer::handle_message(window, msg, wparam, lparam);
 }
 
 void ui::menu::render() {
@@ -61,7 +61,7 @@ void ui::menu::render_fps_counter() {
   const auto screen_width = ImGui::GetMainViewport()->Size.x;
   const auto text_begin = screen_width - 2 - 5 - text_size.x;
   const auto rect_begin = text_begin - 5;
-  const auto rect_end = screen_width - (rect_begin) - 2;
+  const auto rect_end = screen_width - rect_begin - 2;
 
   renderer::add_rectangle({rect_begin, 2}, {rect_end, 20}, {50, 50, 50, 255});
   renderer::add_rectangle({rect_begin, 21}, {rect_end, 1}, {195, 141, 145, 255});

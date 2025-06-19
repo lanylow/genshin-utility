@@ -9,9 +9,9 @@ namespace ui {
   public:
     menu();
 
+    static LRESULT handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
+    
     void render();
-
-    static long long handle_message(HWND window, uint32_t message, WPARAM wparam, LPARAM lparam);
 
   private:
     void render_menu();

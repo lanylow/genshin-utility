@@ -6,7 +6,7 @@
 
 #include <hooks/hooks.hpp>
 
-void ui::renderer::initialize() {
+void ui::renderer::initialize(const hooks::RenderData& render_data) {
   ImGui::CreateContext();
 
   auto io = ImGui::GetIO();
@@ -14,16 +14,14 @@ void ui::renderer::initialize() {
   io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
   io.Fonts->AddFontFromFileTTF(R"(C:\Windows\Fonts\tahoma.ttf)", 14.f);
 
-  ImGui_ImplWin32_Init(hooks::wndproc.get_storage().window);
-
-  const auto& storage = hooks::present.get_storage();
-  ImGui_ImplDX11_Init(storage.device, storage.context);
+  ImGui_ImplWin32_Init(render_data.window);
+  ImGui_ImplDX11_Init(render_data.device, render_data.context);
 }
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-long long ui::renderer::handle_message(HWND window, unsigned int message, unsigned long long wparam, long long lparam) {
-  return ImGui_ImplWin32_WndProcHandler(window, message, wparam, lparam);
+LRESULT ui::renderer::handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam) {
+  return ImGui_ImplWin32_WndProcHandler(window, msg, wparam, lparam);
 }
 
 void ui::renderer::begin() {
@@ -32,12 +30,11 @@ void ui::renderer::begin() {
   ImGui::NewFrame();
 }
 
-void ui::renderer::end() {
+void ui::renderer::end(const hooks::RenderData& render_data) {
   ImGui::EndFrame();
   ImGui::Render();
 
-  const auto& storage = hooks::present.get_storage();
-  storage.context->OMSetRenderTargets(1, &storage.render_target, nullptr);
+  render_data.context->OMSetRenderTargets(1, &render_data.render_target, nullptr);
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
