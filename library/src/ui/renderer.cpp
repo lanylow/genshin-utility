@@ -5,59 +5,92 @@
 #include <imgui/imgui_impl_win32.h>
 
 #include <hooks/hooks.hpp>
+#include <options.hpp>
 
-void ui::renderer::initialize(const hooks::RenderData& render_data) {
-  ImGui::CreateContext();
+Renderer::Renderer() {
+  inst_ = this;
+}
 
-  auto io = ImGui::GetIO();
-  io.IniFilename = nullptr;
-  io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-  io.Fonts->AddFontFromFileTTF(R"(C:\Windows\Fonts\tahoma.ttf)", 14.f);
+void Renderer::Render(IDXGISwapChain* swap_chain, const std::function<void()>& callback) {
+  Init(swap_chain);
 
-  ImGui_ImplWin32_Init(render_data.window);
-  ImGui_ImplDX11_Init(render_data.device, render_data.context);
+  ImGui_ImplDX11_NewFrame();
+  ImGui_ImplWin32_NewFrame();
+  ImGui::NewFrame();
+
+  callback();
+
+  ImGui::EndFrame();
+  ImGui::Render();
+
+  render_data_.context->OMSetRenderTargets(1, &render_data_.render_target, nullptr);
+  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Renderer::Resize() {
+  render_data_.render_target->Release();
+  render_data_.render_target = nullptr;
+}
+
+void Renderer::AddText(const std::string& text, ImVec2 pos, ImColor color) {
+  const auto draw_list = ImGui::GetBackgroundDrawList();
+
+  draw_list->AddText(ImVec2(pos.x + 1, pos.y + 1), IM_COL32_BLACK, text.c_str());
+  draw_list->AddText(ImVec2(pos.x - 1, pos.y - 1), IM_COL32_BLACK, text.c_str());
+  draw_list->AddText(ImVec2(pos.x + 1, pos.y - 1), IM_COL32_BLACK, text.c_str());
+  draw_list->AddText(ImVec2(pos.x - 1, pos.y + 1), IM_COL32_BLACK, text.c_str());
+
+  draw_list->AddText(ImVec2(pos.x + 1, pos.y), IM_COL32_BLACK, text.c_str());
+  draw_list->AddText(ImVec2(pos.x - 1, pos.y), IM_COL32_BLACK, text.c_str());
+  draw_list->AddText(ImVec2(pos.x, pos.y - 1), IM_COL32_BLACK, text.c_str());
+  draw_list->AddText(ImVec2(pos.x, pos.y + 1), IM_COL32_BLACK, text.c_str());
+
+  draw_list->AddText(ImVec2(pos.x, pos.y), color, text.c_str());
+}
+
+void Renderer::AddRectangle(ImVec2 pos, ImVec2 size, ImColor color) {
+  ImGui::GetBackgroundDrawList()->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), color);
+}
+
+void Renderer::AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color) {
+  ImGui::GetBackgroundDrawList()->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y), color);
 }
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-LRESULT ui::renderer::handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam) {
-  return ImGui_ImplWin32_WndProcHandler(window, msg, wparam, lparam);
+LRESULT Renderer::WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam) {
+  if (!ImGui_ImplWin32_WndProcHandler(window, msg, wparam, lparam) && options::menu.opened)
+    return true;
+
+  return CallWindowProcA(inst_->wnd_proc_, window, msg, wparam, lparam);
 }
 
-void ui::renderer::begin() {
-  ImGui_ImplDX11_NewFrame();
-  ImGui_ImplWin32_NewFrame();
-  ImGui::NewFrame();
-}
+void Renderer::Init(IDXGISwapChain* swap_chain) {
+  std::call_once(init_flag_, [&] {
+    swap_chain->GetDevice(__uuidof(ID3D11Device), (void**)&render_data_.device); // NOLINT(clang-diagnostic-language-extension-token)
+    render_data_.device->GetImmediateContext(&render_data_.context);
 
-void ui::renderer::end(const hooks::RenderData& render_data) {
-  ImGui::EndFrame();
-  ImGui::Render();
+    auto swap_chain_desc = DXGI_SWAP_CHAIN_DESC();
+    swap_chain->GetDesc(&swap_chain_desc);
 
-  render_data.context->OMSetRenderTargets(1, &render_data.render_target, nullptr);
-  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-}
+    render_data_.window = swap_chain_desc.OutputWindow;
+    inst_->wnd_proc_ = (WNDPROC)SetWindowLongPtrA(render_data_.window, GWLP_WNDPROC, (LONG_PTR)&WndProc);
 
-void ui::renderer::add_text(const char* name, ImVec2 pos, ImColor color) {
-  const auto draw_list = ImGui::GetBackgroundDrawList();
+    ImGui::CreateContext();
 
-  draw_list->AddText({pos.x + 1, pos.y + 1}, IM_COL32_BLACK, name);
-  draw_list->AddText({pos.x - 1, pos.y - 1}, IM_COL32_BLACK, name);
-  draw_list->AddText({pos.x + 1, pos.y - 1}, IM_COL32_BLACK, name);
-  draw_list->AddText({pos.x - 1, pos.y + 1}, IM_COL32_BLACK, name);
+    auto io = ImGui::GetIO();
+    io.IniFilename = nullptr;
+    io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+    io.Fonts->AddFontFromFileTTF(R"(C:\Windows\Fonts\tahoma.ttf)", 14.f);
 
-  draw_list->AddText({pos.x + 1, pos.y}, IM_COL32_BLACK, name);
-  draw_list->AddText({pos.x - 1, pos.y}, IM_COL32_BLACK, name);
-  draw_list->AddText({pos.x, pos.y - 1}, IM_COL32_BLACK, name);
-  draw_list->AddText({pos.x, pos.y + 1}, IM_COL32_BLACK, name);
+    ImGui_ImplWin32_Init(render_data_.window);
+    ImGui_ImplDX11_Init(render_data_.device, render_data_.context);
+  });
 
-  draw_list->AddText({pos.x, pos.y}, color, name);
-}
-
-void ui::renderer::add_rectangle(ImVec2 pos, ImVec2 size, ImColor color) {
-  ImGui::GetBackgroundDrawList()->AddRectFilled(pos, {pos.x + size.x, pos.y + size.y}, color);
-}
-
-void ui::renderer::add_outlined_rectangle(ImVec2 pos, ImVec2 size, ImColor color) {
-  ImGui::GetBackgroundDrawList()->AddRect(pos, {pos.x + size.x, pos.y + size.y}, color);
+  if (!render_data_.render_target) {
+    ID3D11Texture2D* back_buffer = nullptr;
+    swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&back_buffer); // NOLINT(clang-diagnostic-language-extension-token)
+    render_data_.device->CreateRenderTargetView(back_buffer, nullptr, &render_data_.render_target);
+    back_buffer->Release();
+  }
 }

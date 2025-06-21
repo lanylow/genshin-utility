@@ -1,12 +1,10 @@
 #include <hooks/veh.hpp>
 
-#include <windows.h>
-
-namespace hooks::veh {
+namespace veh {
   long exception_handler(EXCEPTION_POINTERS* info);
 }
 
-long hooks::veh::exception_handler(EXCEPTION_POINTERS* info) {
+long veh::exception_handler(EXCEPTION_POINTERS* info) {
   switch (info->ExceptionRecord->ExceptionCode) {
   case EXCEPTION_GUARD_PAGE:
     if (info->ExceptionRecord->ExceptionAddress == data.target)
@@ -27,18 +25,18 @@ long hooks::veh::exception_handler(EXCEPTION_POINTERS* info) {
   }
 }
 
-void hooks::veh::initialize(void* target, void* detour) {
+void veh::initialize(void* target, void* detour) {
   data.target = target;
   data.detour = detour;
 
   GetSystemInfo(&data.system_info);
-  data.handle = AddVectoredExceptionHandler(1, hooks::veh::exception_handler);
+  data.handle = AddVectoredExceptionHandler(1, exception_handler);
 
   unsigned long old;
   VirtualProtect(target, data.system_info.dwPageSize, PAGE_EXECUTE_READ | PAGE_GUARD, &old);
 }
 
-void hooks::veh::destroy() {
+void veh::destroy() {
   unsigned long old;
   VirtualProtect(data.target, data.system_info.dwPageSize, PAGE_EXECUTE_READ, &old);
 

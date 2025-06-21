@@ -1,27 +1,26 @@
 #pragma once
 
-#include <windows.h>
+#include <chrono>
 
 #include <ui/widgets.hpp>
 
-namespace ui {
-  class menu {
-  public:
-    menu();
+class Renderer;
 
-    static LRESULT handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
-    
-    void render();
+class Menu {
+public:
+  Menu(Renderer* renderer);
 
-  private:
-    void render_menu();
-    void render_fps_counter();
-    void update_fps_counter();
+  void Render();
 
-    widgets::window window;
-    LARGE_INTEGER performance_counter = {};
-    LARGE_INTEGER performance_frequency = {};
-    int frames = 0;
-    int frame_rate = 0;
-  };
-}
+private:
+  void RenderMenu();
+  void RenderFpsCounter();
+  void UpdateFpsCounter();
+
+  Window window_;
+  Renderer* renderer_;
+
+  std::chrono::time_point<std::chrono::high_resolution_clock> start_;
+  int frames_ = 0;
+  int frame_rate_ = 0;
+};

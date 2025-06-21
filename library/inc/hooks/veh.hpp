@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-namespace hooks::veh {
+namespace veh {
   struct veh_data_t {
     SYSTEM_INFO system_info;
     void* handle;
@@ -11,7 +11,7 @@ namespace hooks::veh {
   };
 }
 
-namespace hooks::veh {
+namespace veh {
   void initialize(void* target, void* detour);
   void destroy();
 
@@ -22,7 +22,7 @@ namespace hooks::veh {
 }
 
 template <typename... arg_type>
-void hooks::veh::call_original(arg_type... args) {
+void veh::call_original(arg_type... args) {
   unsigned long old;
   VirtualProtect(data.target, data.system_info.dwPageSize, PAGE_EXECUTE_READ, &old);
   reinterpret_cast<void(*)(arg_type...)>(data.target)(args...);

@@ -1,57 +1,36 @@
 #pragma once
 
-#include <utils/once.hpp>
-#include <hooks/hook.hpp>
-#include <ui/menu.hpp>
-
 #include <d3d11.h>
 
-namespace hooks {
-  struct RenderData {
-    HWND window = nullptr;
-    ID3D11Device* device = nullptr;
-    ID3D11DeviceContext* context = nullptr;
-    ID3D11RenderTargetView* render_target = nullptr;
-  };
+#include <hooks/hook.hpp>
+#include <ui/renderer.hpp>
+#include <ui/menu.hpp>
 
-  struct PresentStorage : HookStorage {
-    utils::once_flag init_flag;
-    utils::once_flag render_target_flag;
-    ui::menu menu;
-  };
+class Hooks {
+public:
+  Hooks();
 
-  struct SetFieldOfViewStorage : HookStorage {
-    bool is_in_battle = false;
-    utils::once_flag present_flag;
-  };
-}
+private:
+  static HRESULT Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags);
+  static HRESULT ResizeBuffers(IDXGISwapChain* _this, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags);
 
-namespace hooks {
-  class Hooks {
-  public:
-    Hooks();
+  static void SetFieldOfView(void* _this, float value);
+  static void SetFieldOfViewGi(void* _this, float value);
+  static void Quit();
+  static void Enter(void* _this);
+  static void Leave(void* _this, void* a1);
 
-  private:
-    static HRESULT Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags);
-    static HRESULT ResizeBuffers(IDXGISwapChain* _this, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags);
-    static LRESULT WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
+  static inline Hooks* inst_ = nullptr;
 
-    static void SetFieldOfView(void* _this, float value);
-    static void SetFieldOfViewGi(void* _this, float value);
-    static void Quit();
-    static void Enter(void* _this);
-    static void Leave(void* _this, void* a1);
+  Renderer renderer_;
+  Menu menu_;
+  std::once_flag present_flag_;
+  bool is_in_battle_ = false;
 
-    static inline Hooks* inst_ = nullptr;
-
-    RenderData render_data_;
-
-    Hook<PresentStorage> present_;
-    Hook<> resize_buffers_;
-    Hook<> wndproc_;
-    Hook<SetFieldOfViewStorage> set_field_of_view_;
-    Hook<> quit_;
-    Hook<> enter_;
-    Hook<> leave_;
-  };
-}
+  Hook<decltype(&Present)> present_;
+  Hook<decltype(&ResizeBuffers)> resize_buffers_;
+  Hook<decltype(&SetFieldOfView)> set_field_of_view_;
+  Hook<decltype(&Quit)> quit_;
+  Hook<decltype(&Enter)> enter_;
+  Hook<decltype(&Leave)> leave_;
+};

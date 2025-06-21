@@ -1,19 +1,40 @@
 #pragma once
 
-#include <windows.h>
+#include <d3d11.h>
+
+#include <mutex>
+#include <functional>
 
 #include <imgui/imgui.h>
 
-#include <hooks/hooks.hpp>
+struct RenderData {
+  HWND window = nullptr;
+  ID3D11Device* device = nullptr;
+  ID3D11DeviceContext* context = nullptr;
+  ID3D11RenderTargetView* render_target = nullptr;
+};
 
-namespace ui::renderer {
-  void initialize(const hooks::RenderData& render_data);
-  LRESULT handle_message(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
+class Renderer {
+public:
+  Renderer();
 
-  void begin();
-  void end(const hooks::RenderData& render_data);
+  void Render(IDXGISwapChain* swap_chain, const std::function<void()>& callback);
+  void Resize();
 
-  void add_text(const char* name, ImVec2 pos, ImColor color);
-  void add_rectangle(ImVec2 pos, ImVec2 size, ImColor color);
-  void add_outlined_rectangle(ImVec2 pos, ImVec2 size, ImColor color);
-}
+  void AddText(const std::string& text, ImVec2 pos, ImColor color);
+  void AddRectangle(ImVec2 pos, ImVec2 size, ImColor color);
+  void AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color);
+
+  const RenderData& GetRenderData() { return render_data_; }
+
+private:
+  static LRESULT WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);
+
+  void Init(IDXGISwapChain* swap_chain);
+
+  static inline Renderer* inst_ = nullptr;
+
+  RenderData render_data_;
+  std::once_flag init_flag_;
+  WNDPROC wnd_proc_ = nullptr;
+};

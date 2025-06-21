@@ -13,7 +13,7 @@ void Init() {
 
   options::load();
   sdk::initialize();
-  static auto hooks = new hooks::Hooks();
+  static auto hooks = new Hooks();
 }
 
 BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID) {
