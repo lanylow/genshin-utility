@@ -5,7 +5,6 @@
 #include <imgui/imgui_impl_win32.h>
 
 #include <hooks/hooks.hpp>
-#include <options.hpp>
 
 Renderer::Renderer() {
   inst_ = this;
@@ -59,7 +58,9 @@ void Renderer::AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color) {
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT Renderer::WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam) {
-  if (!ImGui_ImplWin32_WndProcHandler(window, msg, wparam, lparam) && options::menu.opened)
+  ImGui_ImplWin32_WndProcHandler(window, msg, wparam, lparam);
+  
+  if (inst_->render_data_.capture_input)
     return true;
 
   return CallWindowProcA(inst_->wnd_proc_, window, msg, wparam, lparam);

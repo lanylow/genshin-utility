@@ -13,7 +13,6 @@ public:
 private:
   static HRESULT Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags);
   static HRESULT ResizeBuffers(IDXGISwapChain* _this, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags);
-
   static void SetFieldOfView(void* _this, float value);
   static void SetFieldOfViewGi(void* _this, float value);
   static void Quit();

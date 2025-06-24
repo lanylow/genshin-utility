@@ -12,6 +12,7 @@ struct RenderData {
   ID3D11Device* device = nullptr;
   ID3D11DeviceContext* context = nullptr;
   ID3D11RenderTargetView* render_target = nullptr;
+  bool capture_input = false;
 };
 
 class Renderer {
@@ -25,7 +26,7 @@ public:
   void AddRectangle(ImVec2 pos, ImVec2 size, ImColor color);
   void AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color);
 
-  const RenderData& GetRenderData() { return render_data_; }
+  RenderData& GetRenderData() { return render_data_; }
 
 private:
   static LRESULT WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam);

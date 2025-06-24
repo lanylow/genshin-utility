@@ -2,11 +2,12 @@
 
 #include <hooks/veh.hpp>
 #include <sdk.hpp>
-#include <options.hpp>
 
 Hooks::Hooks()
   : menu_(&renderer_) {
   inst_ = this;
+
+  menu_.ReadConfig();
 
   if (sdk::game_t::is(sdk::game_t::genshin_impact)) {
     veh::initialize((void*)sdk::set_field_of_view, (void*)&SetFieldOfViewGi);
@@ -47,14 +48,16 @@ void Hooks::SetFieldOfView(void* _this, float value) {
   };
 
   if (const auto res = sdk::game_t::is(sdk::game_t::genshin_impact) ? gi(value) : sr(value); res) {
+    const auto& config = inst_->menu_.GetConfig();
+    
     if (!inst_->is_in_battle_)
-      value = (float)options::tools.camera_fov;
+      value = (float)config.tools.camera_fov;
 
-    sdk::set_target_frame_rate(options::tools.enable_vsync ? -1 : options::tools.fps_limit);
-    sdk::set_vsync_count(options::tools.enable_vsync ? 1 : 0);
+    sdk::set_target_frame_rate(config.tools.enable_vsync ? -1 : config.tools.fps_limit);
+    sdk::set_vsync_count(config.tools.enable_vsync ? 1 : 0);
 
     if (sdk::game_t::is(sdk::game_t::genshin_impact))
-      sdk::set_fog(!options::tools.disable_fog);
+      sdk::set_fog(!config.tools.disable_fog);
   }
 
   inst_->set_field_of_view_.GetTrampoline()(_this, value);
@@ -78,7 +81,7 @@ void Hooks::SetFieldOfViewGi(void* _this, float value) {
 }
 
 void Hooks::Quit() {
-  options::save();
+  inst_->menu_.WriteConfig();
   inst_->quit_.GetTrampoline()();
 }
 

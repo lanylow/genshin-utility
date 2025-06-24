@@ -1,7 +1,6 @@
 #include <thread>
 
 #include <hooks/hooks.hpp>
-#include <options.hpp>
 #include <sdk.hpp>
 
 using namespace std::chrono_literals;
@@ -11,7 +10,6 @@ void Init() {
     while (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll"))
       std::this_thread::sleep_for(10ms);
 
-  options::load();
   sdk::initialize();
   static auto hooks = new Hooks();
 }
