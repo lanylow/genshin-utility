@@ -4,8 +4,6 @@
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
 
-#include <hooks/hooks.hpp>
-
 Renderer::Renderer() {
   inst_ = this;
 }
@@ -59,7 +57,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 LRESULT Renderer::WndProc(HWND window, UINT msg, WPARAM wparam, LPARAM lparam) {
   ImGui_ImplWin32_WndProcHandler(window, msg, wparam, lparam);
-  
+
   if (inst_->render_data_.capture_input)
     return true;
 

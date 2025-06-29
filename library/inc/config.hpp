@@ -28,8 +28,6 @@ public:
   void WriteConfig(const Config& config);
 
 private:
-  void InitPaths();
-
   std::filesystem::path folder_path_;
   std::filesystem::path file_path_;
 };

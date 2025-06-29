@@ -2,31 +2,27 @@
 
 #include <chrono>
 
-#include <ui/config.hpp>
 #include <ui/widgets.hpp>
 
 class Renderer;
+struct Config;
 
 class Menu {
 public:
-  Menu(Renderer* renderer);
+  Menu(Config* config, Renderer* renderer, bool is_star_rail);
 
-  void ReadConfig();
-  void WriteConfig();
   void Render();
-
-  const Config& GetConfig() { return config_; }
+  void ToggleMenu();
 
 private:
-  void ToggleMenu();
   void RenderMenu();
   void RenderFpsCounter();
   void UpdateFpsCounter();
 
-  Config config_;
-  ConfigFileManager config_file_manager_;
   Window window_;
+  Config* config_;
   Renderer* renderer_;
+  bool is_star_rail_;
 
   std::chrono::time_point<std::chrono::high_resolution_clock> start_;
   int frames_ = 0;

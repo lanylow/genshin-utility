@@ -2,13 +2,15 @@
 
 #include <d3d11.h>
 
+#include <mutex>
+
 #include <hooks/hook.hpp>
-#include <ui/renderer.hpp>
-#include <ui/menu.hpp>
+
+class GenshinUtility;
 
 class Hooks {
 public:
-  Hooks();
+  Hooks(GenshinUtility* gu);
 
 private:
   static HRESULT Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags);
@@ -21,10 +23,8 @@ private:
 
   static inline Hooks* inst_ = nullptr;
 
-  Renderer renderer_;
-  Menu menu_;
+  GenshinUtility* gu_;
   std::once_flag present_flag_;
-  bool is_in_battle_ = false;
 
   Hook<decltype(&Present)> present_;
   Hook<decltype(&ResizeBuffers)> resize_buffers_;

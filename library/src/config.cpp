@@ -1,7 +1,8 @@
-#include <ui/config.hpp>
+#include <config.hpp>
 
 #include <shlobj.h>
 
+#define MINI_CASE_SENSITIVE
 #include <mini/ini.h>
 
 namespace {
@@ -33,7 +34,26 @@ namespace {
 }
 
 ConfigFileManager::ConfigFileManager() {
-  InitPaths();
+  wchar_t* path_to_documents;
+
+  if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &path_to_documents)))
+    folder_path_ = path_to_documents;
+
+  CoTaskMemFree(path_to_documents);
+
+  if (folder_path_.empty())
+    return;
+
+  folder_path_ /= "genshin-utility";
+
+  if (!std::filesystem::is_directory(folder_path_)) {
+    std::filesystem::remove(folder_path_);
+
+    if (!std::filesystem::create_directories(folder_path_))
+      return;
+  }
+
+  file_path_ = folder_path_ / "config.ini";
 }
 
 void ConfigFileManager::ReadConfig(Config& config) {
@@ -68,27 +88,4 @@ void ConfigFileManager::WriteConfig(const Config& config) {
 
   const auto file = mINI::INIFile(file_path_);
   file.write(ini, true);
-}
-
-void ConfigFileManager::InitPaths() {
-  wchar_t* path_to_documents;
-
-  if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &path_to_documents)))
-    folder_path_ = path_to_documents;
-
-  CoTaskMemFree(path_to_documents);
-
-  if (folder_path_.empty())
-    return;
-
-  folder_path_ /= "genshin-utility";
-
-  if (!std::filesystem::is_directory(folder_path_)) {
-    std::filesystem::remove(folder_path_);
-
-    if (!std::filesystem::create_directories(folder_path_))
-      return;
-  }
-
-  file_path_ = folder_path_ / "config.ini";
 }
