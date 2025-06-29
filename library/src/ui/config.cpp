@@ -20,7 +20,7 @@ namespace {
 
   void TryRead(mINI::INIStructure& ini, const std::string& section, const std::string& key, bool& value) {
     if (const auto str = TryRead(ini, section, key); !str.empty())
-      value = str == "true";
+      value = str == "True";
   }
 
   void Write(mINI::INIStructure& ini, const std::string& section, const std::string& key, int value) {
@@ -28,7 +28,7 @@ namespace {
   }
 
   void Write(mINI::INIStructure& ini, const std::string& section, const std::string& key, bool value) {
-    ini[section][key] = value ? "true" : "false";
+    ini[section][key] = value ? "True" : "False";
   }
 }
 
@@ -45,12 +45,12 @@ void ConfigFileManager::ReadConfig(Config& config) {
   if (const auto file = mINI::INIFile(file_path_); !file.read(ini))
     return;
 
-  TryRead(ini, "menu", "open_on_start", config.menu.open_on_start);
-  TryRead(ini, "tools", "fps_counter", config.tools.fps_counter);
-  TryRead(ini, "tools", "enable_vsync", config.tools.enable_vsync);
-  TryRead(ini, "tools", "disable_fog", config.tools.disable_fog);
-  TryRead(ini, "tools", "fps_limit", config.tools.fps_limit);
-  TryRead(ini, "tools", "camera_fov", config.tools.camera_fov);
+  TryRead(ini, "Menu", "OpenOnStart", config.menu.open_on_start);
+  TryRead(ini, "Tools", "FpsCounter", config.tools.fps_counter);
+  TryRead(ini, "Tools", "EnableVSync", config.tools.enable_vsync);
+  TryRead(ini, "Tools", "DisableFog", config.tools.disable_fog);
+  TryRead(ini, "Tools", "FpsLimit", config.tools.fps_limit);
+  TryRead(ini, "Tools", "CameraFov", config.tools.camera_fov);
 }
 
 void ConfigFileManager::WriteConfig(const Config& config) {
@@ -59,12 +59,12 @@ void ConfigFileManager::WriteConfig(const Config& config) {
 
   auto ini = mINI::INIStructure();
 
-  Write(ini, "menu", "open_on_start", config.menu.open_on_start);
-  Write(ini, "tools", "fps_counter", config.tools.fps_counter);
-  Write(ini, "tools", "enable_vsync", config.tools.enable_vsync);
-  Write(ini, "tools", "disable_fog", config.tools.disable_fog);
-  Write(ini, "tools", "fps_limit", config.tools.fps_limit);
-  Write(ini, "tools", "camera_fov", config.tools.camera_fov);
+  Write(ini, "Menu", "OpenOnStart", config.menu.open_on_start);
+  Write(ini, "Tools", "FpsCounter", config.tools.fps_counter);
+  Write(ini, "Tools", "EnableVSync", config.tools.enable_vsync);
+  Write(ini, "Tools", "DisableFog", config.tools.disable_fog);
+  Write(ini, "Tools", "FpsLimit", config.tools.fps_limit);
+  Write(ini, "Tools", "CameraFov", config.tools.camera_fov);
 
   const auto file = mINI::INIFile(file_path_);
   file.write(ini, true);
