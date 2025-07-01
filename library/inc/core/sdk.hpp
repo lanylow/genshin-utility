@@ -4,22 +4,22 @@
 
 struct Functions {
   // UnityEngine.Camera
-  utils::function<void> set_field_of_view;
+  Function<void> set_field_of_view;
 
   // UnityEngine.Application
-  utils::function<void> set_target_frame_rate;
-  utils::function<void> quit;
+  Function<void> set_target_frame_rate;
+  Function<void> quit;
 
   // UnityEngine.QualitySettings
-  utils::function<void> set_vsync_count;
+  Function<void> set_vsync_count;
 
   // UnityEngine.RenderSettings
-  utils::function<void> set_fog;
+  Function<void> set_fog;
 
   // Only needed in Honkai: Star Rail
   // RPG.Client.BattleGamePhase
-  utils::function<void> enter;
-  utils::function<void> leave;
+  Function<void> enter;
+  Function<void> leave;
 };
 
 class Sdk {

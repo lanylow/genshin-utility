@@ -6,7 +6,7 @@
 #include <ui/renderer.hpp>
 
 Menu::Menu(Config* config, Renderer* renderer, bool is_star_rail)
-  : window_(renderer, ImVec2(324.f, 218.f), "Genshin Utility by lanylow", "v1.5.19")
+  : window_(renderer, ImVec2(324.f, 218.f), "Genshin Utility by lanylow", "v1.6.0")
   , config_(config)
   , renderer_(renderer)
   , is_star_rail_(is_star_rail) {}
