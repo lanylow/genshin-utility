@@ -2,7 +2,7 @@
 
 #include <format>
 
-#include <config.hpp>
+#include <core/config.hpp>
 #include <ui/renderer.hpp>
 
 Menu::Menu(Config* config, Renderer* renderer, bool is_star_rail)

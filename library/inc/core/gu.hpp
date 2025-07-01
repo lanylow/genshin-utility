@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <config.hpp>
-#include <sdk.hpp>
+#include <core/config.hpp>
+#include <core/sdk.hpp>
 #include <hooks/hooks.hpp>
 #include <ui/renderer.hpp>
 #include <ui/menu.hpp>

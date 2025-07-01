@@ -1,4 +1,4 @@
-﻿#include <gu.hpp>
+﻿#include <core/gu.hpp>
 
 GenshinUtility::GenshinUtility()
   : hooks_(this)

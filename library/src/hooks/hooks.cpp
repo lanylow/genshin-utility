@@ -1,6 +1,6 @@
 #include <hooks/hooks.hpp>
 
-#include <gu.hpp>
+#include <core/gu.hpp>
 
 Hooks::Hooks(GenshinUtility* gu)
   : gu_(gu) {

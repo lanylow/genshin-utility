@@ -1,14 +1,13 @@
 #include <thread>
 
-#include <gu.hpp>
+#include <core/gu.hpp>
 
 using namespace std::chrono_literals;
 
 namespace {
   void Init() {
-    if (GetModuleHandleA("StarRail.exe"))
-      while (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll"))
-        std::this_thread::sleep_for(10ms);
+    while (GetModuleHandleA("StarRail.exe") && (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll")))
+      std::this_thread::sleep_for(10ms);
 
     static auto gu = GenshinUtility();
   }

@@ -1,4 +1,4 @@
-#include <config.hpp>
+#include <core/config.hpp>
 
 #include <shlobj.h>
 
