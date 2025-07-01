@@ -1,13 +1,12 @@
 #include <hooks/hooks.hpp>
 
-#include <hooks/veh.hpp>
 #include <gu.hpp>
 
 Hooks::Hooks(GenshinUtility* gu)
   : gu_(gu) {
   inst_ = this;
 
-  auto& sdk = gu_->sdk_;
+  const auto& sdk = gu_->sdk_;
   const auto& funcs = sdk.GetFuncs();
 
   if (sdk.IsStarRail()) {
@@ -17,18 +16,18 @@ Hooks::Hooks(GenshinUtility* gu)
     leave_.Install(funcs.leave, &Leave);
   }
   else {
-    veh::initialize((void*)funcs.set_field_of_view, (void*)&SetFieldOfViewGi);
+    set_field_of_view_gi_.Install(funcs.set_field_of_view, &SetFieldOfViewGi);
   }
 }
 
 HRESULT Hooks::Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags) {
   inst_->gu_->renderer_.Render(_this, [] { inst_->gu_->menu_.Render(); });
-  return inst_->present_.GetTrampoline()(_this, sync_interval, flags);
+  return inst_->present_.CallOriginal<HRESULT>(_this, sync_interval, flags);
 }
 
 HRESULT Hooks::ResizeBuffers(IDXGISwapChain* _this, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags) {
   inst_->gu_->renderer_.Resize();
-  return inst_->resize_buffers_.GetTrampoline()(_this, buffer_count, width, height, format, flags);
+  return inst_->resize_buffers_.CallOriginal<HRESULT>(_this, buffer_count, width, height, format, flags);
 }
 
 void Hooks::SetFieldOfView(void* _this, float value) {
@@ -38,11 +37,11 @@ void Hooks::SetFieldOfView(void* _this, float value) {
   });
 
   inst_->gu_->OnSetFov(value);
-  inst_->set_field_of_view_.GetTrampoline()(_this, value);
+  inst_->set_field_of_view_.CallOriginal<void>(_this, value);
 }
 
 void Hooks::SetFieldOfViewGi(void* _this, float value) {
-  veh::call_original(_this, value);
+  inst_->set_field_of_view_gi_.CallOriginal<void>(_this, value);
 
   std::call_once(inst_->present_flag_, [] {
     inst_->present_.InstallSwapChain(8, &Present);
@@ -56,20 +55,20 @@ void Hooks::SetFieldOfViewGi(void* _this, float value) {
   inst_->set_field_of_view_.Install(funcs.set_field_of_view, &SetFieldOfView);
   inst_->quit_.Install(funcs.quit, &Quit);
 
-  veh::destroy();
+  inst_->set_field_of_view_gi_.Remove();
 }
 
 void Hooks::Quit() {
   inst_->gu_->WriteConfig();
-  inst_->quit_.GetTrampoline()();
+  inst_->quit_.CallOriginal<void>();
 }
 
 void Hooks::Enter(void* _this) {
   inst_->gu_->in_battle_ = true;
-  inst_->enter_.GetTrampoline()(_this);
+  inst_->enter_.CallOriginal<void>(_this);
 }
 
 void Hooks::Leave(void* _this, void* a1) {
   inst_->gu_->in_battle_ = false;
-  inst_->leave_.GetTrampoline()(_this, a1);
+  inst_->leave_.CallOriginal<void>(_this, a1);
 }

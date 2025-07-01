@@ -26,8 +26,8 @@ class Sdk {
 public:
   Sdk();
 
-  bool IsStarRail() { return is_star_rail_; }
-  const Functions& GetFuncs() { return funcs_; }
+  bool IsStarRail() const { return is_star_rail_; }
+  const Functions& GetFuncs() const { return funcs_; }
 
 private:
   void InitGenshinImpact();
