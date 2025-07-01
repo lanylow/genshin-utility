@@ -2,6 +2,8 @@
 
 #include <d3d11.h>
 
+#include <array>
+
 struct WindowManager {
   HWND window;
   WNDCLASSEX wnd_class;
@@ -14,7 +16,7 @@ struct WindowManager {
   }
 };
 
-std::array<void*, 18> utils::GetSwapChainVmt() {
+void* utils::GetSwapChainMethod(size_t index) {
   static auto vmt = [] {
     const auto wnd_class = WNDCLASSEX{
       .cbSize = sizeof(WNDCLASSEX),
@@ -84,7 +86,7 @@ std::array<void*, 18> utils::GetSwapChainVmt() {
     return table;
   }();
 
-  return vmt;
+  return vmt[index];
 }
 
 DWORD utils::GetPageSize() {

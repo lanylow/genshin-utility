@@ -29,7 +29,7 @@ void Renderer::Resize() {
   render_data_.render_target = nullptr;
 }
 
-void Renderer::AddText(const std::string& text, ImVec2 pos, ImColor color) {
+void Renderer::AddText(const std::string& text, ImVec2 pos, ImColor color) const {
   const auto draw_list = ImGui::GetBackgroundDrawList();
 
   draw_list->AddText(ImVec2(pos.x + 1, pos.y + 1), IM_COL32_BLACK, text.c_str());
@@ -45,11 +45,11 @@ void Renderer::AddText(const std::string& text, ImVec2 pos, ImColor color) {
   draw_list->AddText(ImVec2(pos.x, pos.y), color, text.c_str());
 }
 
-void Renderer::AddRectangle(ImVec2 pos, ImVec2 size, ImColor color) {
+void Renderer::AddRectangle(ImVec2 pos, ImVec2 size, ImColor color) const {
   ImGui::GetBackgroundDrawList()->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), color);
 }
 
-void Renderer::AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color) {
+void Renderer::AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color) const {
   ImGui::GetBackgroundDrawList()->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y), color);
 }
 

@@ -26,11 +26,11 @@ private:
   GenshinUtility* gu_;
   std::once_flag present_flag_;
 
-  Hook<InlineHook> present_;
-  Hook<InlineHook> resize_buffers_;
-  Hook<InlineHook> set_field_of_view_;
-  Hook<VehHook> set_field_of_view_gi_;
-  Hook<InlineHook> quit_;
-  Hook<InlineHook> enter_;
-  Hook<InlineHook> leave_;
+  InlineHook present_;
+  InlineHook resize_buffers_;
+  InlineHook set_field_of_view_;
+  VehHook set_field_of_view_gi_;
+  InlineHook quit_;
+  InlineHook enter_;
+  InlineHook leave_;
 };

@@ -117,7 +117,7 @@ void Window::Begin() {
   renderer_->AddText(text_right_, ImVec2(pos_.x + size_.x - text_right_size.x - 5, pos_.y + 2), ImColor(180, 180, 180));
 }
 
-Groupbox Window::AddGroupbox(const std::string& name, float x, float y, float width, float height) {
+Groupbox Window::AddGroupbox(const std::string& name, float x, float y, float width, float height) const {
   const auto text_size = ImGui::CalcTextSize(name.c_str());
 
   renderer_->AddOutlinedRectangle(ImVec2(pos_.x + x, pos_.y + y), ImVec2(width, height), ImColor(20, 20, 20));

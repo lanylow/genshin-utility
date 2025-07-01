@@ -25,7 +25,7 @@ public:
   Window(Renderer* renderer, ImVec2 size, std::string text_left, std::string text_right);
 
   void Begin();
-  Groupbox AddGroupbox(const std::string& name, float x, float y, float width, float height);
+  Groupbox AddGroupbox(const std::string& name, float x, float y, float width, float height) const;
 
 private:
   Renderer* renderer_;

@@ -24,8 +24,8 @@ class ConfigFileManager {
 public:
   ConfigFileManager();
 
-  void ReadConfig(Config& config);
-  void WriteConfig(const Config& config);
+  void ReadConfig(Config& config) const;
+  void WriteConfig(const Config& config) const;
 
 private:
   std::filesystem::path folder_path_;

@@ -6,30 +6,29 @@
 #include <mini/ini.h>
 
 namespace {
-  std::string TryRead(mINI::INIStructure& ini, const std::string& section, const std::string& key) {
+  template <typename ValueType>
+  void Read(mINI::INIStructure& ini, const std::string& section, const std::string& key, ValueType& value) {
+    auto str = std::string();
+
     if (ini.has(section))
       if (auto& keys = ini[section]; keys.has(key))
-        return keys[key];
+        str = keys[key];
 
-    return std::string();
-  }
+    if (str.empty())
+      return;
 
-  void TryRead(mINI::INIStructure& ini, const std::string& section, const std::string& key, int& value) {
-    if (const auto str = TryRead(ini, section, key); !str.empty())
+    if constexpr (std::same_as<ValueType, int>)
       value = std::stoi(str);
-  }
-
-  void TryRead(mINI::INIStructure& ini, const std::string& section, const std::string& key, bool& value) {
-    if (const auto str = TryRead(ini, section, key); !str.empty())
+    else if constexpr (std::same_as<ValueType, bool>)
       value = str == "True";
   }
 
-  void Write(mINI::INIStructure& ini, const std::string& section, const std::string& key, int value) {
-    ini[section][key] = std::to_string(value);
-  }
-
-  void Write(mINI::INIStructure& ini, const std::string& section, const std::string& key, bool value) {
-    ini[section][key] = value ? "True" : "False";
+  template <typename ValueType>
+  void Write(mINI::INIStructure& ini, const std::string& section, const std::string& key, ValueType value) {
+    if constexpr (std::same_as<ValueType, int>)
+      ini[section][key] = std::to_string(value);
+    else if constexpr (std::same_as<ValueType, bool>)
+      ini[section][key] = value ? "True" : "False";
   }
 }
 
@@ -56,7 +55,7 @@ ConfigFileManager::ConfigFileManager() {
   file_path_ = folder_path_ / "config.ini";
 }
 
-void ConfigFileManager::ReadConfig(Config& config) {
+void ConfigFileManager::ReadConfig(Config& config) const {
   if (file_path_.empty())
     return;
 
@@ -65,15 +64,15 @@ void ConfigFileManager::ReadConfig(Config& config) {
   if (const auto file = mINI::INIFile(file_path_); !file.read(ini))
     return;
 
-  TryRead(ini, "Menu", "OpenOnStart", config.menu.open_on_start);
-  TryRead(ini, "Tools", "FpsCounter", config.tools.fps_counter);
-  TryRead(ini, "Tools", "EnableVSync", config.tools.enable_vsync);
-  TryRead(ini, "Tools", "DisableFog", config.tools.disable_fog);
-  TryRead(ini, "Tools", "FpsLimit", config.tools.fps_limit);
-  TryRead(ini, "Tools", "CameraFov", config.tools.camera_fov);
+  Read(ini, "Menu", "OpenOnStart", config.menu.open_on_start);
+  Read(ini, "Tools", "FpsCounter", config.tools.fps_counter);
+  Read(ini, "Tools", "EnableVSync", config.tools.enable_vsync);
+  Read(ini, "Tools", "DisableFog", config.tools.disable_fog);
+  Read(ini, "Tools", "FpsLimit", config.tools.fps_limit);
+  Read(ini, "Tools", "CameraFov", config.tools.camera_fov);
 }
 
-void ConfigFileManager::WriteConfig(const Config& config) {
+void ConfigFileManager::WriteConfig(const Config& config) const {
   if (file_path_.empty())
     return;
 

@@ -6,7 +6,7 @@ GenshinUtility::GenshinUtility()
   ReadConfig();
 }
 
-void GenshinUtility::OnSetFov(float& value) {
+void GenshinUtility::OnSetFov(float& value) const {
   const auto& funcs = sdk_.GetFuncs();
 
   const auto gi = [&](float val) {
@@ -39,6 +39,6 @@ void GenshinUtility::ReadConfig() {
     menu_.ToggleMenu();
 }
 
-void GenshinUtility::WriteConfig() {
+void GenshinUtility::WriteConfig() const {
   config_file_manager_.WriteConfig(config_);
 }

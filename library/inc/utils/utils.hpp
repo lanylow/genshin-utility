@@ -2,9 +2,7 @@
 
 #include <windows.h>
 
-#include <array>
-
 namespace utils {
-  std::array<void*, 18> GetSwapChainVmt();
+  void* GetSwapChainMethod(size_t index);
   DWORD GetPageSize();
 }

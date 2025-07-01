@@ -22,9 +22,9 @@ public:
   void Render(IDXGISwapChain* swap_chain, const std::function<void()>& callback);
   void Resize();
 
-  void AddText(const std::string& text, ImVec2 pos, ImColor color);
-  void AddRectangle(ImVec2 pos, ImVec2 size, ImColor color);
-  void AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color);
+  void AddText(const std::string& text, ImVec2 pos, ImColor color) const;
+  void AddRectangle(ImVec2 pos, ImVec2 size, ImColor color) const;
+  void AddOutlinedRectangle(ImVec2 pos, ImVec2 size, ImColor color) const;
 
   RenderData& GetRenderData() { return render_data_; }
 

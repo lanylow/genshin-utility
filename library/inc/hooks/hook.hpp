@@ -1,14 +1,16 @@
 #pragma once
 
+#include <type_traits>
+
 #include <utils/utils.hpp>
 
-class InlineHook {
+class InlineHookProvider {
 public:
   void Create(void* target, void* detour);
   void Remove();
 
   template <typename ReturnType, typename... Args>
-  ReturnType CallOriginal(Args... args) {
+  ReturnType CallOriginal(Args... args) const {
     return reinterpret_cast<ReturnType(*)(Args...)>(trampoline_)(args...);
   }
 
@@ -17,16 +19,16 @@ private:
   void* trampoline_ = nullptr;
 };
 
-class VehHook {
+class VehHookProvider {
 public:
   void Create(void* target, void* detour);
   void Remove();
 
   template <typename ReturnType, typename... Args>
-  ReturnType CallOriginal(Args... args) {
+  ReturnType CallOriginal(Args... args) const {
     const auto page_size = utils::GetPageSize();
     auto old = 0ul;
-    
+
     if constexpr (std::is_void_v<ReturnType>) {
       VirtualProtect(target_, page_size, PAGE_EXECUTE_READ, &old);
       reinterpret_cast<ReturnType(*)(Args...)>(target_)(args...);
@@ -55,7 +57,7 @@ public:
 
   template <typename DetourType>
   void InstallSwapChain(int index, DetourType detour) {
-    provider_.Create(utils::GetSwapChainVmt()[index], (void*)detour);
+    provider_.Create(utils::GetSwapChainMethod(index), (void*)detour);
   }
 
   void Remove() {
@@ -63,10 +65,13 @@ public:
   }
 
   template <typename ReturnType, typename... Args>
-  ReturnType CallOriginal(Args... args) {
+  ReturnType CallOriginal(Args... args) const {
     return provider_.template CallOriginal<ReturnType, Args...>(args...);
   }
 
 private:
   HookProvider provider_;
 };
+
+using InlineHook = Hook<InlineHookProvider>;
+using VehHook = Hook<VehHookProvider>;

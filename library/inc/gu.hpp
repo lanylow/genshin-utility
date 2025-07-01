@@ -10,13 +10,13 @@ class GenshinUtility {
 public:
   GenshinUtility();
 
-  void OnSetFov(float& value);
+  void OnSetFov(float& value) const;
 
 private:
   friend class Hooks;
   
   void ReadConfig();
-  void WriteConfig();
+  void WriteConfig() const;
 
   Config config_;
   ConfigFileManager config_file_manager_;

@@ -33,7 +33,7 @@ namespace {
   }
 }
 
-void InlineHook::Create(void* target, void* detour) {
+void InlineHookProvider::Create(void* target, void* detour) {
   static auto init = MH_Initialize();
 
   target_ = target;
@@ -41,12 +41,12 @@ void InlineHook::Create(void* target, void* detour) {
   MH_EnableHook(target);
 }
 
-void InlineHook::Remove() {
+void InlineHookProvider::Remove() {
   MH_DisableHook(target_);
   MH_RemoveHook(target_);
 }
 
-void VehHook::Create(void* target, void* detour) {
+void VehHookProvider::Create(void* target, void* detour) {
   static auto init = AddVectoredExceptionHandler(1, ExceptionHandler);
 
   target_ = target;
@@ -56,7 +56,7 @@ void VehHook::Create(void* target, void* detour) {
   VirtualProtect(target, utils::GetPageSize(), PAGE_EXECUTE_READ | PAGE_GUARD, &old);
 }
 
-void VehHook::Remove() {
+void VehHookProvider::Remove() {
   auto old = 0ul;
   VirtualProtect(target_, utils::GetPageSize(), PAGE_EXECUTE_READ, &old);
 
