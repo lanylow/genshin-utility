@@ -4,18 +4,6 @@
 
 #include <array>
 
-struct WindowManager {
-  HWND window;
-  WNDCLASSEX wnd_class;
-
-  WindowManager(HWND window, const WNDCLASSEX& wnd_class) : window(window), wnd_class(wnd_class) {}
-
-  ~WindowManager() {
-    DestroyWindow(window);
-    UnregisterClassA(wnd_class.lpszClassName, wnd_class.hInstance);
-  }
-};
-
 void* utils::GetSwapChainMethod(size_t index) {
   static auto vmt = [] {
     const auto wnd_class = WNDCLASSEX{
@@ -35,10 +23,6 @@ void* utils::GetSwapChainMethod(size_t index) {
 
     RegisterClassExA(&wnd_class);
     const auto window = CreateWindowExA(0, wnd_class.lpszClassName, "GenshinUtilityWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, wnd_class.hInstance, nullptr);
-    const auto manager = WindowManager(window, wnd_class);
-
-    auto feature_level = D3D_FEATURE_LEVEL();
-    const auto feature_levels = std::array{D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_11_0};
 
     const auto refresh_rate = DXGI_RATIONAL{
       .Numerator = 60,
@@ -70,18 +54,17 @@ void* utils::GetSwapChainMethod(size_t index) {
       .Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH,
     };
 
-    IDXGISwapChain* swap_chain;
-    ID3D11Device* device;
-    ID3D11DeviceContext* context;
-
+    IDXGISwapChain* swap_chain = nullptr;
     auto table = std::array<void*, 18>();
 
-    if (SUCCEEDED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, feature_levels.data(), 2, D3D11_SDK_VERSION, &swap_chain_desc, &swap_chain, &device, &feature_level, &context)))
+    if (SUCCEEDED(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &swap_chain_desc, &swap_chain, nullptr, nullptr, nullptr)))
       std::copy_n(*(void***)swap_chain, table.size(), table.begin());
 
-    swap_chain->Release();
-    device->Release();
-    context->Release();
+    if (swap_chain)
+      swap_chain->Release();
+
+    DestroyWindow(window);
+    UnregisterClassA(wnd_class.lpszClassName, wnd_class.hInstance);
 
     return table;
   }();
