@@ -1,42 +1,36 @@
 #pragma once
 
-#include <utils/once.hpp>
-#include <hooks/hook.hpp>
-#include <ui/menu.hpp>
-
 #include <d3d11.h>
 
-namespace hooks {
-  struct present_storage : hooks::hook_storage {
-    ID3D11Device* device = nullptr;
-    ID3D11DeviceContext* context = nullptr;
-    ID3D11RenderTargetView* render_target = nullptr;
+#include <mutex>
 
-    utils::once_flag init_flag;
-    utils::once_flag render_target_flag;
+#include <hooks/hook.hpp>
 
-    ui::menu menu;
-  };
+class GenshinUtility;
 
-  struct wndproc_storage : hooks::hook_storage {
-    HWND window = nullptr;
-  };
+class Hooks {
+public:
+  Hooks(GenshinUtility* gu);
 
-  struct set_field_of_view_storage : hooks::hook_storage {
-    bool is_in_battle = false;
+private:
+  static HRESULT Present(IDXGISwapChain* _this, UINT sync_interval, UINT flags);
+  static HRESULT ResizeBuffers(IDXGISwapChain* _this, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags);
+  static void SetFieldOfView(void* _this, float value);
+  static void SetFieldOfViewGi(void* _this, float value);
+  static void Quit();
+  static void Enter(void* _this);
+  static void Leave(void* _this, void* a1);
 
-    utils::once_flag present_flag;
-  };
-}
+  static inline Hooks* inst_ = nullptr;
 
-namespace hooks {
-  void initialize();
+  GenshinUtility* gu_;
+  std::once_flag present_flag_;
 
-  inline hooks::hook<hooks::present_storage> present;
-  inline hooks::hook<> resize_buffers;
-  inline hooks::hook<hooks::wndproc_storage> wndproc;
-  inline hooks::hook<hooks::set_field_of_view_storage> set_field_of_view;
-  inline hooks::hook<> quit;
-  inline hooks::hook<> enter;
-  inline hooks::hook<> leave;
-}
+  InlineHook present_;
+  InlineHook resize_buffers_;
+  InlineHook set_field_of_view_;
+  VehHook set_field_of_view_gi_;
+  InlineHook quit_;
+  InlineHook enter_;
+  InlineHook leave_;
+};

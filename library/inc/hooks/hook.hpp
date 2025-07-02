@@ -1,56 +1,77 @@
 #pragma once
 
-#include <utils/directx.hpp>
-#include <utils/function.hpp>
-
-#include <minhook/MinHook.h>
-
 #include <type_traits>
 
-namespace hooks {
-  struct hook_storage {
-    void* address = nullptr;
-    void* trampoline = nullptr;
-  };
+#include <utils/utils.hpp>
 
-  template <typename storage_type = hooks::hook_storage>
-    requires (std::is_base_of_v<hook_storage, storage_type> || std::is_same_v<hook_storage, storage_type>) && std::is_default_constructible_v<storage_type>
-  class hook {
-  public:
-    template <typename target_type, typename detour_type>
-      requires std::is_pointer_v<detour_type>
-    void install(target_type target, detour_type detour) {
-      storage.address = (void*)target;
-      create((void*)detour);
+class InlineHookProvider {
+public:
+  void Create(void* target, void* detour);
+  void Remove();
+
+  template <typename ReturnType, typename... Args>
+  ReturnType CallOriginal(Args... args) const {
+    return reinterpret_cast<ReturnType(*)(Args...)>(trampoline_)(args...);
+  }
+
+private:
+  void* target_ = nullptr;
+  void* trampoline_ = nullptr;
+};
+
+class VehHookProvider {
+public:
+  void Create(void* target, void* detour);
+  void Remove();
+
+  template <typename ReturnType, typename... Args>
+  ReturnType CallOriginal(Args... args) const {
+    const auto page_size = utils::GetPageSize();
+    auto old = 0ul;
+
+    if constexpr (std::is_void_v<ReturnType>) {
+      VirtualProtect(target_, page_size, PAGE_EXECUTE_READ, &old);
+      reinterpret_cast<ReturnType(*)(Args...)>(target_)(args...);
+      VirtualProtect(target_, page_size, old, &old);
+      return;
     }
-
-    template <typename detour_type>
-      requires std::is_pointer_v<detour_type>
-    void install_swap_chain(int index, detour_type detour) {
-      storage.address = utils::directx::get_swap_chain_vmt()[index];
-      create((void*)detour);
+    else {
+      VirtualProtect(target_, page_size, PAGE_EXECUTE_READ, &old);
+      const auto res = reinterpret_cast<ReturnType(*)(Args...)>(target_)(args...);
+      VirtualProtect(target_, page_size, old, &old);
+      return res;
     }
+  }
 
-    template <utils::fn_convertible trampoline_type>
-    trampoline_type get_trampoline() const {
-      return (trampoline_type)storage.trampoline;
-    }
+private:
+  void* target_ = nullptr;
+};
 
-    template <utils::fn_convertible trampoline_type>
-    void set_trampoline(trampoline_type value) {
-      storage.trampoline = (void*)value;
-    }
+template <class HookProvider>
+class Hook {
+public:
+  template <typename TargetType, typename DetourType>
+  void Install(TargetType target, DetourType detour) {
+    provider_.Create((void*)target, (void*)detour);
+  }
 
-    storage_type& get_storage() {
-      return storage;
-    }
+  template <typename DetourType>
+  void InstallSwapChain(int index, DetourType detour) {
+    provider_.Create(utils::GetSwapChainMethod(index), (void*)detour);
+  }
 
-  private:
-    void create(void* detour) {
-      MH_CreateHook(storage.address, detour, &storage.trampoline);
-      MH_EnableHook(storage.address);
-    }
+  void Remove() {
+    provider_.Remove();
+  }
 
-    storage_type storage;
-  };
-}
+  template <typename ReturnType, typename... Args>
+  ReturnType CallOriginal(Args... args) const {
+    return provider_.template CallOriginal<ReturnType, Args...>(args...);
+  }
+
+private:
+  HookProvider provider_;
+};
+
+using InlineHook = Hook<InlineHookProvider>;
+using VehHook = Hook<VehHookProvider>;

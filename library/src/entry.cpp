@@ -1,27 +1,23 @@
 #include <thread>
 
-#include <hooks/hooks.hpp>
-#include <options.hpp>
-#include <sdk.hpp>
+#include <core/gu.hpp>
 
 using namespace std::chrono_literals;
 
-void initialize() {
-  if (GetModuleHandleA("StarRail.exe"))
-    while (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll"))
+namespace {
+  void Init() {
+    while (GetModuleHandleA("StarRail.exe") && (!GetModuleHandleA("UnityPlayer.dll") || !GetModuleHandleA("GameAssembly.dll")))
       std::this_thread::sleep_for(10ms);
 
-  options::load();
-  sdk::initialize();
-  hooks::initialize();
+    static auto gu = GenshinUtility();
+  }
 }
 
-bool DllMain(HMODULE module, unsigned int reason, void*) {
+BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID) {
   DisableThreadLibraryCalls(module);
 
   if (reason == DLL_PROCESS_ATTACH)
-    if (const auto handle = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)initialize, nullptr, 0, nullptr))
-      CloseHandle(handle);
+    std::thread(Init).detach();
 
-  return true;
+  return TRUE;
 }

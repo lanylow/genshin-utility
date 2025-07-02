@@ -40,8 +40,6 @@
 #pragma comment(lib, "d3dcompiler") // Automatically link with d3dcompiler.lib as we are using D3DCompile() below.
 #endif
 
-#include <sdk.hpp>
-
 // DirectX11 data
 struct ImGui_ImplDX11_Data
 {
@@ -450,7 +448,7 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     {
       static const char* pixelShader;
 
-        if (sdk::game_t::is(sdk::game_t::genshin_impact))
+        if (GetModuleHandleA("GenshinImpact.exe"))
           pixelShader =
           "struct PS_INPUT\
             {\

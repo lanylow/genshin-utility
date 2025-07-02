@@ -1,6 +1,6 @@
 # Genshin Utility [![License](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://github.com/lanylow/genshin-utility/blob/main/LICENSE) ![OS](https://img.shields.io/badge/OS-Windows-yellow.svg) [![Discord](https://img.shields.io/badge/chat-discord-informational)](https://discord.gg/MrtJvV5tKv)
 
-Free and open-source tool for Genshin Impact and Honkai: Start Rail that includes a few quality-of-life features, developed as an internal module that's being loaded into the game process. Compatible with the Global and Chinese versions of the game.
+Free and open-source tool for Genshin Impact and Honkai: Start Rail that includes a few quality-of-life features. Compatible with the Global and Chinese versions of the game.
 
 ## FAQ
 
@@ -11,10 +11,10 @@ Free and open-source tool for Genshin Impact and Honkai: Start Rail that include
 4. The game will open and the mod will be loaded.
 
 ### How do I open and close the menu?
-When you have the game window focused, press the <kbd>INSERT</kbd> key.
+With the game window focused, press the <kbd>INSERT</kbd> key.
 
 ### Where is my configuration saved?
-The `genshin-utility` folder within your Documents directory contains the saved configuration file in `.lff` format. After some updates, it may be necessary to delete and recreate the configuration file.
+The `genshin-utility` folder within your Documents directory contains the saved configuration file in `.ini` format. After some updates, it may be necessary to delete and recreate the configuration file.
 
 ### What do I do if the Genshin Utility menu doesn't pop up?
 The most common cause of this problem are third-party overlays. Make sure programs such as MSI Afterburner (RTSS) or Discord Game Overlay are not attached to the game, because they might interfere with the menu of this tool. Another possible cause is that you are not running the game through the launcher, this program will not work if you open the game's executable directly.
