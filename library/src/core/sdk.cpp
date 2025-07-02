@@ -22,14 +22,15 @@ void Sdk::InitGenshinImpact() {
 }
 
 void Sdk::InitStarRail() {
-  const auto mod = (uintptr_t)GetModuleHandleA("GameAssembly.dll");
+  const auto game_assembly = (uintptr_t)GetModuleHandleA("GameAssembly.dll");
+  const auto unity_player = (uintptr_t)GetModuleHandleA("UnityPlayer.dll");
 
-  funcs_.set_field_of_view = mod + 0xe6e8100;
-  funcs_.set_target_frame_rate = mod + 0xe6e1ff0;
-  funcs_.quit = mod + 0xe6e1b20;
-  funcs_.set_vsync_count = mod + 0xe7786a0;
-  funcs_.enter = mod + 0x814abb0;
-  funcs_.leave = mod + 0x814d860;
+  funcs_.set_field_of_view = unity_player + 0x9d2d90;
+  funcs_.set_target_frame_rate = game_assembly + 0x129ae8b0;
+  funcs_.quit = game_assembly + 0x129ae3e0;
+  funcs_.set_vsync_count = game_assembly + 0x129ed520;
+  funcs_.enter = game_assembly + 0xcc35510;
+  funcs_.leave = game_assembly + 0xcc390e0;
 
   is_star_rail_ = true;
 }
