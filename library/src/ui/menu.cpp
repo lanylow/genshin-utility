@@ -17,15 +17,15 @@ void Menu::Render() {
 }
 
 void Menu::ToggleMenu() {
-  config_->menu.opened ^= true;
-  renderer_->GetRenderData().capture_input = config_->menu.opened;
+  opened_ ^= true;
+  renderer_->GetRenderData().capture_input = opened_;
 }
 
 void Menu::RenderMenu() {
   if (ImGui::IsKeyPressed(ImGuiKey_Insert))
     ToggleMenu();
 
-  if (!config_->menu.opened)
+  if (!opened_)
     return;
 
   window_.Begin();

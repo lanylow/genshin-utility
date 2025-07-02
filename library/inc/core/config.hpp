@@ -3,7 +3,6 @@
 #include <filesystem>
 
 struct MenuConfig {
-  bool opened = false;
   bool open_on_start = true;
 };
 

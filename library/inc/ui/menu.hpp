@@ -23,6 +23,7 @@ private:
   Config* config_;
   Renderer* renderer_;
   bool is_star_rail_;
+  bool opened_ = false;
 
   std::chrono::time_point<std::chrono::high_resolution_clock> start_;
   int frames_ = 0;
