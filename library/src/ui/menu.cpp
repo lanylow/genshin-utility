@@ -22,7 +22,7 @@ void Menu::ToggleMenu() {
 }
 
 void Menu::RenderMenu() {
-  if (ImGui::IsKeyPressed(ImGuiKey_Insert))
+  if (ImGui::IsKeyPressed(config_->menu.key))
     ToggleMenu();
 
   if (!opened_)

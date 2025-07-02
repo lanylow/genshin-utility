@@ -2,7 +2,10 @@
 
 #include <filesystem>
 
+#include <imgui/imgui.h>
+
 struct MenuConfig {
+  ImGuiKey_ key = ImGuiKey_Insert;
   bool open_on_start = true;
 };
 

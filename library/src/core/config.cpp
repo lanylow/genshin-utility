@@ -6,6 +6,12 @@
 #include <mini/ini.h>
 
 namespace {
+  void ReadKey(const std::string& str, ImGuiKey_& value) {
+    for (auto key = (int)ImGuiKey_NamedKey_BEGIN; key < ImGuiKey_NamedKey_END; key++)
+      if (str == ImGui::GetKeyName(key))
+        value = (ImGuiKey_)key;
+  }
+  
   template <typename ValueType>
   void Read(mINI::INIStructure& ini, const std::string& section, const std::string& key, ValueType& value) {
     auto str = std::string();
@@ -21,14 +27,22 @@ namespace {
       value = std::stoi(str);
     else if constexpr (std::same_as<ValueType, bool>)
       value = str == "True";
+    else if constexpr (std::same_as<ValueType, ImGuiKey_>)
+      ReadKey(str, value);
   }
 
   template <typename ValueType>
   void Write(mINI::INIStructure& ini, const std::string& section, const std::string& key, ValueType value) {
+    auto str = std::string();
+
     if constexpr (std::same_as<ValueType, int>)
-      ini[section][key] = std::to_string(value);
+      str = std::to_string(value);
     else if constexpr (std::same_as<ValueType, bool>)
-      ini[section][key] = value ? "True" : "False";
+      str = value ? "True" : "False";
+    else if constexpr (std::same_as<ValueType, ImGuiKey_>)
+      str = ImGui::GetKeyName(value);
+
+    ini[section][key] = str;
   }
 }
 
@@ -64,6 +78,7 @@ void ConfigFileManager::ReadConfig(Config& config) const {
   if (const auto file = mINI::INIFile(file_path_); !file.read(ini))
     return;
 
+  Read(ini, "Menu", "Key", config.menu.key);
   Read(ini, "Menu", "OpenOnStart", config.menu.open_on_start);
   Read(ini, "Tools", "FpsCounter", config.tools.fps_counter);
   Read(ini, "Tools", "EnableVSync", config.tools.enable_vsync);
@@ -78,6 +93,7 @@ void ConfigFileManager::WriteConfig(const Config& config) const {
 
   auto ini = mINI::INIStructure();
 
+  Write(ini, "Menu", "Key", config.menu.key);
   Write(ini, "Menu", "OpenOnStart", config.menu.open_on_start);
   Write(ini, "Tools", "FpsCounter", config.tools.fps_counter);
   Write(ini, "Tools", "EnableVSync", config.tools.enable_vsync);
