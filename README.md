@@ -11,7 +11,7 @@ Free and open-source tool for Genshin Impact and Honkai: Start Rail that include
 4. The game will open and the mod will be loaded.
 
 ### How do I open and close the menu?
-With the game window focused, press the <kbd>INSERT</kbd> key.
+By default the key used to toggle the menu is <kbd>INSERT</kbd>, however you can change it by modifying the configuration file.
 
 ### Where is my configuration saved?
 The `genshin-utility` folder within your Documents directory contains the saved configuration file in `.ini` format. After some updates, it may be necessary to delete and recreate the configuration file.
