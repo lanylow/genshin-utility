@@ -1,8 +1,0 @@
-[package]
-name = "loader"
-version = "1.3.0"
-edition = "2021"
-
-[dependencies]
-winapi =  { version = "0.3.9", features = [ "windef", "winnt", "libloaderapi", "processthreadsapi", "memoryapi", "tlhelp32", "handleapi" ] }
-thiserror = "1.0.37"
