@@ -19,12 +19,12 @@ void* GetSwapChainMethod(size_t index) {
       .hCursor = nullptr,
       .hbrBackground = nullptr,
       .lpszMenuName = nullptr,
-      .lpszClassName = TEXT("GenshinUtility"),
+      .lpszClassName = "GenshinUtility",
       .hIconSm = nullptr
     };
 
-    RegisterClassEx(&wnd_class);
-    const auto window = CreateWindowEx(0, wnd_class.lpszClassName, TEXT("GenshinUtilityWindow"), WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, wnd_class.hInstance, nullptr);
+    RegisterClassExA(&wnd_class);
+    const auto window = CreateWindowExA(0, wnd_class.lpszClassName, "GenshinUtilityWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, nullptr, nullptr, wnd_class.hInstance, nullptr);
 
     const auto refresh_rate = DXGI_RATIONAL{
       .Numerator = 60,
@@ -66,7 +66,7 @@ void* GetSwapChainMethod(size_t index) {
       swap_chain->Release();
 
     DestroyWindow(window);
-    UnregisterClass(wnd_class.lpszClassName, wnd_class.hInstance);
+    UnregisterClassA(wnd_class.lpszClassName, wnd_class.hInstance);
 
     return table;
   }();

@@ -1,8 +1,9 @@
 workspace "GenshinUtility"
   configurations { "Release" }
   architecture "x86_64"
-
+  
   buildoptions { "/MP" }
+  characterset "ASCII"
   staticruntime "On"
   runtime "Release"
   optimize "Speed"
