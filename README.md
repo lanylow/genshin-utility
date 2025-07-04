@@ -26,7 +26,8 @@ The most common cause of this problem are third-party overlays. Make sure progra
 ## Utilized third-party libraries
 
 * [imgui](https://github.com/ocornut/imgui) - Graphical User interface for C++
-* [minhook](https://github.com/TsudaKageyu/minhook) - API Hooking Library for Windows 
+* [minhook](https://github.com/TsudaKageyu/minhook) - API Hooking Library for Windows
+* [mini](https://github.com/metayeti/mINI) - INI file reader and writer
 
 ## License
 
