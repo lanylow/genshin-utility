@@ -1,6 +1,6 @@
 # Genshin Utility [![License](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://github.com/lanylow/genshin-utility/blob/main/LICENSE) ![OS](https://img.shields.io/badge/OS-Windows-yellow.svg) [![Discord](https://img.shields.io/badge/chat-discord-informational)](https://discord.gg/MrtJvV5tKv)
 
-Free and open-source tool for Genshin Impact and Honkai: Start Rail that includes a few quality-of-life features. Compatible with the Global and Chinese versions of the game.
+Free and open-source tool for Genshin Impact and Honkai: Start Rail that includes a few quality-of-life features. Compatible only with the OS version of the game.
 
 ## FAQ
 
