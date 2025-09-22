@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <thread>
+#include <array>
 
 namespace {
 
@@ -19,7 +21,7 @@ struct AutoRelease {
   }
 };
 
-uint32_t GetProcessIdByName(const char* name) {
+uint32_t GetProcessIdByName(std::string_view name) {
   const auto snapshot = AutoRelease(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
 
   if (snapshot.handle == INVALID_HANDLE_VALUE)
@@ -29,10 +31,23 @@ uint32_t GetProcessIdByName(const char* name) {
   entry.dwSize = sizeof(entry);
 
   while (Process32Next(snapshot.handle, &entry))
-    if (entry.szExeFile == name)
+    if (name == entry.szExeFile)
       return entry.th32ProcessID;
 
   return 0u;
+}
+
+uint32_t FindGameProcessId() {
+  while (true) {
+    constexpr auto kNames = std::array{"GenshinImpact.exe", "YuanShen.exe", "StarRail.exe"};
+      
+    for (const auto name : kNames)
+      if (const auto id = GetProcessIdByName(name); id != 0u)
+        return id;
+
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(10ms);
+  }
 }
 
 void Inject(uint32_t process_id, const std::string& path) {
@@ -54,16 +69,7 @@ void Inject(uint32_t process_id, const std::string& path) {
 void Init() {
   std::println("Waiting for Genshin Impact or Honkai: Star Rail to start.");
 
-  auto process_id = 0u;
-
-  for (;;) {
-    for (const auto name : {"GenshinImpact.exe", "YuanShen.exe", "StarRail.exe"})
-      if (const auto id = GetProcessIdByName(name); id != 0u)
-        process_id = id;
-
-    if (process_id != 0u)
-      break;
-  }
+  auto process_id = FindGameProcessId();
 
   std::println("Injecting into {}.", process_id);
 
