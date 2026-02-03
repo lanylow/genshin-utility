@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=lanylow&project=genshin-utility&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # Genshin Utility [![License](https://img.shields.io/badge/License-GPL3.0-green.svg)](https://github.com/lanylow/genshin-utility/blob/main/LICENSE) ![OS](https://img.shields.io/badge/OS-Windows-yellow.svg) [![Discord](https://img.shields.io/badge/chat-discord-informational)](https://discord.gg/MrtJvV5tKv)
 
 Free and open-source tool for Genshin Impact and Honkai: Start Rail that includes a few quality-of-life features. Compatible only with the OS version of the game.
